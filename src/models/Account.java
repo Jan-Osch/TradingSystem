@@ -30,11 +30,15 @@ public class Account {
         return currentState;
     }
 
-    private void addToAccount(BigDecimal valueToAdd) {
+    public void addToAccount(BigDecimal valueToAdd) {
         this.currentState = this.currentState.add(valueToAdd);
     }
 
-    private void subtractFromAccount(BigDecimal valueToSubtract) {
+    public void addToAccount(int value) {
+        this.currentState = this.currentState.add(BigDecimal.valueOf(value));
+    }
+
+    void subtractFromAccount(BigDecimal valueToSubtract) {
         if (this.currentState.compareTo(valueToSubtract) == -1) {
             throw new IllegalArgumentException("Attempting to subtract from account more than current state.");
         }
@@ -83,5 +87,28 @@ public class Account {
 
     public User getOwner() {
         return owner;
+    }
+
+    public int getNumberOfSharesInPortfolio(Index index) {
+        if (!portfolio.containsKey(index)) {
+            return 0;
+        }
+        return portfolio.get(index);
+    }
+
+    public void printPortfolio() {
+        for (Index i : this.portfolio.keySet()) {
+            System.out.println("Index: " + i.getName()
+                    + " number of shares: " + this.getNumberOfSharesInPortfolio(i)
+                    + " current value " + i.getCurrentValue().multiply(BigDecimal.valueOf(this.getNumberOfSharesInPortfolio(i))));
+        }
+    }
+
+    public BigDecimal getTotalPortfolioValue(){
+        BigDecimal result = new BigDecimal(0);
+        for (Index i : this.portfolio.keySet()) {
+            result = result.add(i.getCurrentValue().multiply(BigDecimal.valueOf(this.getNumberOfSharesInPortfolio(i))));
+        }
+        return result;
     }
 }

@@ -3,18 +3,21 @@ package models;
 import commons.IdHelper;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 public abstract class Order {
     private final int id;
     private final Account account;
     private final Index index;
     private final int numberOfShares;
+    private final Date expirationDate;
 
-    protected Order(Account account, Index index, int numberOfShares) {
+    protected Order(Account account, Index index, int numberOfShares, Date expirationDate) {
         this.id = IdHelper.getInstance().getNewId();
         this.account = account;
         this.index = index;
         this.numberOfShares = numberOfShares;
+        this.expirationDate = expirationDate;
     }
 
     public Account getAccount() {
@@ -27,5 +30,9 @@ public abstract class Order {
 
     public int getNumberOfShares() {
         return numberOfShares;
+    }
+
+    public Date getExpirationDate() {
+        return expirationDate;
     }
 }
