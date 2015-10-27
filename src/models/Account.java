@@ -3,9 +3,10 @@ package models;
 import commons.IdHelper;
 
 import java.math.BigDecimal;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Queue;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * @author Janusz.
@@ -14,19 +15,36 @@ public class Account {
     private int id;
     private User owner;
     private BigDecimal currentState;
-    private Queue<Order> orders;
+    private List<Transaction> historyOfTransactions;
+    private Map porfolio;
 
-    /**
-     * @param owner
-     */
     public Account(User owner) {
         this.id = IdHelper.getInstance().getNewId();
         this.owner = owner;
         this.currentState = BigDecimal.valueOf(0);
-        this.orders = new ArrayDeque<>();
+        this.historyOfTransactions = new ArrayList<>();
+        this.porfolio = new TreeMap<>();
     }
 
-    public void addOrderToQueue(Order order){
-        this.orders.add(order);
+    private void addToAccount(BigDecimal valueToAdd) {
+        this.currentState = this.currentState.add(valueToAdd);
+    }
+
+    private void subtractFromAccout(BigDecimal valueToSubtract){
+        if(this.currentState.compareTo(valueToSubtract) == -1 ){
+            throw new IllegalArgumentException("Attempting to subtract from account more than current state.");
+        }
+        this.currentState = this.currentState.subtract(valueToSubtract);
+    }
+
+    private void addBuyTransaction(Transaction transaction){
+        this.subtractFromAccout(transaction.getAmout());
+        this.porfolio.put(transaction)
+        this.historyOfTransactions.add(transaction);
+    }
+
+    private void addSellTransaction(Transaction transaction){
+        this.subtractFromAccout(transaction.getAmout());
+        this.historyOfTransactions.add(transaction);
     }
 }

@@ -14,6 +14,7 @@ public class Order {
     private BigDecimal maximumValue;
     private int numberOfShares;
 
+    //TODO change this to abstract
     public Order(Account account, Index index, BigDecimal maximumValue, int numberOfShares) {
         this.id = IdHelper.getInstance().getNewId();
         this.account = account;
