@@ -3,13 +3,10 @@ package models;
 import java.math.BigDecimal;
 import java.util.Date;
 
-/**
- * @author Janusz
- */
 public class Record {
-    private Index index;
-    private BigDecimal value;
-    private Date date;
+    private final Index index;
+    private final BigDecimal value;
+    private final Date date;
 
     public Record(Index index, BigDecimal value, Date date) {
         this.index = index;
