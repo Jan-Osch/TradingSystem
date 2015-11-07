@@ -1,6 +1,9 @@
-package models;
+package bubble.web.models.account;
 
-import commons.IdHelper;
+import bubble.web.commons.IdHelper;
+import bubble.web.models.index.Index;
+import bubble.web.models.transaction.Transaction;
+import bubble.web.models.user.User;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -71,13 +74,13 @@ public class Account {
 
     public void addBuyTransaction(Transaction transaction) {
         this.subtractFromAccount(transaction.getTotalValue());
-        this.addStockToPortfolio(transaction.getIndex(), transaction.getNumberOfShares());
+//        this.addStockToPortfolio(transaction.getIndex(), transaction.getNumberOfShares());
         this.historyOfTransactions.add(transaction);
     }
 
     public void addSellTransaction(Transaction transaction) {
         this.addToAccount(transaction.getTotalValue());
-        this.removeStockFromPortfolio(transaction.getIndex(), transaction.getNumberOfShares());
+//        this.removeStockFromPortfolio(transaction.getIndex(), transaction.getNumberOfShares());
         this.historyOfTransactions.add(transaction);
     }
 

@@ -1,7 +1,8 @@
-package models;
+package bubble.web.models.index;
 
-import commons.IdHelper;
-import models.managers.StockManager;
+
+import bubble.web.commons.IdHelper;
+import bubble.web.models.stocks.StockManager;
 
 import java.math.BigDecimal;
 import java.util.Objects;

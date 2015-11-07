@@ -1,8 +1,8 @@
-package models.managers;
+package bubble.web.models.transaction;
 
-import models.BuyOrder;
-import models.SellOrder;
-import models.Transaction;
+
+import bubble.web.models.order.BuyOrder;
+import bubble.web.models.order.SellOrder;
 
 import java.math.BigDecimal;
 

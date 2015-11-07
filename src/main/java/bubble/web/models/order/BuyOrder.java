@@ -1,6 +1,7 @@
-package models;
+package bubble.web.models.order;
 
-import commons.IdHelper;
+import bubble.web.models.account.Account;
+import bubble.web.models.index.Index;
 
 import java.util.Date;
 

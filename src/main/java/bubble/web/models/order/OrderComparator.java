@@ -1,4 +1,4 @@
-package models;
+package bubble.web.models.order;
 
 import java.math.BigDecimal;
 import java.util.Comparator;

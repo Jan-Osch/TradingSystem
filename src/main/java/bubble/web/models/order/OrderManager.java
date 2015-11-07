@@ -1,6 +1,7 @@
-package models.managers;
+package bubble.web.models.order;
 
-import models.*;
+import bubble.web.models.index.Index;
+import bubble.web.models.transaction.TransactionManager;
 
 import java.util.*;
 
@@ -65,11 +66,11 @@ public class OrderManager {
     public void addSellOrder(SellOrder sellOrder){
         BuyOrder buyOrder = this.findMatchingBuyOrder(sellOrder);
         if(buyOrder!= null){
-            this.transactionManager.combineOrdersIntoTransaction(sellOrder, buyOrder);
+//            this.transactionManager.combineOrdersIntoTransaction(sellOrder, buyOrder);
             return;
         }
         if (!this.sellOrders.containsKey(sellOrder.getIndex())){
-            this.sellOrders.put(sellOrder.getIndex(), new TreeSet<>(new OrderComparator()));
+//            this.sellOrders.put(sellOrder.getIndex(), new TreeSet<>(new OrderComparator()));
         }
         this.sellOrders.get(sellOrder.getIndex()).add(sellOrder);
     }
@@ -77,11 +78,11 @@ public class OrderManager {
     public void addBuyOrder(BuyOrder buyOrder){
         SellOrder sellOrder= this.findMatchingSellOrder(buyOrder);
         if(sellOrder!= null){
-            this.transactionManager.combineOrdersIntoTransaction(sellOrder, buyOrder);
+//            this.transactionManager.combineOrdersIntoTransaction(sellOrder, buyOrder);
             return;
         }
         if (!this.buyOrders.containsKey(buyOrder.getIndex())){
-            this.buyOrders.put(buyOrder.getIndex(), new TreeSet<>(new OrderComparator()));
+//            this.buyOrders.put(buyOrder.getIndex(), new TreeSet<>(new OrderComparator()));
         }
         this.buyOrders.get(buyOrder.getIndex()).add(buyOrder);
     }

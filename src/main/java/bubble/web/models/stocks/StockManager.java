@@ -1,8 +1,8 @@
-package models.managers;
+package bubble.web.models.stocks;
 
-import models.Index;
-import models.Record;
-import models.Session;
+
+import bubble.web.models.index.Index;
+import bubble.web.models.session.Session;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -31,14 +31,14 @@ public class StockManager {
         return instance;
     }
 
-    public void changeIndexPrice(Index index, int value){
-        if(!this.indexes.contains(index)){
+    public void changeIndexPrice(Index index, int value) {
+        if (!this.indexes.contains(index)) {
             this.indexes.add(index);
         }
-        this.currentSession.createRecord(index, BigDecimal.valueOf(value));
+//        this.currentSession.createRecord(index, BigDecimal.valueOf(value));
     }
 
-    public BigDecimal getCurrentPrice(Index index){
+    public BigDecimal getCurrentPrice(Index index) {
         return this.currentSession.getCurrentValueOfIndex(index);
     }
 
@@ -46,9 +46,13 @@ public class StockManager {
         this.currentSession.finishSession();
         this.historySessions.add(this.currentSession);
         Session newSession = new Session();
-        for(Index index : this.indexes){
+        for (Index index : this.indexes) {
             newSession.createRecord(index, this.currentSession.getCurrentValueOfIndex(index));
         }
         this.currentSession = newSession;
+    }
+
+    public void pushRecord(Record record) {
+        System.out.println(record.getStockName() + " value: " + record.getValue() + " volume: " + record.getVolume());
     }
 }

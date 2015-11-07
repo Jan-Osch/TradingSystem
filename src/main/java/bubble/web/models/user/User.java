@@ -1,7 +1,11 @@
-package models;
+package bubble.web.models.user;
 
-import commons.IdHelper;
-import models.managers.OrderManager;
+import bubble.web.commons.IdHelper;
+import bubble.web.models.account.Account;
+import bubble.web.models.index.Index;
+import bubble.web.models.order.BuyOrder;
+import bubble.web.models.order.OrderManager;
+import bubble.web.models.order.SellOrder;
 
 import java.math.BigDecimal;
 import java.util.Date;

@@ -1,4 +1,4 @@
-package commons;
+package bubble.web.commons;
 
 public class IdHelper {
     private static IdHelper instance = null;

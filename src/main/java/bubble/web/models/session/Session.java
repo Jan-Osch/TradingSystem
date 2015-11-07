@@ -1,6 +1,9 @@
-package models;
+package bubble.web.models.session;
 
-import commons.IdHelper;
+
+import bubble.web.commons.IdHelper;
+import bubble.web.models.index.Index;
+import bubble.web.models.stocks.Record;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -24,10 +27,10 @@ public class Session {
 
     public void createRecord(Index index, BigDecimal value) {
         if (this.records.containsKey(index)) {
-            this.records.get(index).add(new Record(index, value));
+//            this.records.get(index).add(new Record(index.e, value));
         } else {
             ArrayList<Record> previousRecords = new ArrayList<>();
-            previousRecords.add(new Record(index, value));
+//            previousRecords.add(new Record(index, value));
             this.records.put(index, previousRecords);
         }
     }

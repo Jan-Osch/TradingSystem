@@ -1,4 +1,6 @@
-package models;
+package bubble.web.models.user;
+
+import bubble.web.models.account.Account;
 
 import java.math.BigDecimal;
 
@@ -15,7 +17,7 @@ public class Employee extends User {
         if(account.getCurrentState().compareTo(BigDecimal.valueOf(amout))==-1){
             throw new IllegalArgumentException("User has not enough resources to withdraw");
         }
-        account.subtractFromAccount(BigDecimal.valueOf(amout));
+//        account.subtractFromAccount(BigDecimal.valueOf(amout));
         return BigDecimal.valueOf(amout);
     }
 }
