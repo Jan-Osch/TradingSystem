@@ -1,8 +1,5 @@
 package commons;
 
-/**
- * @author Janusz
- */
 public class IdHelper {
     private static IdHelper instance = null;
     private static int current;

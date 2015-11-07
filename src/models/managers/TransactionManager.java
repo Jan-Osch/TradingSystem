@@ -10,7 +10,6 @@ public class TransactionManager {
     private static TransactionManager instance = null;
 
     private TransactionManager() {
-
     }
 
     public static TransactionManager getInstance() {

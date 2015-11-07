@@ -68,5 +68,9 @@ public class User {
     public void addResourcesToAccount(int value) {
         this.account.addToAccount(value);
     }
+
+    public int getId() {
+        return id;
+    }
 }
 

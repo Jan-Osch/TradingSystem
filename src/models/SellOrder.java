@@ -1,7 +1,5 @@
 package models;
 
-import commons.IdHelper;
-
 import java.util.Date;
 
 public class SellOrder extends Order{
