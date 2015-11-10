@@ -2,8 +2,8 @@ package bubble.web.models.session;
 
 
 import bubble.web.commons.IdHelper;
-import bubble.web.models.index.Index;
-import bubble.web.models.stocks.Record;
+import bubble.web.models.instrument.Index;
+import bubble.web.models.record.Record;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -47,6 +47,7 @@ public class Session {
         if (!this.records.containsKey(index)) {
             throw new IllegalArgumentException("Index not in this session");
         }
-        return this.records.get(index).get(this.records.get(index).size() - 1).getValue();
+//        return this.records.get(index).get(this.records.get(index).size() - 1).getValue();
+        return null;
     }
 }
