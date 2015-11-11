@@ -42,6 +42,24 @@ public class StockRecord extends Record {
     }
 
     @Override
+    public void add(Record record) {
+        StockRecord stockRecord = (StockRecord) record;
+        this.volume = this.volume.add(stockRecord.getVolume());
+        this.value = this.value.add(stockRecord.getValue());
+    }
+
+    @Override
+    public void divideByInteger(int number) {
+        this.value = this.value.divideToIntegralValue(BigDecimal.valueOf(number));
+        this.volume = this.volume.divideToIntegralValue(BigDecimal.valueOf(number));
+    }
+
+    @Override
+    public Record copy() {
+        return new StockRecord(this.instrument, this.value, this.volume);
+    }
+
+    @Override
     public int compareTo(Object o) {
 
         try {

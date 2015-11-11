@@ -8,18 +8,28 @@ import bubble.web.models.record.Record;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
 
 public abstract class InstrumentManager {
     private Map<String, Instrument> trackedInstruments;
     private InstrumentQuotesCache instrumentQuotesCache;
     private InstrumentQuotesIntervalContainer instrumentQuotesIntervalContainer;
     private InstrumentType instrumentType;
+    private long interval;
+    private Timer timer;
 
-    public InstrumentManager(InstrumentQuotesCache instrumentQuotesCache, InstrumentQuotesIntervalContainer instrumentQuotesIntervalContainer, InstrumentType instrumentType) {
+    public InstrumentManager(InstrumentQuotesCache instrumentQuotesCache, InstrumentQuotesIntervalContainer instrumentQuotesIntervalContainer, InstrumentType instrumentType, long interval) {
         this.instrumentQuotesCache = instrumentQuotesCache;
         this.trackedInstruments = new HashMap<String, Instrument>();
         this.instrumentQuotesIntervalContainer = instrumentQuotesIntervalContainer;
         this.instrumentType = instrumentType;
+        this.interval = interval;
+        this.startIntervalDataTransfer();
+    }
+
+    private void startIntervalDataTransfer() {
+        this.timer = new Timer();
+        this.timer.scheduleAtFixedRate(new InstrumentManagerDataTransferTask(this), 0, this.interval);
     }
 
     public Boolean tracksInstrumentWithCode(String code) {
@@ -45,5 +55,9 @@ public abstract class InstrumentManager {
 
     public InstrumentType getInstrumentType() {
         return instrumentType;
+    }
+
+    public void transferData() {
+        this.instrumentQuotesIntervalContainer.propagateRecords(this.instrumentQuotesCache.getRecords());
     }
 }

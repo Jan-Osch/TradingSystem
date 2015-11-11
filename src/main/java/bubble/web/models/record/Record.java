@@ -10,4 +10,9 @@ public abstract class Record implements Comparable {
     abstract Date getDateCreated();
 
     public abstract String getStringRepresentation();
+
+    public abstract void add(Record record);
+    public abstract void divideByInteger(int number);
+    public abstract Record copy();
+
 }

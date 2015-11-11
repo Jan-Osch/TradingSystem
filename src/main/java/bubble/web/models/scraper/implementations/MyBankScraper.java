@@ -1,7 +1,9 @@
-package bubble.web.models.scraper;
+package bubble.web.models.scraper.implementations;
 
+import bubble.web.models.instrument.Stock;
 import bubble.web.models.instrument.manager.StockManager;
 import bubble.web.models.record.StockRecord;
+import bubble.web.models.scraper.Scraper;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -10,12 +12,15 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.InputMismatchException;
+import java.util.Map;
 
 public class MyBankScraper implements Scraper {
     private final StockManager stockManager;
     private Document document;
     private final String urlToParse;
+    private Map<String, Stock> fullNameToStockMap;
 
     public MyBankScraper(StockManager stockManager, String urlToParse) {
         this.stockManager = stockManager;
@@ -64,10 +69,11 @@ public class MyBankScraper implements Scraper {
         }
         BigDecimal value = new BigDecimal(stringValue);
         BigDecimal volume = new BigDecimal(stringVolume);
-        String indexName = columns.get(0).text();
-        if (!this.stockManager.tracksInstrumentWithCode(indexName)) {
-            this.stockManager.createInstrumentByCode(indexName);
+        String stockName = columns.get(0).text();
+        if (this.stockManager.getStockCodeByFullName(stockName) == null) {
+            return null;
         }
-        return new StockRecord(this.stockManager.getInstrumentByCode(indexName), value, volume);
+        String codeName = this.stockManager.getStockCodeByFullName(stockName);
+        return new StockRecord(this.stockManager.getInstrumentByCode(codeName), value, volume);
     }
 }

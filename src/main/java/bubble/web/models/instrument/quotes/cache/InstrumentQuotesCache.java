@@ -4,6 +4,7 @@ import bubble.web.models.instrument.Instrument;
 import bubble.web.models.record.Record;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class InstrumentQuotesCache {
@@ -26,18 +27,21 @@ public class InstrumentQuotesCache {
 
     public void insertUpdateRecord(Record record) {
         if (!this.instrumentToRecordMap.containsKey(record.getInstrument())) {
-            System.out.println("New instrument - Type: " + record.getInstrument().getInstrumentType()
-                    + " Code: " + record.getInstrument().getCodeName()
-                    + " - " + record.getStringRepresentation());
+//            System.out.println("New instrument - Type: " + record.getInstrument().getInstrumentType()
+//                    + " Code: " + record.getInstrument().getCodeName()
+//                    + " - " + record.getStringRepresentation());
             this.insertRecord(record);
         } else if (this.getRecordForInstrument(record.getInstrument()).compareTo(record) != 0) {
-            System.out.println("Record changed - Instrument: " + record.getInstrument().getInstrumentType()
-                    + " Code: " + record.getInstrument().getCodeName()
-                    + " - " + record.getStringRepresentation());
+//            System.out.println("Record changed - Instrument: " + record.getInstrument().getInstrumentType()
+//                    + " Code: " + record.getInstrument().getCodeName()
+//                    + " - " + record.getStringRepresentation());
             this.insertRecord(record);
         } else {
 //            System.out.println("No change - Instrument: " + record.getInstrument().getInstrumentType()
 //                    + " Code: " + record.getInstrument().getCodeName());
         }
+    }
+    public Iterable<Record> getRecords(){
+        return this.instrumentToRecordMap.values();
     }
 }

@@ -7,8 +7,8 @@ import bubble.web.models.instrument.quotes.interval.container.InstrumentQuotesIn
 
 public class IndexManager extends InstrumentManager {
 
-    public IndexManager(InstrumentQuotesCache instrumentQuotesCache, InstrumentQuotesIntervalContainer instrumentQuotesIntervalContainer) {
-        super(instrumentQuotesCache, instrumentQuotesIntervalContainer, InstrumentType.INDEX);
+    public IndexManager(InstrumentQuotesCache instrumentQuotesCache, InstrumentQuotesIntervalContainer instrumentQuotesIntervalContainer, long interval) {
+        super(instrumentQuotesCache, instrumentQuotesIntervalContainer, InstrumentType.INDEX, interval);
     }
 
     @Override
