@@ -1,11 +1,9 @@
 package bubble.web.models.instrument.quotes.interval.container;
 
-import bubble.web.hibernate.HibernateUtil;
 import bubble.web.models.instrument.Instrument;
 import bubble.web.models.record.Record;
 import bubble.web.models.record.StockRecord;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -68,7 +66,6 @@ public class InstrumentQuotesIntervalContainer {
 
     private void saveToDatabase(Record record) {
 //        System.out.println(this.name + " Saving record to database " + record.toString());
-        HibernateUtil.saveStockRecordToDatabase("GPW_STOCKS_30_SECONDS", (StockRecord) record);
     }
 
     public void propagateRecords(Iterable<Record> records) {
