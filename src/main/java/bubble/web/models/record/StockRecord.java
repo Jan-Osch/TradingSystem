@@ -1,6 +1,7 @@
 package bubble.web.models.record;
 
 import bubble.web.models.instrument.Instrument;
+import bubble.web.models.instrument.Stock;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -18,13 +19,18 @@ public class StockRecord extends Record {
         this.dateCreated = new Date();
     }
 
+    public StockRecord(Stock stock, int i, int i1) {
+        this(stock, BigDecimal.valueOf(i), BigDecimal.valueOf(i1));
+    }
+
+
     @Override
     public Instrument getInstrument() {
         return this.instrument;
     }
 
     @Override
-    Date getDateCreated() {
+    public Date getDateCreated() {
         return this.dateCreated;
     }
 

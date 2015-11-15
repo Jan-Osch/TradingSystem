@@ -29,9 +29,9 @@ public class Session {
         if (this.records.containsKey(index)) {
 //            this.records.get(index).add(new Record(index.e, value));
         } else {
-            ArrayList<Record> previousRecords = new ArrayList<>();
+//            ArrayList<Record> previousRecords = new ArrayList<>();
 //            previousRecords.add(new Record(index, value));
-            this.records.put(index, previousRecords);
+//            this.records.put(index, previousRecords);
         }
     }
 

@@ -14,5 +14,4 @@ public abstract class Record implements Comparable {
     public abstract void add(Record record);
     public abstract void divideByInteger(int number);
     public abstract Record copy();
-
 }
