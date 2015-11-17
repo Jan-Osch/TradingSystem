@@ -2,6 +2,7 @@ package bubble.web.models.record;
 
 import bubble.web.models.instrument.Instrument;
 import bubble.web.models.instrument.Stock;
+import bubble.web.postgresSQLJDBC.PostgreSQLJDBC;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -79,6 +80,26 @@ public class StockRecord extends Record {
             return this.getVolume().compareTo(rec.getVolume());
         } catch (ClassCastException e) {
             return -1;
+        }
+    }
+
+    public void saveToDatabase(String tableName) {
+        PostgreSQLJDBC.getInstance().saveStockRecordToDatabase(tableName, this);
+    }
+
+    @Override
+    public void printComparison(Record record) {
+        StockRecord anotherRecord;
+        try {
+            anotherRecord = (StockRecord) record;
+        } catch (ClassCastException e) {
+            return;
+        }
+        if (anotherRecord.getInstrument() == this.instrument) {
+            System.out.format("StockRecord - code: %s value change: %s volume change: %s\n",
+                    this.instrument.getCodeName(),
+                    this.getValue().subtract(anotherRecord.getValue()).negate().toString(),
+                    this.getVolume().subtract(anotherRecord.getVolume()).negate().toString());
         }
     }
 }

@@ -12,8 +12,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class StockManager extends InstrumentManager {
     private Map<String, String> fullNameToStockCodeMap;
 
-    public StockManager(InstrumentQuotesCache instrumentQuotesCache, InstrumentQuotesIntervalContainer instrumentQuotesIntervalContainer, long interval) {
-        super(instrumentQuotesCache, instrumentQuotesIntervalContainer, InstrumentType.STOCK, interval);
+    public StockManager(InstrumentQuotesCache instrumentQuotesCache, InstrumentQuotesIntervalContainer instrumentQuotesIntervalContainer, long offset, long interval) {
+        super(instrumentQuotesCache, instrumentQuotesIntervalContainer, InstrumentType.STOCK, offset, interval);
         this.fullNameToStockCodeMap = new ConcurrentHashMap<String, String>();
     }
 

@@ -10,6 +10,7 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -37,6 +38,8 @@ public class GPWStocksScraper implements Scraper {
             }
         } catch (IndexOutOfBoundsException e) {
             throw new IOException();
+        } catch (SocketTimeoutException e) {
+            throw new IOException();
         }
     }
 
@@ -44,7 +47,6 @@ public class GPWStocksScraper implements Scraper {
         Elements rows = this.document.getElementsByTag("tr");
         ArrayList<StockRecord> result = new ArrayList<StockRecord>();
         StockRecord current;
-
         for (Element row : rows) {
             try {
                 current = this.parseRecordFromRow(row);
@@ -67,7 +69,7 @@ public class GPWStocksScraper implements Scraper {
             valueAsString = "-1";
         }
         BigDecimal volume = new BigDecimal(volumeAsString);
-        BigDecimal value= new BigDecimal(valueAsString);
+        BigDecimal value = new BigDecimal(valueAsString);
         String stockName = columns.get(2).text();
         String codeName = columns.get(3).text();
         if (!this.stockManager.tracksInstrumentWithCode(codeName)) {

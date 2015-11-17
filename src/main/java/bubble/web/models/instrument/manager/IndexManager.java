@@ -7,13 +7,13 @@ import bubble.web.models.instrument.quotes.interval.container.InstrumentQuotesIn
 
 public class IndexManager extends InstrumentManager {
 
-    public IndexManager(InstrumentQuotesCache instrumentQuotesCache, InstrumentQuotesIntervalContainer instrumentQuotesIntervalContainer, long interval) {
-        super(instrumentQuotesCache, instrumentQuotesIntervalContainer, InstrumentType.INDEX, interval);
+    public IndexManager(InstrumentQuotesCache instrumentQuotesCache, InstrumentQuotesIntervalContainer instrumentQuotesIntervalContainer, long offset, long interval) {
+        super(instrumentQuotesCache, instrumentQuotesIntervalContainer, InstrumentType.INDEX, offset, interval);
     }
 
     @Override
     public void createInstrumentByCode(String code) {
-        if(super.getTrackedInstruments().containsKey(code)){
+        if (super.getTrackedInstruments().containsKey(code)) {
             throw new IllegalArgumentException("Index Already Tracked!");
         }
         super.getTrackedInstruments().put(code, new Index(code, null));

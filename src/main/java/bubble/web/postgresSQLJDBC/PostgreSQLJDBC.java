@@ -50,7 +50,7 @@ public class PostgreSQLJDBC {
             sql = addParameterToSqlStatement(sql, "code", stockRecord.getInstrument().getCodeName());
             sql = addParameterToSqlStatement(sql, "value", stockRecord.getValue().toString());
             sql = addParameterToSqlStatement(sql, "volume", stockRecord.getVolume().toString());
-            System.out.println("SQL QUERY: "+ sql);
+//            System.out.println("SQL QUERY: "+ sql);
 
             statement.executeUpdate(sql);
             statement.close();

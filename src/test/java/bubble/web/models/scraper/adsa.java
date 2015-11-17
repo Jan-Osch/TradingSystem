@@ -13,20 +13,17 @@ class MyBankScraperTest {
     public static void main(String[] args) {
         Market warsaw = new Market("Warsaw GPW");
 
-        InstrumentQuotesIntervalContainer tenMinutes = new InstrumentQuotesIntervalContainer(5, "Ten minutes");
-        InstrumentQuotesIntervalContainer twoMinutes = new InstrumentQuotesIntervalContainer(4, tenMinutes, "Two minutes");
-        InstrumentQuotesIntervalContainer halfMinute = new InstrumentQuotesIntervalContainer(3, twoMinutes, "30 seconds");
-        StockManager warsawStockManager = new StockManager(new InstrumentQuotesCache(), halfMinute, 10000);
+        InstrumentQuotesIntervalContainer tenMinutes = new InstrumentQuotesIntervalContainer(5, "GPW_STOCKS_10_MINUTES");
+        InstrumentQuotesIntervalContainer twoMinutes = new InstrumentQuotesIntervalContainer(4, tenMinutes, "GPW_STOCKS_2_MINUTES");
+        InstrumentQuotesIntervalContainer halfMinute = new InstrumentQuotesIntervalContainer(3, twoMinutes, "GPW_STOCKS_30_SECONDS");
+        StockManager warsawStockManager = new StockManager(new InstrumentQuotesCache(), halfMinute, 5000, 10000);
         warsaw.addInstrumentToMarket(InstrumentType.STOCK, warsawStockManager);
 
 
-//        MyBankScraper scraper = new MyBankScraper(warsawStockManager, "http://akcje.mybank.pl/");
         GPWStocksScraper gpwStocksScraper = new GPWStocksScraper(warsawStockManager);
 
-//        ScrapingTask myBankScrapingTask = new ScrapingTask(scraper);
         ScrapingTask gpwStocksScrapingTask = new ScrapingTask(gpwStocksScraper);
         ScrapingManager scrapingManager = ScrapingManager.getInstance();
-//        scrapingManager.startScraping(myBankScrapingTask, 5000);
         scrapingManager.startScraping(gpwStocksScrapingTask, 2000);
     }
 }

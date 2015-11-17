@@ -16,20 +16,22 @@ public abstract class InstrumentManager {
     private InstrumentQuotesIntervalContainer instrumentQuotesIntervalContainer;
     private InstrumentType instrumentType;
     private long interval;
+    private long offsetBeforeStartingTransfer;
     private Timer timer;
 
-    public InstrumentManager(InstrumentQuotesCache instrumentQuotesCache, InstrumentQuotesIntervalContainer instrumentQuotesIntervalContainer, InstrumentType instrumentType, long interval) {
+    public InstrumentManager(InstrumentQuotesCache instrumentQuotesCache, InstrumentQuotesIntervalContainer instrumentQuotesIntervalContainer, InstrumentType instrumentType, long offsetBeforeStartingTransfer, long interval) {
         this.instrumentQuotesCache = instrumentQuotesCache;
         this.trackedInstruments = new HashMap<String, Instrument>();
         this.instrumentQuotesIntervalContainer = instrumentQuotesIntervalContainer;
         this.instrumentType = instrumentType;
         this.interval = interval;
+        this.offsetBeforeStartingTransfer = offsetBeforeStartingTransfer;
         this.startIntervalDataTransfer();
     }
 
     private void startIntervalDataTransfer() {
         this.timer = new Timer();
-        this.timer.scheduleAtFixedRate(new InstrumentManagerDataTransferTask(this), 0, this.interval);
+        this.timer.scheduleAtFixedRate(new InstrumentManagerDataTransferTask(this), this.offsetBeforeStartingTransfer, this.interval);
     }
 
     public Boolean tracksInstrumentWithCode(String code) {

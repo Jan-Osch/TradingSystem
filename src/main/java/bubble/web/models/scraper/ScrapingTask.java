@@ -16,7 +16,7 @@ public class ScrapingTask extends TimerTask {
         try {
             this.scraper.scrap();
         } catch (IOException e) {
-            e.printStackTrace();
+            //todo
         }
     }
 }
