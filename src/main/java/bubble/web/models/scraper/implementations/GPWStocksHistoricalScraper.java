@@ -10,19 +10,45 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.*;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Objects;
 
 
 public class GPWStocksHistoricalScraper {
     private StockManager stockManager;
     private String baseUrl;
+    private static String dateFormat = "YYYY-MM-dd";
+    private static SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
 
     public GPWStocksHistoricalScraper(String baseUrl, StockManager stockManager) {
         this.baseUrl = baseUrl;
         this.stockManager = stockManager;
     }
 
-    Iterable<HistoricalStockRecord> scrapUrl(String urlToScrap, Date historicalDate) {
+    public GPWStocksHistoricalScraper(StockManager stockManager) {
+        this.baseUrl = "http://www.gpw.pl/notowania_archiwalne_full?type=10&date=";
+        this.stockManager = stockManager;
+    }
+
+    public void scrapIntAmountOfTradingDays(int i) {
+        Date historicalDate = new Date();
+        String currentUrl;
+        while (i > 0) {
+            historicalDate.setTime(historicalDate.getTime() - 24 * 60 * 60* 1000);
+            currentUrl = baseUrl + formatter.format(historicalDate);
+            Iterable<HistoricalStockRecord> resultOfParsing = scrapUrl(currentUrl, historicalDate);
+            if (resultOfParsing != null) {
+                for (HistoricalStockRecord historicalStockRecord : resultOfParsing) {
+                    this.stockManager.pushHistoricalRecord(historicalStockRecord);
+                }
+                i--;
+            }
+        }
+    }
+
+    private Iterable<HistoricalStockRecord> scrapUrl(String urlToScrap, Date historicalDate) {
         try {
             Document currentDocument = Jsoup.connect(urlToScrap).get();
             assert (currentDocument.getElementsByClass("tab03").size() == 1);
@@ -40,7 +66,7 @@ public class GPWStocksHistoricalScraper {
 
         } catch (IOException e) {
             e.printStackTrace();
-            return Collections.emptyList();
+            return null;
         }
     }
 
@@ -49,7 +75,13 @@ public class GPWStocksHistoricalScraper {
             Elements columns = row.getElementsByTag("td");
 
             String stockName = columns.get(0).text();
-            Stock stock = (Stock) this.stockManager.getInstrumentByCode(this.stockManager.getStockCodeByFullName(stockName));
+            String stockCode = this.stockManager.getStockCodeByFullName(stockName);
+            if (stockCode==null){
+                String stockISINCode = columns.get(1).text();
+                createMissingStock(stockCode);
+                stockCode = this.stockManager.getStockCodeByFullName(stockName)
+            }
+            Stock stock = (Stock) this.stockManager.getInstrumentByCode(stockCode);
 
             String openingAsString = columns.get(3).text().replaceAll("[^0-9]", "");
             if (Objects.equals(openingAsString, "")) {
@@ -86,8 +118,12 @@ public class GPWStocksHistoricalScraper {
             return new HistoricalStockRecord(stock, historicalDate, volume, opening, value, minimum, change, transaction);
 
         } catch (Throwable e) {
+            e.printStackTrace();
             return null;
         }
+    }
 
+    private void createMissingStock(String stockCode) {
+        //todo
     }
 }

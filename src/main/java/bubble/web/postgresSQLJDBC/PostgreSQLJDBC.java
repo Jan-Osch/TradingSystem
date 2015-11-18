@@ -75,9 +75,9 @@ public class PostgreSQLJDBC {
             sql = addParameterToSqlStatement(sql, "change", String.valueOf(historicalStockRecord.getValueChangePercentage()));
             sql = addParameterToSqlStatement(sql, "transactions", String.valueOf(historicalStockRecord.getNumberOfTransactions()));
 
-//            System.out.println("SQL QUERY: "+ sql);
+            System.out.println("SQL QUERY: "+ sql);
 
-            statement.executeUpdate(sql);
+//            statement.executeUpdate(sql);
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();

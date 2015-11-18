@@ -3,12 +3,13 @@ package bubble.web.models.instrument.manager;
 import bubble.web.models.instrument.Index;
 import bubble.web.models.instrument.InstrumentType;
 import bubble.web.models.instrument.quotes.cache.InstrumentQuotesCache;
+import bubble.web.models.instrument.quotes.container.InstrumentQuotesHistoricalContainer;
 import bubble.web.models.instrument.quotes.container.InstrumentQuotesIntervalContainer;
 
 public class IndexManager extends InstrumentManager {
 
-    public IndexManager(InstrumentQuotesCache instrumentQuotesCache, InstrumentQuotesIntervalContainer instrumentQuotesIntervalContainer, long offset, long interval) {
-        super(instrumentQuotesCache, instrumentQuotesIntervalContainer, instrumentQuotesHistoricalContainer, InstrumentType.INDEX, offset, interval);
+    public IndexManager(InstrumentQuotesCache instrumentQuotesCache, InstrumentQuotesIntervalContainer instrumentQuotesIntervalContainer, InstrumentQuotesHistoricalContainer instrumentQuotesHistoricalContainer, InstrumentType instrumentType, long offsetBeforeStartingTransfer, long interval) {
+        super(instrumentQuotesCache, instrumentQuotesIntervalContainer, instrumentQuotesHistoricalContainer, instrumentType, offsetBeforeStartingTransfer, interval);
     }
 
     @Override
