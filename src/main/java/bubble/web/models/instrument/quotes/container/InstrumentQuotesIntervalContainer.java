@@ -1,4 +1,4 @@
-package bubble.web.models.instrument.quotes.interval.container;
+package bubble.web.models.instrument.quotes.container;
 
 import bubble.web.models.instrument.Instrument;
 import bubble.web.models.record.Record;
@@ -6,20 +6,19 @@ import bubble.web.models.record.Record;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class InstrumentQuotesIntervalContainer {
+public class InstrumentQuotesIntervalContainer extends InstrumentQuotesContainer {
     private InstrumentQuotesIntervalContainer pipelineMeanStockQuoteHolder;
     private Map<Instrument, Record> previousRecords;
     private Map<Instrument, Record> currentRecords;
     private Map<Instrument, Integer> numberOfChanges;
     private int numberOfIntervals;
     private int currentIteration;
-    private String databaseTableName;
 
     public InstrumentQuotesIntervalContainer(int numberOfIntervals, InstrumentQuotesIntervalContainer pipelineMeanStockQuoteHolder, String databaseTableName) {
+        super(databaseTableName);
         this.numberOfIntervals = numberOfIntervals;
         this.pipelineMeanStockQuoteHolder = pipelineMeanStockQuoteHolder;
         this.currentIteration = 0;
-        this.databaseTableName = databaseTableName;
         this.currentRecords = new ConcurrentHashMap<Instrument, Record>();
         this.previousRecords = new ConcurrentHashMap<Instrument, Record>();
         this.numberOfChanges = new ConcurrentHashMap<Instrument, Integer>();
@@ -29,7 +28,8 @@ public class InstrumentQuotesIntervalContainer {
         this(numberOfIntervals, null, databaseTableName);
     }
 
-    public void addRecord(Record record) {
+    @Override
+    public void pushRecordToContainer(Record record) {
         if (!this.currentRecords.containsKey(record.getInstrument())) {
             this.currentRecords.put(record.getInstrument(), record.getRecordCopy());
             this.numberOfChanges.put(record.getInstrument(), 1);
@@ -75,17 +75,12 @@ public class InstrumentQuotesIntervalContainer {
         }
     }
 
-    private void saveToDatabase(Record record) {
-        record.saveToDatabase(this.databaseTableName);
-    }
-
     public void propagateRecords(Iterable<Record> records) {
         this.currentIteration++;
         for (Record record : records) {
-            this.addRecord(record);
+            this.pushRecordToContainer(record);
         }
         if (this.currentIteration == this.numberOfIntervals) {
-//            System.out.println(this.databaseTableName + " finishes iteration");
             this.processRecordsOnIntervalEnd();
             this.saveChangedRecordsToDatabase();
             this.propagateChangesToNextContainer();

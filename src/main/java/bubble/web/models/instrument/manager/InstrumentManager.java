@@ -3,29 +3,34 @@ package bubble.web.models.instrument.manager;
 import bubble.web.models.instrument.Instrument;
 import bubble.web.models.instrument.InstrumentType;
 import bubble.web.models.instrument.quotes.cache.InstrumentQuotesCache;
-import bubble.web.models.instrument.quotes.interval.container.InstrumentQuotesIntervalContainer;
+import bubble.web.models.instrument.quotes.container.InstrumentQuotesHistoricalContainer;
+import bubble.web.models.instrument.quotes.container.InstrumentQuotesIntervalContainer;
 import bubble.web.models.record.Record;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
+import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class InstrumentManager {
     private Map<String, Instrument> trackedInstruments;
     private InstrumentQuotesCache instrumentQuotesCache;
     private InstrumentQuotesIntervalContainer instrumentQuotesIntervalContainer;
+    private InstrumentQuotesHistoricalContainer instrumentQuotesHistoricalContainer;
     private InstrumentType instrumentType;
     private long interval;
     private long offsetBeforeStartingTransfer;
     private Timer timer;
 
-    public InstrumentManager(InstrumentQuotesCache instrumentQuotesCache, InstrumentQuotesIntervalContainer instrumentQuotesIntervalContainer, InstrumentType instrumentType, long offsetBeforeStartingTransfer, long interval) {
+    public InstrumentManager(InstrumentQuotesCache instrumentQuotesCache, InstrumentQuotesIntervalContainer instrumentQuotesIntervalContainer, InstrumentQuotesHistoricalContainer instrumentQuotesHistoricalContainer, InstrumentType instrumentType, long offsetBeforeStartingTransfer, long interval) {
         this.instrumentQuotesCache = instrumentQuotesCache;
-        this.trackedInstruments = new HashMap<String, Instrument>();
+        this.instrumentQuotesHistoricalContainer = instrumentQuotesHistoricalContainer;
         this.instrumentQuotesIntervalContainer = instrumentQuotesIntervalContainer;
         this.instrumentType = instrumentType;
         this.interval = interval;
         this.offsetBeforeStartingTransfer = offsetBeforeStartingTransfer;
+
+        this.trackedInstruments = new ConcurrentHashMap<String, Instrument>();
         this.startIntervalDataTransfer();
     }
 
@@ -53,6 +58,10 @@ public abstract class InstrumentManager {
 
     public void pushRecord(Record record) {
         this.instrumentQuotesCache.insertUpdateRecord(record);
+    }
+
+    public void pushHistoricalRecord(Record record){
+        this.instrumentQuotesHistoricalContainer.pushRecordToContainer(record);
     }
 
     public InstrumentType getInstrumentType() {

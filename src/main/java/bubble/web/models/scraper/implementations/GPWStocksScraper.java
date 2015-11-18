@@ -1,5 +1,6 @@
 package bubble.web.models.scraper.implementations;
 
+import bubble.web.models.instrument.Stock;
 import bubble.web.models.instrument.manager.StockManager;
 import bubble.web.models.record.StockRecord;
 import bubble.web.models.scraper.Scraper;
@@ -75,6 +76,6 @@ public class GPWStocksScraper implements Scraper {
         if (!this.stockManager.tracksInstrumentWithCode(codeName)) {
             this.stockManager.createStock(codeName, stockName);
         }
-        return new StockRecord(this.stockManager.getInstrumentByCode(codeName), value);
+        return new StockRecord((Stock)this.stockManager.getInstrumentByCode(codeName), value);
     }
 }

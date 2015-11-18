@@ -20,8 +20,8 @@ public class StockRecord extends Record {
         this.dateCreated = date;
     }
 
-    public StockRecord(Stock stock, int i) {
-        this(stock, BigDecimal.valueOf(i), new Date());
+    public StockRecord(Stock stock, BigDecimal value) {
+        this(stock, value, new Date());
     }
 
     @Override

@@ -4,10 +4,9 @@ package bubble.web.models.scraper;
 import bubble.web.models.instrument.InstrumentType;
 import bubble.web.models.instrument.manager.StockManager;
 import bubble.web.models.instrument.quotes.cache.InstrumentQuotesCache;
-import bubble.web.models.instrument.quotes.interval.container.InstrumentQuotesIntervalContainer;
+import bubble.web.models.instrument.quotes.container.InstrumentQuotesIntervalContainer;
 import bubble.web.models.market.Market;
 import bubble.web.models.scraper.implementations.GPWStocksScraper;
-import bubble.web.models.scraper.implementations.MyBankScraper;
 
 class MyBankScraperTest {
     public static void main(String[] args) {

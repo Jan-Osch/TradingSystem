@@ -74,6 +74,6 @@ public class MyBankScraper implements Scraper {
             return null;
         }
         String codeName = this.stockManager.getStockCodeByFullName(stockName);
-        return new StockRecord(this.stockManager.getInstrumentByCode(codeName), value);
+        return new StockRecord((Stock)this.stockManager.getInstrumentByCode(codeName), value);
     }
 }
