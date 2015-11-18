@@ -60,21 +60,21 @@ public class GPWStocksScraper implements Scraper {
 
     private StockRecord parseRecordFromRow(Element root) {
         Elements columns = root.getElementsByTag("td");
-        String volumeAsString = columns.get(22).text().replaceAll("[^0-9]", "");
-        if (Objects.equals(volumeAsString, "")) {
-            volumeAsString = "-1";
-        }
-        String valueAsString = columns.get(6).text().replaceAll("[^0-9]", "");
+//        String volumeAsString = columns.get(22).text().replaceAll("[^0-9]", "");
+//        if (Objects.equals(volumeAsString, "")) {
+//            volumeAsString = "-1";
+//        }
+        String valueAsString = columns.get(11).text().replaceAll("[^0-9]", "");
         if (Objects.equals(valueAsString, "")) {
             valueAsString = "-1";
         }
-        BigDecimal volume = new BigDecimal(volumeAsString);
+//        BigDecimal volume = new BigDecimal(volumeAsString);
         BigDecimal value = new BigDecimal(valueAsString);
         String stockName = columns.get(2).text();
         String codeName = columns.get(3).text();
         if (!this.stockManager.tracksInstrumentWithCode(codeName)) {
             this.stockManager.createStock(codeName, stockName);
         }
-        return new StockRecord(this.stockManager.getInstrumentByCode(codeName), value, volume);
+        return new StockRecord(this.stockManager.getInstrumentByCode(codeName), value);
     }
 }

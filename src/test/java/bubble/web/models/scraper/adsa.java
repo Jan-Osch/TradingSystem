@@ -24,6 +24,6 @@ class MyBankScraperTest {
 
         ScrapingTask gpwStocksScrapingTask = new ScrapingTask(gpwStocksScraper);
         ScrapingManager scrapingManager = ScrapingManager.getInstance();
-        scrapingManager.startScraping(gpwStocksScrapingTask, 2000);
+        scrapingManager.startScraping(gpwStocksScrapingTask, 1000);
     }
 }

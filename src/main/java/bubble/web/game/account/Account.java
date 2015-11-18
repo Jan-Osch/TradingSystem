@@ -110,7 +110,7 @@ public class Account {
 //    public BigDecimal getTotalPortfolioValue(){
 //        BigDecimal result = new BigDecimal(0);
 //        for (Index i : this.portfolio.keySet()) {
-//            result = result.add(i.getCurrentValue().multiply(BigDecimal.valueOf(this.getNumberOfSharesInPortfolio(i))));
+//            result = result.addValueOfAnotherRecord(i.getCurrentValue().multiply(BigDecimal.valueOf(this.getNumberOfSharesInPortfolio(i))));
 //        }
 //        return result;
 //    }

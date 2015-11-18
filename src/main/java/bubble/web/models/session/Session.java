@@ -27,10 +27,10 @@ public class Session {
 
     public void createRecord(Index index, BigDecimal value) {
         if (this.records.containsKey(index)) {
-//            this.records.get(index).add(new Record(index.e, value));
+//            this.records.get(index).addValueOfAnotherRecord(new Record(index.e, value));
         } else {
 //            ArrayList<Record> previousRecords = new ArrayList<>();
-//            previousRecords.add(new Record(index, value));
+//            previousRecords.addValueOfAnotherRecord(new Record(index, value));
 //            this.records.put(index, previousRecords);
         }
     }

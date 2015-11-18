@@ -66,7 +66,7 @@ public class User {
 //    }
 
 //    public BigDecimal getTotalUserValue() {
-//        return this.account.getTotalPortfolioValue().add(this.getAccountState());
+//        return this.account.getTotalPortfolioValue().addValueOfAnotherRecord(this.getAccountState());
 //    }
 
     public void addResourcesToAccount(int value) {

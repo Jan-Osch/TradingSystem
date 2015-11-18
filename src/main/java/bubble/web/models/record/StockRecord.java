@@ -5,25 +5,24 @@ import bubble.web.models.instrument.Stock;
 import bubble.web.postgresSQLJDBC.PostgreSQLJDBC;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.Date;
 
 public class StockRecord extends Record {
     private Instrument instrument;
     private BigDecimal value;
-    private BigDecimal volume;
     private Date dateCreated;
+    static DecimalFormat decimalFormat = new DecimalFormat("+#,##0.00;-#");
 
-    public StockRecord(Instrument instrument, BigDecimal value, BigDecimal volume) {
+    public StockRecord(Instrument instrument, BigDecimal value, Date date) {
         this.instrument = instrument;
         this.value = value;
-        this.volume = volume;
-        this.dateCreated = new Date();
+        this.dateCreated = date;
     }
 
-    public StockRecord(Stock stock, int i, int i1) {
-        this(stock, BigDecimal.valueOf(i), BigDecimal.valueOf(i1));
+    public StockRecord(Stock stock, int i) {
+        this(stock, BigDecimal.valueOf(i), new Date());
     }
-
 
     @Override
     public Instrument getInstrument() {
@@ -39,31 +38,25 @@ public class StockRecord extends Record {
         return value;
     }
 
-    public BigDecimal getVolume() {
-        return volume;
-    }
-
     @Override
     public String getStringRepresentation() {
-        return "Value: " + this.value + " Volume: " + this.volume;
+        return "Code: " + this.instrument.getCodeName() + " Value: " + this.value;
     }
 
     @Override
-    public void add(Record record) {
+    public void addValueOfAnotherRecord(Record record) {
         StockRecord stockRecord = (StockRecord) record;
-        this.volume = this.volume.add(stockRecord.getVolume());
         this.value = this.value.add(stockRecord.getValue());
     }
 
     @Override
     public void divideByInteger(int number) {
         this.value = this.value.divideToIntegralValue(BigDecimal.valueOf(number));
-        this.volume = this.volume.divideToIntegralValue(BigDecimal.valueOf(number));
     }
 
     @Override
-    public Record copy() {
-        return new StockRecord(this.instrument, this.value, this.volume);
+    public Record getRecordCopy() {
+        return new StockRecord(this.instrument, this.value, this.getDateCreated());
     }
 
     @Override
@@ -74,10 +67,7 @@ public class StockRecord extends Record {
             if (!this.getInstrument().equals(rec.getInstrument())) {
                 return this.getInstrument().getCodeName().compareTo(rec.getInstrument().getCodeName());
             }
-            if (this.getValue().compareTo(rec.getValue()) != 0) {
-                return this.getValue().compareTo(rec.getValue());
-            }
-            return this.getVolume().compareTo(rec.getVolume());
+            return this.getValue().compareTo(rec.getValue());
         } catch (ClassCastException e) {
             return -1;
         }
@@ -96,10 +86,10 @@ public class StockRecord extends Record {
             return;
         }
         if (anotherRecord.getInstrument() == this.instrument) {
-            System.out.format("StockRecord - code: %s value change: %s volume change: %s\n",
+            System.out.format("StockRecord - code: %s value change: %s \n",
                     this.instrument.getCodeName(),
-                    this.getValue().subtract(anotherRecord.getValue()).negate().toString(),
-                    this.getVolume().subtract(anotherRecord.getVolume()).negate().toString());
+                    decimalFormat.format(anotherRecord.getValue().subtract(this.getValue()))
+            );
         }
     }
 }

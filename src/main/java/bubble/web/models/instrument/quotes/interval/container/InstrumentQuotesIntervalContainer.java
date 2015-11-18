@@ -31,10 +31,10 @@ public class InstrumentQuotesIntervalContainer {
 
     public void addRecord(Record record) {
         if (!this.currentRecords.containsKey(record.getInstrument())) {
-            this.currentRecords.put(record.getInstrument(), record.copy());
+            this.currentRecords.put(record.getInstrument(), record.getRecordCopy());
             this.numberOfChanges.put(record.getInstrument(), 1);
         } else {
-            this.currentRecords.get(record.getInstrument()).add(record);
+            this.currentRecords.get(record.getInstrument()).addValueOfAnotherRecord(record);
             this.numberOfChanges.computeIfPresent(record.getInstrument(), (key, value) -> value + 1);
         }
     }
@@ -64,7 +64,7 @@ public class InstrumentQuotesIntervalContainer {
 
     private void saveChangedRecordsToDatabase() {
         for (Record currentRecord : this.currentRecords.values()) {
-            this.saveToDatabase(currentRecord.copy());
+            this.saveToDatabase(currentRecord.getRecordCopy());
         }
     }
 
