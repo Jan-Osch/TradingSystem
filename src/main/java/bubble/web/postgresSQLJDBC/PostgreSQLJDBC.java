@@ -52,7 +52,7 @@ public class PostgreSQLJDBC {
             sql = addParameterToSqlStatement(sql, "value", stockRecord.getValue().toString());
 //            System.out.println("SQL QUERY: "+ sql);
 
-            statement.executeUpdate(sql);
+//            statement.executeUpdate(sql);
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -77,7 +77,7 @@ public class PostgreSQLJDBC {
 
             System.out.println("SQL QUERY: "+ sql);
 
-//            statement.executeUpdate(sql);
+            statement.executeUpdate(sql);
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();

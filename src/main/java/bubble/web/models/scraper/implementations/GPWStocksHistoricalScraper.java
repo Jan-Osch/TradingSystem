@@ -1,5 +1,6 @@
 package bubble.web.models.scraper.implementations;
 
+import bubble.web.models.instrument.Instrument;
 import bubble.web.models.instrument.Stock;
 import bubble.web.models.instrument.manager.StockManager;
 import bubble.web.models.record.HistoricalStockRecord;
@@ -36,19 +37,17 @@ public class GPWStocksHistoricalScraper {
         Date historicalDate = new Date();
         String currentUrl;
         while (i > 0) {
-            historicalDate.setTime(historicalDate.getTime() - 24 * 60 * 60* 1000);
+            historicalDate.setTime(historicalDate.getTime() - 24 * 60 * 60 * 1000);
             currentUrl = baseUrl + formatter.format(historicalDate);
-            Iterable<HistoricalStockRecord> resultOfParsing = scrapUrl(currentUrl, historicalDate);
-            if (resultOfParsing != null) {
-                for (HistoricalStockRecord historicalStockRecord : resultOfParsing) {
-                    this.stockManager.pushHistoricalRecord(historicalStockRecord);
-                }
+            if (scrapUrl(currentUrl, historicalDate)) {
                 i--;
+                System.out.println("Sucessfully scraped 1 day of historical data");
             }
         }
     }
 
-    private Iterable<HistoricalStockRecord> scrapUrl(String urlToScrap, Date historicalDate) {
+    private boolean scrapUrl(String urlToScrap, Date historicalDate) {
+        boolean flag = false;
         try {
             Document currentDocument = Jsoup.connect(urlToScrap).get();
             assert (currentDocument.getElementsByClass("tab03").size() == 1);
@@ -59,15 +58,16 @@ public class GPWStocksHistoricalScraper {
             for (Element row : rows) {
                 currentHistoricalStockRecord = parseRow(row, historicalDate);
                 if (currentHistoricalStockRecord != null) {
-                    result.add(currentHistoricalStockRecord);
+                    this.stockManager.pushHistoricalRecord(currentHistoricalStockRecord);
+                    flag = true;
                 }
             }
-            return result;
 
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
+            return false;
         }
+        return flag;
     }
 
     private HistoricalStockRecord parseRow(Element row, Date historicalDate) {
@@ -76,12 +76,18 @@ public class GPWStocksHistoricalScraper {
 
             String stockName = columns.get(0).text();
             String stockCode = this.stockManager.getStockCodeByFullName(stockName);
-            if (stockCode==null){
+            if (stockCode == null) {
                 String stockISINCode = columns.get(1).text();
-                createMissingStock(stockCode);
-                stockCode = this.stockManager.getStockCodeByFullName(stockName)
+                stockCode = getMissingCode(stockISINCode);
             }
-            Stock stock = (Stock) this.stockManager.getInstrumentByCode(stockCode);
+            Instrument instrument= this.stockManager.getInstrumentByCode(stockCode);
+            Stock stock;
+            if (instrument== null) {
+                this.stockManager.createStock(stockCode, stockName);
+                stock = (Stock) this.stockManager.getInstrumentByCode(stockCode);
+            }else{
+                stock = (Stock) instrument;
+            }
 
             String openingAsString = columns.get(3).text().replaceAll("[^0-9]", "");
             if (Objects.equals(openingAsString, "")) {
@@ -95,7 +101,7 @@ public class GPWStocksHistoricalScraper {
             if (Objects.equals(valueAsString, "")) {
                 valueAsString = "-1";
             }
-            String changeAsString = columns.get(7).text().replaceAll("[^0-9]", "");
+            String changeAsString = columns.get(7).text().replace(",", ".");
             if (Objects.equals(changeAsString, "")) {
                 changeAsString = "-1";
             }
@@ -123,7 +129,14 @@ public class GPWStocksHistoricalScraper {
         }
     }
 
-    private void createMissingStock(String stockCode) {
-        //todo
+    private String getMissingCode(String stockISINCode) {
+        try {
+            Document toParse = Jsoup.connect("http://www.gpw.pl/karta_spolki/" + stockISINCode + "/").get();
+            String title = toParse.title();
+            return title.substring(title.indexOf("|") + 2, title.lastIndexOf("|") - 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
