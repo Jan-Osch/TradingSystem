@@ -3,26 +3,26 @@ package bubble.web.gameplay.account;
 import bubble.web.gameplay.account.AccountTransaction.AccountTransaction;
 import bubble.web.gameplay.account.AccountTransaction.InFlowTransaction;
 import bubble.web.gameplay.account.AccountTransaction.OutFlowTransaction;
+import bubble.web.gameplay.portfolio.Portfolio;
+import bubble.web.gameplay.portfolio.PortfolioFactory;
 import bubble.web.gameplay.user.Player;
-import bubble.web.instruments.instrument.Index;
+import bubble.web.instruments.market.Market;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 public class Account {
     private final Player owner;
     private BigDecimal currentBalance;
     private List<AccountTransaction> historyOfAccountTransactions;
-    private Map<Index, Integer> portfolio;
+    private Portfolio portfolio;
 
-    public Account(Player owner) {
+    public Account(Player owner, Market market) {
         this.owner = owner;
         this.currentBalance = BigDecimal.valueOf(0);
         this.historyOfAccountTransactions = new ArrayList<>();
-        this.portfolio = new TreeMap<>();
+        this.portfolio = PortfolioFactory.createPortfolio(market);
     }
 
     public BigDecimal getCurrentBalance() {

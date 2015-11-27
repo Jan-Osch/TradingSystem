@@ -1,15 +1,19 @@
-package bubble.web.gameplay.account;
+package bubble.web.gameplay.portfolio;
 
-import bubble.web.instruments.instrument.Index;
 import bubble.web.instruments.instrument.InstrumentType;
 
 public class InstrumentPortfolio {
     private InstrumentType instrumentType;
+    private Portfolio portfolio;
 
-    public InstrumentPortfolio(InstrumentType instrumentType) {
+    public InstrumentPortfolio(InstrumentType instrumentType, Portfolio portfolio) {
         this.instrumentType = instrumentType;
+        this.portfolio = portfolio;
     }
-//
+
+    public InstrumentType getInstrumentType() {
+        return instrumentType;
+    }
 //    public void addStockToPortfolio(Index index, int number) {
 //        Integer newNumberOfShares = number;
 //        if (this.portfolio.containsKey(index)) {

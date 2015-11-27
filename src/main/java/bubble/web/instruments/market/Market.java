@@ -15,11 +15,22 @@ public class Market {
         this.instrumentTypeInstrumentManagerMap = new HashMap<InstrumentType, InstrumentManager>();
     }
 
-    public void addInstrumentToMarket(InstrumentType instrumentType, InstrumentManager instrumentManager){
-        if(this.instrumentTypeInstrumentManagerMap.containsKey(instrumentType)){
-            throw new IllegalArgumentException("Instrument already on the market!");
+    public void addInstrumentToMarket(InstrumentType instrumentType, InstrumentManager instrumentManager) throws InstrumentAlreadyOnMarket {
+        if(isInstrumentAlreadyOnMarket(instrumentType)){
+            throw new InstrumentAlreadyOnMarket();
         }
         this.instrumentTypeInstrumentManagerMap.put(instrumentType, instrumentManager);
+    }
+
+    public Iterable<InstrumentType> getTrackedInstruments(){
+        return this.instrumentTypeInstrumentManagerMap.keySet();
+    }
+
+    private boolean isInstrumentAlreadyOnMarket(InstrumentType instrumentType) {
+        return this.instrumentTypeInstrumentManagerMap.containsKey(instrumentType);
+    }
+
+    private class InstrumentAlreadyOnMarket extends Throwable {
     }
 }
 
