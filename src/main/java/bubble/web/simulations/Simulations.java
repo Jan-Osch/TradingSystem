@@ -1,9 +1,9 @@
 //package bubble.web.simulations;
 //
-//import models.Index;
-//import models.User;
-//import models.managers.OrderManager;
-//import models.managers.StockManager;
+//import instruments.Index;
+//import instruments.Player;
+//import instruments.managers.OrderManager;
+//import instruments.managers.StockManager;
 //
 //public class Simulations {
 //    /**
@@ -11,20 +11,20 @@
 //     * Create user
 //     * Create stockManager
 //     * Sets prices of indexes
-//     * Add funds to User's account
+//     * Add funds to Player's account
 //     * Check current account state
-//     * Add stocks to User's portfolio
+//     * Add stocks to Player's portfolio
 //     * Check current portfolio
 //     */
 //    public static void simpleUserCreation() {
 //        System.out.println("########################################");
-//        System.out.println("Simple User Creation, adding some stocks");
+//        System.out.println("Simple Player Creation, adding some stocks");
 //
 //        Index alior = new Index("ALIOR");
 //        Index asseco = new Index("ASSECO");
 //        Index enea = new Index("ENEA");
 //
-//        User andrzejNowak = new User("Andrzej Nowak");
+//        Player andrzejNowak = new Player("Andrzej Nowak");
 //        andrzejNowak.addResourcesToAccount(1000);
 //        andrzejNowak.printAccountState();
 //
@@ -48,14 +48,14 @@
 //        StockManager stockManager = StockManager.getInstance();
 //        stockManager.changeIndexPrice(alior, 83);
 //
-//        User andrzejNowak = new User("Andrzej Nowak");
+//        Player andrzejNowak = new Player("Andrzej Nowak");
 //        andrzejNowak.addResourcesToAccount(1000);
 //        andrzejNowak.addStockToPortfolio(alior, 60);
 //
-//        User janKowalski = new User("Jan Kowalski");
+//        Player janKowalski = new Player("Jan Kowalski");
 //        janKowalski.addResourcesToAccount(10000);
 //
-//        System.out.println("\nBefore Transaction:");
+//        System.out.println("\nBefore StockTransaction:");
 //        janKowalski.printAccountState();
 //        janKowalski.printPortfolio();
 //        andrzejNowak.printPortfolio();
@@ -85,7 +85,7 @@
 //        stockManager.changeIndexPrice(asseco, 83);
 //        stockManager.changeIndexPrice(enea, 35);
 //
-//        User andrzejNowak = new User("Andrzej Nowak");
+//        Player andrzejNowak = new Player("Andrzej Nowak");
 //        andrzejNowak.addResourcesToAccount(1000);
 //        andrzejNowak.addStockToPortfolio(alior, 60);
 //        andrzejNowak.addStockToPortfolio(enea, 600);
@@ -113,14 +113,14 @@
 //        StockManager stockManager = StockManager.getInstance();
 //        stockManager.changeIndexPrice(alior, 83);
 //
-//        User andrzejNowak = new User("Andrzej Nowak");
+//        Player andrzejNowak = new Player("Andrzej Nowak");
 //        andrzejNowak.addResourcesToAccount(1000);
 //        andrzejNowak.addStockToPortfolio(alior, 60);
 //
-//        User janKowalski = new User("Jan Kowalski");
+//        Player janKowalski = new Player("Jan Kowalski");
 //        janKowalski.addResourcesToAccount(10000);
 //
-//        System.out.println("\nBefore Transaction:");
+//        System.out.println("\nBefore StockTransaction:");
 //        janKowalski.printAccountState();
 //        janKowalski.printPortfolio();
 //        andrzejNowak.printPortfolio();

@@ -1,8 +1,7 @@
 package bubble.web.postgresSQLJDBC;
 
-import bubble.web.models.record.HistoricalStockRecord;
-import bubble.web.models.record.StockRecord;
-import com.sun.javaws.exceptions.InvalidArgumentException;
+import bubble.web.instruments.record.HistoricalStockRecord;
+import bubble.web.instruments.record.StockRecord;
 
 import java.sql.*;
 
