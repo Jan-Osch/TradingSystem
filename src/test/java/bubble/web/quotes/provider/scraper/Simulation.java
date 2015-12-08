@@ -1,14 +1,16 @@
 package bubble.web.quotes.provider.scraper;
 
 
-import bubble.web.instruments.instrument.InstrumentType;
-import bubble.web.instruments.instrument.manager.StockManager;
-import bubble.web.instruments.instrument.quotes.cache.InstrumentQuotesCache;
-import bubble.web.instruments.instrument.quotes.container.InstrumentQuotesHistoricalContainer;
-import bubble.web.instruments.instrument.quotes.container.InstrumentQuotesIntervalContainer;
-import bubble.web.instruments.market.Market;
-import bubble.web.quotes.provider.scraper.implementations.GPWStocksHistoricalScraper;
-import bubble.web.quotes.provider.scraper.implementations.GPWStocksScraper;
+import markets.entities.instrument.InstrumentType;
+import markets.entities.manager.StockManager;
+import markets.entities.manager.quotes.cache.InstrumentQuotesCache;
+import markets.entities.manager.quotes.container.InstrumentQuotesHistoricalContainer;
+import markets.entities.manager.quotes.container.InstrumentQuotesIntervalContainer;
+import markets.entities.market.Market;
+import scraper.ScrapingManager;
+import scraper.ScrapingTask;
+import scraper.implementations.GPWStocksHistoricalScraper;
+import scraper.implementations.GPWStocksScraper;
 
 class Simulation {
     public static void main(String[] args) {
