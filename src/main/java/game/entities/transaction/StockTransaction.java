@@ -1,6 +1,6 @@
 package game.entities.transaction;
 
-import utilities.IdHelper;
+import commons.IdHelper;
 import markets.entities.instrument.Index;
 import game.entities.order.BuyOrder;
 import game.entities.order.SellOrder;

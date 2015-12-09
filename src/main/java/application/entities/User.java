@@ -1,9 +1,11 @@
 package application.entities;
 
 public class User {
-    private String login;
+    private final String login;
+    private final String password;
 
-    public User(String login) {
+    public User(String login, String password) {
         this.login = login;
+        this.password = password;
     }
 }

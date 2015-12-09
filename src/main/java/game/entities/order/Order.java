@@ -1,6 +1,6 @@
 package game.entities.order;
 
-import utilities.IdHelper;
+import commons.IdHelper;
 import game.entities.account.Account;
 import markets.entities.instrument.Index;
 

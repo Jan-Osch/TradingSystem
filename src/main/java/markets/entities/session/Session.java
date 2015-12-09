@@ -1,7 +1,7 @@
 package markets.entities.session;
 
 
-import utilities.IdHelper;
+import commons.IdHelper;
 import markets.entities.instrument.Index;
 import markets.entities.record.Record;
 
