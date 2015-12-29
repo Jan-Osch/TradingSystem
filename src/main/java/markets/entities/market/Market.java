@@ -5,13 +5,28 @@ import markets.entities.manager.InstrumentManager;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class Market {
     private String name;
-    private Map<InstrumentType, InstrumentManager> instrumentTypeInstrumentManagerMap;
+
+    private UUID uuid;
+
+    public Map<InstrumentType, InstrumentManager> instrumentTypeInstrumentManagerMap;
+    public UUID getUuid() {
+        return uuid;
+    }
+    public String getName() {
+        return name;
+    }
 
     public Market(String name) {
+        this(name, UUID.randomUUID());
+    }
+
+    public Market(String name, UUID uuid) {
         this.name = name;
+        this.uuid = uuid;
         this.instrumentTypeInstrumentManagerMap = new HashMap<InstrumentType, InstrumentManager>();
     }
 
@@ -30,7 +45,7 @@ public class Market {
         return this.instrumentTypeInstrumentManagerMap.containsKey(instrumentType);
     }
 
-    private class InstrumentAlreadyOnMarket extends Throwable {
+    public class InstrumentAlreadyOnMarket extends Throwable {
     }
 }
 

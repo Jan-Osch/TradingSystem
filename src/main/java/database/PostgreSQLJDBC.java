@@ -2,15 +2,19 @@ package database;
 
 import markets.entities.record.HistoricalStockRecord;
 import markets.entities.record.StockRecord;
+import markets.entities.session.State;
 
 import java.sql.*;
+import java.util.HashMap;
 
 public class PostgreSQLJDBC {
     static PostgreSQLJDBC instance = null;
     static Connection connection = null;
+    static HashMap<ResultSet, Statement> statementsToClose;
 
     private PostgreSQLJDBC() {
         this.connection = createConnection();
+        this.statementsToClose = new HashMap<>();
     }
 
     public static PostgreSQLJDBC getInstance() {
@@ -38,6 +42,30 @@ public class PostgreSQLJDBC {
 
     private static String addParameterToSqlStatement(String baseSql, String parameterName, String value) {
         return baseSql.replaceFirst(":" + parameterName, value);
+    }
+
+    public static void executeSql(String sql) throws SQLException {
+        Statement statement = connection.createStatement();
+        statement.executeUpdate(sql);
+        statement.close();
+    }
+
+    public static ResultSet executeSqlWithReturn(String sql) {
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            statementsToClose.put(resultSet, statement);
+            return resultSet;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static void closeStatementAfterResult(ResultSet resultSet) throws SQLException {
+        Statement statement = statementsToClose.get(resultSet);
+        resultSet.close();
+        statement.close();
     }
 
     public static void saveStockRecordToDatabase(String tableName, StockRecord stockRecord) {
@@ -74,7 +102,7 @@ public class PostgreSQLJDBC {
             sql = addParameterToSqlStatement(sql, "change", String.valueOf(historicalStockRecord.getValueChangePercentage()));
             sql = addParameterToSqlStatement(sql, "transactions", String.valueOf(historicalStockRecord.getNumberOfTransactions()));
 
-            System.out.println("SQL QUERY: "+ sql);
+            System.out.println("SQL QUERY: " + sql);
 
             statement.executeUpdate(sql);
             statement.close();

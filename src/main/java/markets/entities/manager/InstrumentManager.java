@@ -77,6 +77,6 @@ public abstract class InstrumentManager {
         this.instrumentQuotesIntervalContainer.propagateRecords(this.instrumentQuotesCache.getRecords());
     }
 
-    static class InstrumentAlreadyTracked extends Throwable {
+    public static class InstrumentAlreadyTracked extends Throwable {
     }
 }

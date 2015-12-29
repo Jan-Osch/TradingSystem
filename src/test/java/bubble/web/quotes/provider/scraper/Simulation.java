@@ -22,7 +22,11 @@ class Simulation {
 
         //Market
         Market warsaw = new Market("Warsaw GPW");
-        warsaw.addInstrumentToMarket(InstrumentType.STOCK, warsawStockManager);
+        try {
+            warsaw.addInstrumentToMarket(InstrumentType.STOCK, warsawStockManager);
+        } catch (Market.InstrumentAlreadyOnMarket instrumentAlreadyOnMarket) {
+            instrumentAlreadyOnMarket.printStackTrace();
+        }
 
         //Scraper
         GPWStocksScraper gpwStocksScraper = new GPWStocksScraper(warsawStockManager);

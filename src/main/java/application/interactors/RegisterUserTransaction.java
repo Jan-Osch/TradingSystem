@@ -1,11 +1,12 @@
 package application.interactors;
 
 import application.entities.User;
+import commons.InteractorTransactionWithResult;
 import persistance.EntityGateWayManager;
 import commons.InteractorTransaction;
 import persistance.UserGateWay;
 
-public class RegisterUserTransaction implements InteractorTransaction {
+public class RegisterUserTransaction implements InteractorTransactionWithResult {
     private final String password;
     private final String login;
 
@@ -15,9 +16,14 @@ public class RegisterUserTransaction implements InteractorTransaction {
     }
 
     @Override
-    public void execute() {
-        User user = new User(this.login, this.password);
+    public Boolean execute() {
         UserGateWay userGateWay = EntityGateWayManager.getUserGateway();
-        userGateWay.save(user);
+        User previousNameHolder = userGateWay.getUserByLogin(this.login);
+        if (previousNameHolder == null) {
+            User user = new User(this.login, this.password);
+            userGateWay.saveUser(user);
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
     }
 }

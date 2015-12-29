@@ -1,6 +1,7 @@
 package scraper.implementations;
 
 import markets.entities.instrument.Stock;
+import markets.entities.manager.InstrumentManager;
 import markets.entities.manager.StockManager;
 import markets.entities.record.StockRecord;
 import scraper.Scraper;
@@ -69,7 +70,11 @@ public class GPWStocksScraper implements Scraper {
         String codeName = columns.get(3).text();
         String stockName = columns.get(2).text().replaceAll("/.*","").replaceAll("\u00A0","");
         if (!this.stockManager.tracksInstrumentWithCode(codeName)) {
-            this.stockManager.createStock(codeName, stockName);
+            try {
+                this.stockManager.createStock(codeName, stockName);
+            } catch (InstrumentManager.InstrumentAlreadyTracked instrumentAlreadyTracked) {
+                instrumentAlreadyTracked.printStackTrace();
+            }
         }
         return new StockRecord((Stock)this.stockManager.getInstrumentByCode(codeName), value);
     }

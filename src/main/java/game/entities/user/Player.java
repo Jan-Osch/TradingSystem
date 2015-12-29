@@ -14,7 +14,7 @@ public class Player {
     private OrderManager orderManager;
 
     public Player() {
-        this.account = new Account(this);
+//        this.account = new Account(this);
         this.orderManager = OrderManager.getInstance();
     }
 
@@ -37,24 +37,24 @@ public class Player {
         this.orderManager.addBuyOrder(new BuyOrder(this.getAccount(), index, numberOfShares, expirationDate));
     }
 
-    public void createSellOrder(Index index, int numberOfShares, int secondsOffset) {
-        if (this.account.getNumberOfSharesInPortfolio(index) == 0) {
-            throw new IllegalArgumentException("Player has not enough shares of given index in his account portfolio");
-        }
-        Date current = new Date();
-        Date expirationDate = new Date();
-        expirationDate.setSeconds(current.getSeconds() + secondsOffset);
-        this.orderManager.addSellOrder(new SellOrder(this.getAccount(), index, numberOfShares, expirationDate));
-    }
-
-    public void printPortfolio() {
-//        this.account.printPortfolio();
-    }
-
-    public void addStockToPortfolio(Index index, int amount) {
-        this.account.addStockToPortfolio(index, amount);
-    }
+//    public void createSellOrder(Index index, int numberOfShares, int secondsOffset) {
+//        if (this.account.getNumberOfSharesInPortfolio(index) == 0) {
+//            throw new IllegalArgumentException("Player has not enough shares of given index in his account portfolio");
+//        }
+//        Date current = new Date();
+//        Date expirationDate = new Date();
+//        expirationDate.setSeconds(current.getSeconds() + secondsOffset);
+//        this.orderManager.addSellOrder(new SellOrder(this.getAccount(), index, numberOfShares, expirationDate));
+//    }
 //
+//    public void printPortfolio() {
+////        this.account.printPortfolio();
+//    }
+//
+//    public void addStockToPortfolio(Index index, int amount) {
+//        this.account.addStockToPortfolio(index, amount);
+//    }
+////
 //    public void printTotalUserValue() {
 //        System.out.println("Player's " + this.name + " total value of stocks + resources in account: " + this.getTotalUserValue());
 //    }

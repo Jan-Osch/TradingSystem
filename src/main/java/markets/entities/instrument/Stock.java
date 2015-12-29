@@ -1,7 +1,9 @@
 package markets.entities.instrument;
 
-public class Stock extends Instrument{
-    public Stock(String codeName, String fullName) {
-        super(codeName, fullName, InstrumentType.STOCK);
+import java.util.UUID;
+
+public class Stock extends Instrument {
+    public Stock(UUID uuid, UUID marketUuid, String codeName, String fullName) {
+        super(uuid, marketUuid, codeName, fullName, InstrumentType.STOCK);
     }
 }
