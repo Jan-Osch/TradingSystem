@@ -3,17 +3,28 @@ package markets.entities.record;
 import markets.entities.instrument.Instrument;
 
 import java.util.Date;
+import java.util.UUID;
 
-public abstract class Record implements Comparable {
-    public abstract Instrument getInstrument();
+public abstract class Record {
+    private final Instrument instrument;
+    private final UUID instrumentUuid;
+    private final Date date;
 
-    abstract Date getDateCreated();
+    public Record(Instrument instrument, UUID instrumentUuid, Date date) {
+        this.instrument = instrument;
+        this.instrumentUuid = instrumentUuid;
+        this.date = date;
+    }
 
-    public abstract String getStringRepresentation();
+    public Instrument getInstrument() {
+        return instrument;
+    }
 
-    public abstract void addValueOfAnotherRecord(Record record);
-    public abstract void divideByInteger(int number);
-    public abstract Record getRecordCopy();
-    public abstract void saveToDatabase(String tableName);
-    public abstract void printComparison(Record record);
+    public UUID getInstrumentUuid() {
+        return instrumentUuid;
+    }
+
+    public Date getDate() {
+        return date;
+    }
 }

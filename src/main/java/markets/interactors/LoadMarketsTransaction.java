@@ -13,10 +13,7 @@ public class LoadMarketsTransaction implements InteractorTransaction {
     @Override
     public void execute() {
         MarketGateWay marketGateWay= EntityGateWayManager.getMarketGateWay();
-        List<Market> markets= marketGateWay.getAllMarkets();
-        MarketManager marketManager = MarketManager.getInstance();
-        for(Market market :markets){
-            marketManager.addMarket(market);
-        }
+        Iterable<Market> markets= marketGateWay.getAllMarkets();
+        markets.forEach(MarketManager::addMarket);
     }
 }

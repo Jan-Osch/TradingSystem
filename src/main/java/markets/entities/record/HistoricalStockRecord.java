@@ -5,16 +5,17 @@ import database.PostgreSQLJDBC;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.UUID;
 
-public class HistoricalStockRecord extends StockRecord {
+public class HistoricalStockRecord extends Record {
     private BigDecimal volumeInShares;
     private BigDecimal openingValue;
     private BigDecimal minimumValue;
     private float valueChangePercentage;
     private int numberOfTransactions;
 
-    public HistoricalStockRecord(Instrument instrument, Date date, BigDecimal volumeInShares, BigDecimal openingValue, BigDecimal closingValue, BigDecimal minimumValue, float valueChangePercentage, int numberOfTransactions) {
-        super(instrument, closingValue, date);
+    public HistoricalStockRecord(UUID uuid, Instrument instrument, Date date, BigDecimal volumeInShares, BigDecimal openingValue, BigDecimal closingValue, BigDecimal minimumValue, float valueChangePercentage, int numberOfTransactions) {
+        super(instrument, uuid, date);
         this.volumeInShares = volumeInShares;
         this.openingValue = openingValue;
         this.minimumValue = minimumValue;
@@ -22,10 +23,6 @@ public class HistoricalStockRecord extends StockRecord {
         this.numberOfTransactions = numberOfTransactions;
     }
 
-    @Override
-    public void saveToDatabase(String tableName) {
-        PostgreSQLJDBC.getInstance().saveHistoricalStockRecordToDatabase(tableName, this);
-    }
 
     public BigDecimal getVolumeInShares() {
         return volumeInShares;

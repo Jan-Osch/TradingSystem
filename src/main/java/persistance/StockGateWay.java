@@ -10,6 +10,6 @@ public interface StockGateWay {
 
     Stock getStockByUuid(UUID uuid);
 
-    List<Stock> getStocksByMarketUuid(UUID marketUuid);
+    Iterable<Stock> getStocksByMarketUuid(UUID marketUuid);
 
 }

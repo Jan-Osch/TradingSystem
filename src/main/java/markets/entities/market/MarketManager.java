@@ -1,24 +1,26 @@
 package markets.entities.market;
 
+import markets.exceptions.MarketNotFoundException;
+
 import java.util.HashMap;
 import java.util.UUID;
 
 public class MarketManager {
-    static MarketManager instance = null;
-    public static HashMap<UUID, Market> marketHashMap;
-
-    private MarketManager() {
-        marketHashMap = new HashMap<>();
-    }
-
-    public static MarketManager getInstance() {
-        if (instance == null) {
-            instance = new MarketManager();
-        }
-        return instance;
-    }
+    private static HashMap<UUID, Market> marketHashMap = new HashMap<>();
 
     public static void addMarket(Market market) {
         marketHashMap.put(market.getUuid(), market);
+    }
+
+    public static Iterable<Market> getAllMarkets() {
+        return marketHashMap.values();
+    }
+
+    public static Market getMarketByUuid(UUID uuid) throws MarketNotFoundException {
+        Market result = marketHashMap.get(uuid);
+        if (result != null) {
+            return result;
+        }
+        throw new MarketNotFoundException();
     }
 }

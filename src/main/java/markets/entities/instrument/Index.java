@@ -1,8 +1,10 @@
 package markets.entities.instrument;
 
+import java.util.UUID;
+
 public class Index extends Instrument {
 
-    public Index(String codeName, String fullName) {
-        super(codeName, fullName, InstrumentType.INDEX);
+    public Index(UUID uuid, UUID marketUuid, String codeName, String fullName) {
+        super(uuid, marketUuid, codeName, fullName, InstrumentType.INDEX);
     }
 }

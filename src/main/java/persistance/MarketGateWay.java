@@ -11,5 +11,5 @@ public interface MarketGateWay {
 
     Market getMarketByUuid(UUID uuid);
 
-    List<Market> getAllMarkets();
+    Iterable<Market> getAllMarkets();
 }

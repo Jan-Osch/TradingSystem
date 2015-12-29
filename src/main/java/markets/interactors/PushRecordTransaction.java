@@ -1,35 +1,34 @@
 package markets.interactors;
 
-import commons.InteractorTransaction;
-import markets.entities.instrument.InstrumentType;
-import markets.entities.manager.StockManager;
+import commons.InteractorTransactionWithException;
 import markets.entities.market.Market;
 import markets.entities.market.MarketManager;
+import markets.entities.record.HistoricalStockRecord;
 import markets.entities.record.Record;
 import markets.entities.record.StockRecord;
+import markets.exceptions.MarketNotFoundException;
+import persistance.EntityGateWayManager;
+import persistance.HistoricalStockRecordGateWay;
 
 import java.util.UUID;
 
-public class PushRecordTransaction implements InteractorTransaction {
+public class PushRecordTransaction implements InteractorTransactionWithException {
     private UUID marketUuid;
     private Record record;
-    private Market market;
+
+    public PushRecordTransaction(UUID marketUuid, Record record) {
+        this.marketUuid = marketUuid;
+        this.record = record;
+    }
 
     @Override
-    public void execute() {
-        loadMarket();
-        if(this.record instanceof StockRecord){
-            this.pushStockRecord();
+    public void execute() throws MarketNotFoundException {
+        Market market = MarketManager.getMarketByUuid(marketUuid);
+        if (this.record instanceof HistoricalStockRecord) {
+            HistoricalStockRecordGateWay historicalStockRecordGateWay = EntityGateWayManager.getHistoricalStockRecordGateWay();
+            historicalStockRecordGateWay.saveHistoricalStockRecord((HistoricalStockRecord) this.record);
+        } else if (this.record instanceof StockRecord) {
+            market.pushRecord(record);
         }
-
-    }
-
-    private void loadMarket() {
-        MarketManager.getInstance();
-        this.market =  MarketManager.marketHashMap.get(marketUuid);
-    }
-
-    private void pushStockRecord() {
-        StockManager stockManager = (StockManager) this.market.instrumentTypeInstrumentManagerMap.get(InstrumentType.STOCK);
     }
 }
