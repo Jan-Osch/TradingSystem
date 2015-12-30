@@ -12,10 +12,9 @@ import java.util.UUID;
 public class StockRecord extends Record {
     private Instrument instrument;
     private BigDecimal value;
-    static DecimalFormat decimalFormat = new DecimalFormat("+#,##0.00;-#");
 
-    public StockRecord(UUID uuid, Instrument instrument, BigDecimal value, Date date) {
-        super(instrument, uuid, date);
+    public StockRecord(Instrument instrument, BigDecimal value, Date date) {
+        super(instrument, date);
         this.value = value;
     }
 

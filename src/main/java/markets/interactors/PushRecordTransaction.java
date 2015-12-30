@@ -1,5 +1,6 @@
 package markets.interactors;
 
+import com.google.common.collect.Iterables;
 import commons.InteractorTransactionWithException;
 import markets.entities.market.Market;
 import markets.entities.market.MarketManager;
@@ -25,10 +26,25 @@ public class PushRecordTransaction implements InteractorTransactionWithException
     public void execute() throws MarketNotFoundException {
         Market market = MarketManager.getMarketByUuid(marketUuid);
         if (this.record instanceof HistoricalStockRecord) {
-            HistoricalStockRecordGateWay historicalStockRecordGateWay = EntityGateWayManager.getHistoricalStockRecordGateWay();
-            historicalStockRecordGateWay.saveHistoricalStockRecord((HistoricalStockRecord) this.record);
+            pushHistoricalRecord();
         } else if (this.record instanceof StockRecord) {
             market.pushRecord(record);
+        }
+    }
+
+    private void pushHistoricalRecord() {
+        HistoricalStockRecordGateWay historicalStockRecordGateWay = EntityGateWayManager.getHistoricalStockRecordGateWay();
+        HistoricalStockRecord historicalStockRecord = (HistoricalStockRecord) this.record;
+        Iterable<HistoricalStockRecord> previous = historicalStockRecordGateWay.getHistoricalStockRecordForPeriod(
+                historicalStockRecord.getInstrumentUuid(),
+                this.marketUuid,
+                historicalStockRecord.getDate(),
+                historicalStockRecord.getDate());
+        if(Iterables.size(previous)>0){
+            System.out.println("HistoricalRecord already in database");
+        }else {
+            System.out.println("pushing historicalRecord");
+            historicalStockRecordGateWay.saveHistoricalStockRecord((HistoricalStockRecord) this.record);
         }
     }
 }

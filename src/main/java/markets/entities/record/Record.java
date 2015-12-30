@@ -10,9 +10,9 @@ public abstract class Record {
     private final UUID instrumentUuid;
     private final Date date;
 
-    public Record(Instrument instrument, UUID instrumentUuid, Date date) {
+    public Record(Instrument instrument, Date date) {
         this.instrument = instrument;
-        this.instrumentUuid = instrumentUuid;
+        this.instrumentUuid = instrument.getUuid();
         this.date = date;
     }
 

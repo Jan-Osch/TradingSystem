@@ -1,8 +1,6 @@
 package database;
 
-import markets.entities.record.HistoricalStockRecord;
 import markets.entities.record.StockRecord;
-import markets.entities.session.State;
 
 import java.sql.*;
 import java.util.HashMap;
@@ -68,46 +66,46 @@ public class PostgreSQLJDBC {
         statement.close();
     }
 
-    public static void saveStockRecordToDatabase(String tableName, StockRecord stockRecord) {
-        try {
-            Statement statement = connection.createStatement();
-            String sql = "INSERT INTO \":tableName\" (DATE, CODE, VALUE) VALUES (':date', ':code', :value)";
+//    public static void saveStockRecordToDatabase(String tableName, StockRecord stockRecord) {
+//        try {
+//            Statement statement = connection.createStatement();
+//            String sql = "INSERT INTO \":tableName\" (DATE, CODE, VALUE) VALUES (':date', ':code', :value)";
+//
+//            sql = addParameterToSqlStatement(sql, "tableName", tableName);
+//            sql = addParameterToSqlStatement(sql, "date", stockRecord.getDateCreated().toGMTString());
+//            sql = addParameterToSqlStatement(sql, "code", stockRecord.getInstrument().getCodeName());
+//            sql = addParameterToSqlStatement(sql, "value", stockRecord.getValue().toString());
+////            System.out.println("SQL QUERY: "+ sql);
+//
+////            statement.executeUpdate(sql);
+//            statement.close();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
-            sql = addParameterToSqlStatement(sql, "tableName", tableName);
-            sql = addParameterToSqlStatement(sql, "date", stockRecord.getDateCreated().toGMTString());
-            sql = addParameterToSqlStatement(sql, "code", stockRecord.getInstrument().getCodeName());
-            sql = addParameterToSqlStatement(sql, "value", stockRecord.getValue().toString());
-//            System.out.println("SQL QUERY: "+ sql);
-
+//    public void saveHistoricalStockRecordToDatabase(String tableName, HistoricalStockRecord historicalStockRecord) {
+//        try {
+//            Statement statement = connection.createStatement();
+//            String sql = "INSERT INTO \":tableName\" (DATE, CODE, VALUE, VOLUME, OPENING, MINIMUM, CHANGE, TRANSACTIONS) "
+//                    + "VALUES (':date', ':code', :value, :volume, :opening, :minimum, :change, :transactions)";
+//
+//            sql = addParameterToSqlStatement(sql, "tableName", tableName);
+//            sql = addParameterToSqlStatement(sql, "date", historicalStockRecord.getDateCreated().toGMTString());
+//            sql = addParameterToSqlStatement(sql, "code", historicalStockRecord.getInstrument().getCodeName());
+//            sql = addParameterToSqlStatement(sql, "value", historicalStockRecord.getValue().toString());
+//            sql = addParameterToSqlStatement(sql, "volume", historicalStockRecord.getVolumeInShares().toString());
+//            sql = addParameterToSqlStatement(sql, "opening", historicalStockRecord.getOpeningValue().toString());
+//            sql = addParameterToSqlStatement(sql, "minimum", historicalStockRecord.getMinimumValue().toString());
+//            sql = addParameterToSqlStatement(sql, "change", String.valueOf(historicalStockRecord.getValueChangePercentage()));
+//            sql = addParameterToSqlStatement(sql, "transactions", String.valueOf(historicalStockRecord.getNumberOfTransactions()));
+//
+//            System.out.println("SQL QUERY: " + sql);
+//
 //            statement.executeUpdate(sql);
-            statement.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void saveHistoricalStockRecordToDatabase(String tableName, HistoricalStockRecord historicalStockRecord) {
-        try {
-            Statement statement = connection.createStatement();
-            String sql = "INSERT INTO \":tableName\" (DATE, CODE, VALUE, VOLUME, OPENING, MINIMUM, CHANGE, TRANSACTIONS) "
-                    + "VALUES (':date', ':code', :value, :volume, :opening, :minimum, :change, :transactions)";
-
-            sql = addParameterToSqlStatement(sql, "tableName", tableName);
-            sql = addParameterToSqlStatement(sql, "date", historicalStockRecord.getDateCreated().toGMTString());
-            sql = addParameterToSqlStatement(sql, "code", historicalStockRecord.getInstrument().getCodeName());
-            sql = addParameterToSqlStatement(sql, "value", historicalStockRecord.getValue().toString());
-            sql = addParameterToSqlStatement(sql, "volume", historicalStockRecord.getVolumeInShares().toString());
-            sql = addParameterToSqlStatement(sql, "opening", historicalStockRecord.getOpeningValue().toString());
-            sql = addParameterToSqlStatement(sql, "minimum", historicalStockRecord.getMinimumValue().toString());
-            sql = addParameterToSqlStatement(sql, "change", String.valueOf(historicalStockRecord.getValueChangePercentage()));
-            sql = addParameterToSqlStatement(sql, "transactions", String.valueOf(historicalStockRecord.getNumberOfTransactions()));
-
-            System.out.println("SQL QUERY: " + sql);
-
-            statement.executeUpdate(sql);
-            statement.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+//            statement.close();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }

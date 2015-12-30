@@ -3,7 +3,9 @@ package database;
 import markets.entities.instrument.Stock;
 import persistance.StockGateWay;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,11 +31,43 @@ public class PostgresStockDao implements StockGateWay {
 
     @Override
     public Stock getStockByUuid(UUID uuid) {
+        String sql = "SELECT * FROM \":tableName\" WHERE uuid = ':uuid'";
+        sql = SqlUtils.addParameterToSqlStatement(sql, "tableName", tableName);
+        sql = SqlUtils.addParameterToSqlStatement(sql, "uuid", uuid.toString());
+        ResultSet resultSet = PostgreSQLJDBC.executeSqlWithReturn(sql);
+        try {
+            resultSet.next();
+            return parseStockFromResultSet(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
+    private Stock parseStockFromResultSet(ResultSet resultSet) throws SQLException {
+        String uuid = resultSet.getString("uuid");
+        String market_uuid = resultSet.getString("market_uuid");
+        String code = resultSet.getString("code");
+        String fullName = resultSet.getString("name");
+        return new Stock(UUID.fromString(uuid), UUID.fromString(market_uuid), code, fullName);
+    }
+
     @Override
-    public List<Stock> getStocksByMarketUuid(UUID marketUuid) {
-        return null;
+    public Iterable<Stock> getStocksByMarketUuid(UUID marketUuid) {
+        String sql = "SELECT * FROM \":tableName\" WHERE market_uuid = ':marketUuid'";
+        sql = SqlUtils.addParameterToSqlStatement(sql, "tableName", tableName);
+        sql = SqlUtils.addParameterToSqlStatement(sql, "marketUuid", marketUuid.toString());
+        ResultSet resultSet = PostgreSQLJDBC.executeSqlWithReturn(sql);
+        List<Stock> result = new LinkedList<>();
+
+        try {
+            while (resultSet.next()) {
+                result.add(parseStockFromResultSet(resultSet));
+            }
+            PostgreSQLJDBC.closeStatementAfterResult(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }

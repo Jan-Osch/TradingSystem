@@ -1,6 +1,6 @@
+import com.google.common.collect.Iterables;
 import database.PostgresMarketDao;
 import markets.entities.market.MarketManager;
-import markets.interactors.CreateMarketTransaction;
 import markets.interactors.LoadMarketsTransaction;
 import persistance.EntityGateWayManager;
 
@@ -18,7 +18,6 @@ public class LoadMarketsTest {
         LoadMarketsTransaction loadMarketsTransaction = new LoadMarketsTransaction();
         loadMarketsTransaction.execute();
 
-        MarketManager marketManager = MarketManager.getInstance();
-        System.out.printf("Number of tracked markets: %d", MarketManager.marketHashMap.size());
+        System.out.printf("Number of tracked markets: %d", Iterables.size(MarketManager.getAllMarkets()));
     }
 }

@@ -1,5 +1,6 @@
 package markets.interactors;
 
+import com.google.common.collect.Iterables;
 import commons.InteractorTransactionWithException;
 import markets.entities.instrument.Index;
 import markets.entities.instrument.Stock;
@@ -31,12 +32,15 @@ public class LoadInstrumentsForMarketTransaction implements InteractorTransactio
     private void loadIndices(Market market) {
         IndexGateWay indexGateWay = EntityGateWayManager.getIndexGateWay();
         Iterable<Index> indices = indexGateWay.getIndicesByMarketUuid(this.marketUuid);
-        indices.forEach(market::addInstrument);
+        if(indices!=null) {
+            indices.forEach(market::addInstrument);
+        }//todo remove this null check
     }
 
     private void loadStocks(Market market) {
         StockGateWay stockGateWay = EntityGateWayManager.getStockGateWay();
         Iterable<Stock> stocks = stockGateWay.getStocksByMarketUuid(this.marketUuid);
         stocks.forEach(market::addInstrument);
+        System.out.printf("Successfully loaded: %d stocks to market: %s\n", Iterables.size(stocks), this.marketUuid);
     }
 }

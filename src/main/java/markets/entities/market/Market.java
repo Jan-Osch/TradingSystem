@@ -50,6 +50,10 @@ public class Market {
         return this.codeSet.contains(instrument.getCodeName());
     }
 
+    public boolean isInstrumentUuidOnTheMarket(UUID instrumentUuid){
+        return this.uuidInstrumentMap.containsKey(instrumentUuid);
+    }
+
     public Record getCurrentRecord(UUID uuid) throws InstrumentUuidNotFoundException {
         Record result = this.uuidRecordMap.get(uuid);
         if (result != null) {
@@ -60,6 +64,17 @@ public class Market {
 
     public Iterable<Record> getAllCurrentRecords() {
         return this.uuidRecordMap.values();
+    }
+
+    public Iterable<Instrument> getAllInstruments(){
+        return this.uuidInstrumentMap.values();
+    }
+
+    public Instrument getInstrumentByUuid(UUID instrumentUuid) throws InstrumentUuidNotFoundException {
+        if(this.isInstrumentUuidOnTheMarket(instrumentUuid)){
+            return this.uuidInstrumentMap.get(instrumentUuid);
+        }
+        throw new InstrumentUuidNotFoundException();
     }
 }
 

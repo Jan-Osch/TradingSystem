@@ -1,5 +1,7 @@
 package commons;
 
+import markets.exceptions.MarketNotFoundException;
+
 public interface InteractorTransactionWithResult {
-    Object execute();
+    Object execute() throws MarketNotFoundException;
 }

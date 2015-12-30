@@ -38,4 +38,12 @@ public class EntityGateWayManager {
     public static HistoricalStockRecordGateWay getHistoricalStockRecordGateWay() {
         return historicalStockRecordGateWay;
     }
+
+    public static void setHistoricalStockRecordGateWay(HistoricalStockRecordGateWay historicalStockRecordGateWay) {
+        EntityGateWayManager.historicalStockRecordGateWay = historicalStockRecordGateWay;
+    }
+
+    public static void setIndexGateWay(IndexGateWay indexGateWay) {
+        EntityGateWayManager.indexGateWay = indexGateWay;
+    }
 }

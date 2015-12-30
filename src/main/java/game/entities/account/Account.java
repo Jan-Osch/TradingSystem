@@ -4,7 +4,6 @@ import game.entities.account.AccountTransaction.AccountTransaction;
 import game.entities.account.AccountTransaction.InFlowTransaction;
 import game.entities.account.AccountTransaction.OutFlowTransaction;
 import game.entities.portfolio.Portfolio;
-import game.entities.portfolio.PortfolioFactory;
 import game.entities.user.Player;
 import markets.entities.market.Market;
 
@@ -22,7 +21,7 @@ public class Account {
         this.owner = owner;
         this.currentBalance = BigDecimal.valueOf(0);
         this.historyOfAccountTransactions = new ArrayList<>();
-        this.portfolio = PortfolioFactory.createPortfolio(market);
+//        this.portfolio = PortfolioFactory.createPortfolio(market);
     }
 
     public BigDecimal getCurrentBalance() {

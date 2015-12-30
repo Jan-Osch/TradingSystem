@@ -11,18 +11,19 @@ public class HistoricalStockRecord extends Record {
     private BigDecimal volumeInShares;
     private BigDecimal openingValue;
     private BigDecimal minimumValue;
+    private BigDecimal closingValue;
     private float valueChangePercentage;
     private int numberOfTransactions;
 
-    public HistoricalStockRecord(UUID uuid, Instrument instrument, Date date, BigDecimal volumeInShares, BigDecimal openingValue, BigDecimal closingValue, BigDecimal minimumValue, float valueChangePercentage, int numberOfTransactions) {
-        super(instrument, uuid, date);
+    public HistoricalStockRecord(Instrument instrument, Date date, BigDecimal volumeInShares, BigDecimal openingValue, BigDecimal closingValue, BigDecimal minimumValue, float valueChangePercentage, int numberOfTransactions) {
+        super(instrument, date);
         this.volumeInShares = volumeInShares;
         this.openingValue = openingValue;
         this.minimumValue = minimumValue;
+        this.closingValue = closingValue;
         this.valueChangePercentage = valueChangePercentage;
         this.numberOfTransactions = numberOfTransactions;
     }
-
 
     public BigDecimal getVolumeInShares() {
         return volumeInShares;
@@ -42,5 +43,9 @@ public class HistoricalStockRecord extends Record {
 
     public int getNumberOfTransactions() {
         return numberOfTransactions;
+    }
+
+    public BigDecimal getClosingValue() {
+        return closingValue;
     }
 }
