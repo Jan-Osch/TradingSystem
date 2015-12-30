@@ -19,7 +19,7 @@ public class HistoricalScraperTest {
 
         GPWStocksHistoricalScraper gpwStocksHistoricalScraper = new GPWStocksHistoricalScraper(warsaw.getUuid());
 
-        gpwStocksHistoricalScraper.scrapIntAmountOfTradingDays(50,0);
+        gpwStocksHistoricalScraper.scrapIntAmountOfTradingDays(100,21);
 
     }
 }

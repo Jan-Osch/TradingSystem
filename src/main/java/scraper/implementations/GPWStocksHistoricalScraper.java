@@ -1,5 +1,7 @@
 package scraper.implementations;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import markets.entities.instrument.Instrument;
 import markets.entities.instrument.Stock;
 import markets.entities.market.Market;
@@ -17,31 +19,18 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 
-public class GPWStocksHistoricalScraper {
-    private Market market;
-    private UUID marketUuid;
+public class GPWStocksHistoricalScraper extends scraper.StockScraper {
     private String baseUrl;
     private static String dateFormat = "YYYY-MM-dd";
     private static SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
 
-    public GPWStocksHistoricalScraper(String baseUrl) {
-        this.baseUrl = baseUrl;
-    }
 
     public GPWStocksHistoricalScraper(UUID marketUuid) {
+        super(marketUuid);
         this.baseUrl = "http://www.gpw.pl/notowania_archiwalne_full?type=10&date=";
-        this.marketUuid = marketUuid;
-        try {
-            this.market = MarketManager.getMarketByUuid(marketUuid);
-        } catch (MarketNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
     public void scrapIntAmountOfTradingDays(int i, int skip) {
@@ -87,7 +76,7 @@ public class GPWStocksHistoricalScraper {
         } catch (IOException e) {
 //            e.printStackTrace();
             return false;
-        }catch (IndexOutOfBoundsException e){
+        } catch (IndexOutOfBoundsException e) {
             return false;
         }
         return flag;
@@ -134,7 +123,6 @@ public class GPWStocksHistoricalScraper {
             return new HistoricalStockRecord(stock, historicalDate, volume, opening, value, minimum, change, transaction);
 
         } catch (Throwable e) {
-//            e.printStackTrace();
             return null;
         }
     }
@@ -142,35 +130,27 @@ public class GPWStocksHistoricalScraper {
     private Stock getStockFromMarket(Elements columns) {
         String stockName = columns.get(0).text();
         String stockCode;
-        Stock stock = getStockByFullName(stockName);
-        if(stock == null){
-            System.out.printf("Stock not found by fullName: %s.\n", stockName);
-            String stockISINCode = columns.get(1).text();
-            stockCode = getMissingCode(stockISINCode);
-            stock = new Stock(UUID.randomUUID(), this.marketUuid, stockCode, stockName);
-
-            AddInstrumentTransaction addInstrumentTransaction = new AddInstrumentTransaction(stock);
-            try {
-                addInstrumentTransaction.execute();
-            } catch (MarketNotFoundException e) {
-//                e.printStackTrace();
-            } catch (InstrumentCodeAlreadyOnMarketException e) {
-//                e.printStackTrace();
-            }
-            return stock;
-        }
-        return stock;
-    }
-
-    private Stock getStockByFullName(String stockName) {
         Iterable<Instrument> allInstruments = this.market.getAllInstruments();
-        for (Instrument instrument : allInstruments) {
-            if (Objects.equals(instrument.getFullName(), stockName)) {
-                return (Stock) instrument;
-            }
+
+        try {
+            return getStockByFullName(stockName, allInstruments);
+        } catch (NoSuchElementException ignored) {
         }
-        return null;
+
+        String stockISINCode = columns.get(1).text();
+        stockCode = getMissingCode(stockISINCode);
+
+        try {
+            if (market.isCodeOnMarket(stockCode)) {
+                return getStockByCode(stockCode, allInstruments);
+            }
+        } catch (NoSuchElementException ignored) {
+        }
+
+        System.out.printf("Stock not found by fullName: %s, or code: %s,\n", stockName, stockCode);
+        return createNewStockOnMarket(stockName, stockCode);
     }
+
 
     private String getMissingCode(String stockISINCode) {
         try {
@@ -178,7 +158,6 @@ public class GPWStocksHistoricalScraper {
             String title = toParse.title();
             return title.substring(title.indexOf("|") + 2, title.lastIndexOf("|") - 1);
         } catch (IOException e) {
-//            e.printStackTrace();
             return null;
         }
     }

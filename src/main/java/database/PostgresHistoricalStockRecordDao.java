@@ -39,6 +39,7 @@ public class PostgresHistoricalStockRecordDao implements HistoricalStockRecordGa
 
         try {
             this.postgreSQLJDBC.executeSql(sql);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

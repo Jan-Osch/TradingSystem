@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.UUID;
 
 public class StockRecord extends Record {
-    private Instrument instrument;
     private BigDecimal value;
 
     public StockRecord(Instrument instrument, BigDecimal value, Date date) {
