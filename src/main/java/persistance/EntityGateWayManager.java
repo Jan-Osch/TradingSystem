@@ -7,6 +7,7 @@ public class EntityGateWayManager {
     private static IndexGateWay indexGateWay;
     private static HistoricalStockRecordGateWay historicalStockRecordGateWay;
     private static CurrentStockRecordGateWay currentStockRecordGateWay;
+    private static AccountGateWay accountGateWay;
 
     public static void setStockGateWay(StockGateWay stockGateWay) {
         EntityGateWayManager.stockGateWay = stockGateWay;
@@ -54,5 +55,9 @@ public class EntityGateWayManager {
 
     public static void setCurrentStockRecordGateWay(CurrentStockRecordGateWay currentStockRecordGateWay) {
         EntityGateWayManager.currentStockRecordGateWay = currentStockRecordGateWay;
+    }
+
+    public static AccountGateWay getAccountGateWay() {
+        return accountGateWay;
     }
 }
