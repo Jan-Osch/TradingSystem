@@ -1,4 +1,4 @@
-package main.orchestrator;
+package main;
 
 import markets.entities.market.Market;
 import markets.entities.market.MarketManager;
@@ -15,9 +15,9 @@ import java.util.UUID;
 
 public class WarsawOrchestrator {
     private Market warsaw;
-    private UUID warsawUuid;
+    private UUID warsawUuid = UUID.fromString("d93e338a-6d0c-4ae7-a730-f84a22eac0cc");
     private static int delay = 15;
-    private long periodSavingRecords = 5* 60000;
+    private long periodSavingRecords = 5 * 60000;
     private Timer mainTimer;
     private Timer scrapingTimer;
     private Timer recordSavingTimer;
@@ -25,19 +25,19 @@ public class WarsawOrchestrator {
     private GPWStocksScraper gpwStocksScraper;
     private GPWStocksHistoricalScraper gpwStocksHistoricalScraper;
 
-    public WarsawOrchestrator(UUID warsawUuid) {
+    public WarsawOrchestrator() {
         try {
-            this.warsaw = MarketManager.getMarketByUuid(warsawUuid);
+            this.warsaw = MarketManager.getMarketByUuid(this.warsawUuid);
         } catch (MarketNotFoundException e) {
             e.printStackTrace();
         }
-        this.warsawUuid = warsawUuid;
         this.gpwStocksScraper = new GPWStocksScraper(this.warsawUuid);
         this.gpwStocksHistoricalScraper = new GPWStocksHistoricalScraper(this.warsawUuid);
         this.scrapingTimer = new Timer();
         this.mainTimer = new Timer();
         this.recordSavingTimer = new Timer();
         this.sessionOpen = false;
+        startWarsaw();
     }
 
     private class ScrapingTask extends TimerTask {
@@ -92,22 +92,22 @@ public class WarsawOrchestrator {
         recordSavingTimer.scheduleAtFixedRate(new SaveRecordTask(), 10000l, this.periodSavingRecords);
     }
 
-    public void startOrchestratingTheMarket() {
+    private void startWarsaw() {
         Date nextTick = getNextSessionStart();
         if (shouldSessionBeOpen()) {
             System.out.println("Warsaw: Session should be open");
             startSession();
             nextTick = getNextSessionFinsish();
-        }else {
+        } else {
             adjustDate(nextTick);
-            System.out.println("Warsaw: Session will start at: "+ nextTick.toString());
+            System.out.println("Warsaw: Session will start at: " + nextTick.toString());
         }
         this.mainTimer.schedule(new TickTask(), nextTick);
     }
 
     private void adjustDate(Date nextTick) {
         Date currentTime = new Date();
-        if(currentTime.compareTo(nextTick) >0){
+        if (currentTime.compareTo(nextTick) > 0) {
             addDay(nextTick);
         }
     }

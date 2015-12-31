@@ -1,17 +1,14 @@
-import main.orchestrator.WarsawOrchestrator;
+import main.WarsawOrchestrator;
 import markets.entities.market.Market;
 import markets.entities.record.StockRecord;
 import markets.interactors.GetCurrentRecordsForPeriodTransaction;
-import persistance.CurrentStockRecordGateWay;
 
 import java.util.Date;
 import java.util.UUID;
 
 public class OrchestratorTest {
     public static void main(String[] args) {
-        Market warsaw = InitializeApplication.initializeMarket();
-        WarsawOrchestrator warsawOrchestrator = new WarsawOrchestrator(warsaw.getUuid());
-        warsawOrchestrator.startOrchestratingTheMarket();
+        new WarsawOrchestrator();
         try {
             Date twoMinutesAgo = new Date();
             twoMinutesAgo.setTime(twoMinutesAgo.getTime() - 10 * 60 * 10000);
