@@ -1,10 +1,7 @@
-package game.entities.account;
+package account.entities.account;
 
-import game.entities.account.AccountTransaction.AccountTransaction;
-import game.entities.account.AccountTransaction.InFlowTransaction;
-import game.entities.account.AccountTransaction.OutFlowTransaction;
-import game.entities.portfolio.Portfolio;
-import game.entities.user.Player;
+import account.portfolio.Portfolio;
+import account.user.Player;
 import markets.entities.market.Market;
 
 import java.math.BigDecimal;

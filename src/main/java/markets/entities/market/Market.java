@@ -9,9 +9,9 @@ import java.util.*;
 public class Market {
     private String name;
     private UUID uuid;
-    private Map<UUID, Instrument> uuidInstrumentMap;
-    private Map<UUID, Record> uuidRecordMap;
-    private Set<String> codeSet;
+    private transient Map<UUID, Instrument> uuidInstrumentMap;
+    private transient Map<UUID, Record> uuidRecordMap;
+    private transient Set<String> codeSet;
 
     public Market(String name, UUID uuid) {
         this.name = name;
