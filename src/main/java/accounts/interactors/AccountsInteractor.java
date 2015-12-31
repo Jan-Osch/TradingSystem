@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class AccountInteractor {
+public class AccountsInteractor {
 
     private static AccountGateWay accountGateWay = EntityGateWayManager.getAccountGateWay();
 
@@ -26,7 +26,7 @@ public class AccountInteractor {
     }
 
     public Map<UUID, BigDecimal> getPortfolio(UUID ownerUUID) throws AccountUuidNotFound {
-        Account account = getAccount(ownerUUID)
+        Account account = getAccount(ownerUUID);
         return account.getPortfolio();
     }
 
