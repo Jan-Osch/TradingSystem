@@ -52,8 +52,8 @@ public class PostgresHistoricalStockRecordDao implements HistoricalStockRecordGa
 
         sql = SqlUtils.addParameterToSqlStatement(sql, "tableName", tableName);
         sql = SqlUtils.addParameterToSqlStatement(sql, "uuid", instrumentUuid.toString());
-        sql = SqlUtils.addParameterToSqlStatement(sql, "startDate", formatter.format(startDate));
-        sql = SqlUtils.addParameterToSqlStatement(sql, "endDate", formatter.format(startDate));
+        sql = SqlUtils.addParameterToSqlStatement(sql, "startDate", startDate.toString());
+        sql = SqlUtils.addParameterToSqlStatement(sql, "endDate", endDate.toString());
 
         LinkedList<HistoricalStockRecord> result = new LinkedList<>();
         Market market;
@@ -77,8 +77,7 @@ public class PostgresHistoricalStockRecordDao implements HistoricalStockRecordGa
     }
 
     private HistoricalStockRecord parseHistoricalStockRecordFromResultSet(UUID instrumentUuid, Market market, ResultSet resultSet) throws SQLException, InstrumentUuidNotFoundException {
-        Date date = resultSet.getDate("date");
-//        String code = resultSet.getString("code");
+        Date date = resultSet.getTimestamp("date");
         BigDecimal value = resultSet.getBigDecimal("value");
         BigDecimal volume = resultSet.getBigDecimal("volume");
         BigDecimal opening = resultSet.getBigDecimal("opening");

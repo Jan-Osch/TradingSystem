@@ -40,10 +40,7 @@ public class PushRecordTransaction implements InteractorTransactionWithException
                 this.marketUuid,
                 historicalStockRecord.getDate(),
                 historicalStockRecord.getDate());
-        if(Iterables.size(previous)>0){
-            System.out.println("HistoricalRecord already in database");
-        }else {
-            System.out.println("pushing historicalRecord");
+        if (Iterables.size(previous) == 0) {
             historicalStockRecordGateWay.saveHistoricalStockRecord((HistoricalStockRecord) this.record);
         }
     }
