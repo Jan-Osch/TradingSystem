@@ -1,4 +1,4 @@
-package game.entities.account.AccountTransaction;
+package account.entities.account;
 
 public class OutFlowTransaction extends AccountTransaction{
 

@@ -1,6 +1,6 @@
-package game.entities.order;
+package account.order;
 
-import game.entities.account.Account;
+import account.entities.account.Account;
 import markets.entities.instrument.Index;
 
 import java.util.Date;

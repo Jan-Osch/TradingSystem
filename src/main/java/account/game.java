@@ -1,8 +1,8 @@
-package game.entities;
+package account;
 
+import account.user.Player;
+import account.user.Spectator;
 import application.entities.User;
-import game.entities.user.Player;
-import game.entities.user.Spectator;
 import markets.entities.market.Market;
 
 import java.util.HashMap;

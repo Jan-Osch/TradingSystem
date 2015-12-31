@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.UUID;
 
 public abstract class Record {
-    private final Instrument instrument;
+    private transient final Instrument instrument;
     private final UUID instrumentUuid;
     private final Date date;
 

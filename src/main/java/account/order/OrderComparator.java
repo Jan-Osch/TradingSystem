@@ -1,4 +1,4 @@
-package game.entities.order;
+package account.order;
 
 import java.util.Comparator;
 
