@@ -1,7 +1,4 @@
-import database.PostgresHistoricalStockRecordDao;
-import database.PostgresIndexDao;
-import database.PostgresMarketDao;
-import database.PostgresStockDao;
+import database.*;
 import markets.entities.market.Market;
 import markets.entities.market.MarketManager;
 import markets.exceptions.MarketNotFoundException;
@@ -18,11 +15,13 @@ public class InitializeApplication {
         PostgresStockDao postgresStockDao = new PostgresStockDao();
         PostgresHistoricalStockRecordDao postgresHistoricalStockRecordDao = new PostgresHistoricalStockRecordDao();
         PostgresIndexDao postgresIndexDao = new PostgresIndexDao();
+        PostgresCurrentStockRecordDao postgresCurrentStockRecordDao = new PostgresCurrentStockRecordDao();
 
         EntityGateWayManager.setHistoricalStockRecordGateWay(postgresHistoricalStockRecordDao);
         EntityGateWayManager.setMarketGateWay(postgresMarketDao);
         EntityGateWayManager.setStockGateWay(postgresStockDao);
         EntityGateWayManager.setIndexGateWay(postgresIndexDao);
+        EntityGateWayManager.setCurrentStockRecordGateWay(postgresCurrentStockRecordDao);
 
 
         LoadMarketsTransaction loadMarketsTransaction = new LoadMarketsTransaction();

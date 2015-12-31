@@ -17,6 +17,7 @@ public class WarsawOrchestrator {
     private Market warsaw;
     private UUID warsawUuid;
     private static int delay = 15;
+    private long periodSavingRecords = 5* 60000;
     private Timer mainTimer;
     private Timer scrapingTimer;
     private Timer recordSavingTimer;
@@ -43,6 +44,7 @@ public class WarsawOrchestrator {
         @Override
         public void run() {
             try {
+                System.out.println("Warsaw: scraping current stock records");
                 gpwStocksScraper.scrap();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -53,6 +55,7 @@ public class WarsawOrchestrator {
     private class SaveRecordTask extends TimerTask {
         @Override
         public void run() {
+            System.out.println("Warsaw: saving current stock records to database");
             SaveCurrentRecordsToDatabaseTransaction saveCurrentRecordsToDatabaseTransaction = new SaveCurrentRecordsToDatabaseTransaction(warsawUuid);
             saveCurrentRecordsToDatabaseTransaction.execute();
         }
@@ -74,7 +77,7 @@ public class WarsawOrchestrator {
     }
 
     private void finishSession() {
-        System.out.println("Warsaw closing session");
+        System.out.println("Warsaw: closing session");
         sessionOpen = false;
         scrapingTimer.cancel();
         recordSavingTimer.cancel();
@@ -82,18 +85,19 @@ public class WarsawOrchestrator {
 
     private void startSession() {
         sessionOpen = true;
-        System.out.println("Warsaw opening session");
+        System.out.println("Warsaw: opening session");
+        System.out.println("Warsaw: scraping historical records from last session");
         gpwStocksHistoricalScraper.scrapIntAmountOfTradingDays(1, 0);
         scrapingTimer.scheduleAtFixedRate(new ScrapingTask(), 0, 10000l);
-        recordSavingTimer.scheduleAtFixedRate(new SaveRecordTask(), 10000l, 60000l);
+        recordSavingTimer.scheduleAtFixedRate(new SaveRecordTask(), 10000l, this.periodSavingRecords);
     }
 
     public void startOrchestratingTheMarket() {
         Date nextTick = getNextSessionStart();
         if (shouldSessionBeOpen()) {
+            System.out.println("Warsaw: Session should be open");
             startSession();
             nextTick = getNextSessionFinsish();
-            System.out.println("Warsaw: Session should be open");
         }else {
             adjustDate(nextTick);
             System.out.println("Warsaw: Session will start at: "+ nextTick.toString());
