@@ -48,6 +48,15 @@ public class PostgreSQLJDBC {
         statement.close();
     }
 
+    public static PreparedStatement getNewPreparedStatement(String sql) throws SQLException {
+        return connection.prepareStatement(sql);
+    }
+
+    public static void executePreparedStatement(PreparedStatement preparedStatement) throws SQLException {
+        preparedStatement.execute();
+        preparedStatement.close();
+    }
+
     public static ResultSet executeSqlWithReturn(String sql) {
         try {
             Statement statement = connection.createStatement();

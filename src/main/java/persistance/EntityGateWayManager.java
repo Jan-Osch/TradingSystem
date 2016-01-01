@@ -10,6 +10,7 @@ public class EntityGateWayManager {
     private static HistoricalStockRecordGateWay historicalStockRecordGateWay;
     private static CurrentStockRecordGateWay currentStockRecordGateWay;
     private static AccountGateWay accountGateWay;
+    private static GameGateWay gameGateWay;
 
     public static void setStockGateWay(StockGateWay stockGateWay) {
         EntityGateWayManager.stockGateWay = stockGateWay;
@@ -65,5 +66,13 @@ public class EntityGateWayManager {
 
     public static void setAccountGateWay(PostgresAccountDao accountGateWay) {
         EntityGateWayManager.accountGateWay = accountGateWay;
+    }
+
+    public static GameGateWay getGameGateWay() {
+        return EntityGateWayManager.gameGateWay;
+    }
+
+    public static void setGameGateWay(GameGateWay gameGateWay) {
+        EntityGateWayManager.gameGateWay = gameGateWay;
     }
 }

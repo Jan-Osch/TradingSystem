@@ -1,13 +1,12 @@
 package main.web;
 
+import game.entities.Game;
 import main.Initializer;
 import main.WarsawOrchestrator;
 import spark.Request;
 import spark.Response;
 import spark.Route;
-import web.AccountsResource;
-import web.MarketsResource;
-import web.TransactionsResource;
+import web.*;
 
 import static spark.Spark.*;
 
@@ -19,6 +18,9 @@ public class Bootstrap {
         new MarketsResource();
         new AccountsResource();
         new TransactionsResource();
+        new GamesResource();
+        new ApplicationResource();
+
         get("/", new Route() {
             @Override
             public Object handle(Request request, Response response) {
