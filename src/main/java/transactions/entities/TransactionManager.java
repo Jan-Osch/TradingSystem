@@ -16,7 +16,7 @@ public class TransactionManager {
     }
 
     public BigDecimal getTransactionAmount(BigDecimal balanceForAccount, BigDecimal currentStockValue, BigDecimal count) {
-        BigDecimal maximumForBalance = balanceForAccount.divide(currentStockValue);
+        BigDecimal maximumForBalance = balanceForAccount.divideToIntegralValue(currentStockValue);
         if (maximumForBalance.compareTo(count) < 0) {
             return maximumForBalance;
         }

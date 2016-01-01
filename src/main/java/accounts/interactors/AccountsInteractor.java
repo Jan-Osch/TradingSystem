@@ -17,20 +17,20 @@ public class AccountsInteractor {
 
     private static AccountGateWay accountGateWay = EntityGateWayManager.getAccountGateWay();
 
-    protected static Account getAccount(UUID ownerUUID) throws AccountUuidNotFound {
-        Account account = accountGateWay.getAccountByUuid();
+    public static Account getAccount(UUID ownerUUID) throws AccountUuidNotFound {
+        Account account = accountGateWay.getAccountByUuid(ownerUUID);
         if (account == null) {
             throw new AccountUuidNotFound();
         }
         return account;
     }
 
-    public Map<UUID, BigDecimal> getPortfolio(UUID ownerUUID) throws AccountUuidNotFound {
+    public static Map<UUID, BigDecimal> getPortfolio(UUID ownerUUID) throws AccountUuidNotFound {
         Account account = getAccount(ownerUUID);
         return account.getPortfolio();
     }
 
-    protected static void addResoucesToAccount(UUID ownerUUID, BigDecimal amount) throws AccountUuidNotFound {
+    protected static void addResourcesToAccount(UUID ownerUUID, BigDecimal amount) throws AccountUuidNotFound {
         Account account = getAccount(ownerUUID);
         account.addResources(amount);
         accountGateWay.save(account);
@@ -54,11 +54,11 @@ public class AccountsInteractor {
         accountGateWay.save(account);
     }
 
-    public static void createAccount(UUID ownerUUID) throws OwnerAlreadyHasAccount {
+    public static void createAccount(UUID ownerUUID, BigDecimal initalBalance) throws OwnerAlreadyHasAccount {
         try {
             getAccount(ownerUUID);
         } catch (AccountUuidNotFound accountUuidNotFound) {
-            accountGateWay.save(new Account(ownerUUID));
+            accountGateWay.save(new Account(ownerUUID, new HashMap<UUID, BigDecimal>(), initalBalance));
             return;
         }
         throw new OwnerAlreadyHasAccount();
@@ -80,7 +80,7 @@ public class AccountsInteractor {
     }
 
     public static void performSellTransactionForAccount(UUID ownerUUID, UUID instrumentUUID, BigDecimal amount, BigDecimal value) throws AccountUuidNotFound, AssetNotSufficient {
-        addResoucesToAccount(ownerUUID, value);
+        addResourcesToAccount(ownerUUID, value);
         subtractAsset(ownerUUID, instrumentUUID, amount);
     }
 

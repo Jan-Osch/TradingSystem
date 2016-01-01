@@ -101,6 +101,12 @@ public class WarsawOrchestrator {
         } else {
             adjustDate(nextTick);
             System.out.println("Warsaw: Session will start at: " + nextTick.toString());
+            System.out.println("Warsaw: populating market with current records");
+            try {
+                gpwStocksScraper.scrap();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         this.mainTimer.schedule(new TickTask(), nextTick);
     }

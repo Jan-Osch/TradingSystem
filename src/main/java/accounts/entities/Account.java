@@ -37,7 +37,7 @@ public class Account {
     }
 
     public void addResources(BigDecimal amount) {
-        this.currentBalance.add(amount);
+        this.currentBalance = this.currentBalance.add(amount);
     }
 
     public void addAsset(UUID instrumentUUID, BigDecimal amount) {

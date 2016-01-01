@@ -1,4 +1,4 @@
-package main.web;
+package web;
 
 import com.google.gson.Gson;
 import spark.ResponseTransformer;

@@ -1,12 +1,10 @@
-package main.web;
+package web;
 
 import database.SqlUtils;
+
 import markets.exceptions.InstrumentUuidNotFoundException;
 import markets.exceptions.MarketNotFoundException;
 import markets.interactors.*;
-import spark.Request;
-import spark.Response;
-import spark.Route;
 
 import java.util.Date;
 import java.util.UUID;

@@ -1,5 +1,7 @@
 package persistance;
 
+import database.PostgresAccountDao;
+
 public class EntityGateWayManager {
     private static UserGateWay userGateway;
     private static MarketGateWay marketGateWay;
@@ -59,5 +61,9 @@ public class EntityGateWayManager {
 
     public static AccountGateWay getAccountGateWay() {
         return accountGateWay;
+    }
+
+    public static void setAccountGateWay(PostgresAccountDao accountGateWay) {
+        EntityGateWayManager.accountGateWay = accountGateWay;
     }
 }
