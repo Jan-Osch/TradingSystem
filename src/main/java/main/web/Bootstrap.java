@@ -1,6 +1,5 @@
 package main.web;
 
-import game.entities.Game;
 import main.Initializer;
 import main.WarsawOrchestrator;
 import spark.Request;
@@ -8,14 +7,14 @@ import spark.Response;
 import spark.Route;
 import web.*;
 
-import static spark.Spark.*;
+import static spark.Spark.get;
+import static spark.Spark.staticFileLocation;
 
 public class Bootstrap {
 
     public static void main(String[] args) {
-        Initializer.start();
         staticFileLocation("/public");
-        new WarsawOrchestrator();
+        Initializer.start();
         new MarketsResource();
         new AccountsResource();
         new TransactionsResource();
@@ -28,5 +27,6 @@ public class Bootstrap {
                 return "";
             }
         });
+        new WarsawOrchestrator();
     }
 }
