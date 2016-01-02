@@ -1,0 +1,35 @@
+<h2>Stocks</h2>
+
+<table class="table table-hover">
+    <tr>
+        <th>
+            #
+        </th>
+        <th>
+            Stock name
+        </th>
+        <th>
+            Stock code
+        </th>
+        <th>
+            quotes
+        </th>
+
+    </tr>
+    <tr ng-repeat="instrument in instruments">
+        <td>{{$index+1}}</td>
+        <td>
+            {{instrument.codeName}}
+        </td>
+        <td>
+            {{instrument.fullName}}
+        </td>
+        <td>
+            <a class="btn btn-primary pull-right"
+               ng-href="#/stock-quotes/{{instrument.marketUuid}}/{{instrument.uuid}}"><i
+                    class="icon-plus-sign icon-white"></i>
+                view quotes</a>
+        </td>
+    </tr>
+</table>
+

@@ -14,7 +14,7 @@ import java.util.UUID;
 import static spark.Spark.post;
 
 public class ApplicationResource {
-    private static final String API_CONTEXT = "";
+    private static final String API_CONTEXT = "api";
 
     public ApplicationResource() {
         setupEndpoints();

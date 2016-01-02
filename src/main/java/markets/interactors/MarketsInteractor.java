@@ -1,5 +1,6 @@
 package markets.interactors;
 
+import markets.entities.instrument.Instrument;
 import markets.entities.market.Market;
 import markets.entities.market.MarketManager;
 import markets.entities.record.StockRecord;
@@ -40,5 +41,10 @@ public class MarketsInteractor {
             }
         }
         throw new InstrumentUuidNotFoundException();
+    }
+
+    public static Instrument getInstrument(UUID marketUuid, UUID instrumentUUID) throws MarketNotFoundException, InstrumentUuidNotFoundException {
+        Market market = MarketManager.getMarketByUuid(marketUuid);
+        return market.getInstrumentByUuid(instrumentUUID);
     }
 }

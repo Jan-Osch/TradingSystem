@@ -15,7 +15,7 @@ import static spark.Spark.put;
 
 public class MarketsResource {
 
-    private static final String API_CONTEXT = "/api/market";
+    private static final String API_CONTEXT = "/api/markets";
 
     public MarketsResource() {
         setupEndpoints();
@@ -54,6 +54,22 @@ public class MarketsResource {
                 e.printStackTrace();
             }
             return "501";
+        }, new JsonTransformer());
+
+        get(API_CONTEXT + "/:marketUuid/instrument/:instrumentUuid", "application/json", (request, response) -> {
+
+            UUID marketUuid = UUID.fromString(request.params(":marketUuid"));
+            UUID instrumentUuid = UUID.fromString(request.params(":instrumentUuid"));
+
+            try {
+                return MarketsInteractor.getInstrument(marketUuid, instrumentUuid);
+            } catch (MarketNotFoundException e) {
+                e.printStackTrace();
+                return "Market not Found";
+            } catch (InstrumentUuidNotFoundException e) {
+                e.printStackTrace();
+                return "Instrument not found!";
+            }
         }, new JsonTransformer());
 
         get(API_CONTEXT + "/:marketUuid/instrument/:instrumentUuid/record/current", "application/json", (request, response) -> {

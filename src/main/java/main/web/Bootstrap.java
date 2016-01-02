@@ -14,17 +14,18 @@ public class Bootstrap {
 
     public static void main(String[] args) {
         Initializer.start();
+        staticFileLocation("/public");
         new WarsawOrchestrator();
         new MarketsResource();
         new AccountsResource();
         new TransactionsResource();
         new GamesResource();
         new ApplicationResource();
-
         get("/", new Route() {
             @Override
             public Object handle(Request request, Response response) {
-                return "Hello World!!";
+                response.redirect("/index.html");
+                return "";
             }
         });
     }
