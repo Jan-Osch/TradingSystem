@@ -127,3 +127,13 @@ app.controller('MarketsCtrl', function ($scope, $http) {
         console.log('Error ' + data)
     });
 });
+
+app.controller('GamesCtrl', function ($scope, $http) {
+    console.log('games ctrl');
+    console.warn('sraczka!');
+    $http.get('/api/games').success(function (data) {
+        $scope.games = data;
+    }).error(function (data, status) {
+        console.log('Error ' + data)
+    });
+});

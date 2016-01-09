@@ -1,0 +1,38 @@
+<h2>Games</h2>
+jkashdkjashd
+ADSJHJKDAHDAS
+<table class="table table-hover">
+    <tr>
+        <th>
+            #
+        </th>
+        <th>
+            Game name
+        </th>
+        <th>
+            # of spectators:
+        </th>
+        <th>
+            is active:
+        </th>
+        <th>
+            initial value:
+        </th>
+
+    </tr>
+    <tr ng-repeat="game in games">
+        <td>{{$index+1}}</td>
+        <td>
+            {{game.name}}
+        </td>
+        <td>
+            {{size(game.spectators)}}
+        </td>
+        <td>
+            {{game.active}}
+        </td>
+        <td>
+            {{game.initalValue / 100 | currency : "PLN" : 2}}
+        </td>
+    </tr>
+</table>
