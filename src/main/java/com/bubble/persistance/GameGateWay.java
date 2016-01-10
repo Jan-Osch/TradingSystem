@@ -8,6 +8,8 @@ public interface GameGateWay {
 
     void save(Game game);
 
+    void update(Game game);
+
     Iterable<Game> geAllGames();
 
     Game getGameByUuid(UUID gameUuid);

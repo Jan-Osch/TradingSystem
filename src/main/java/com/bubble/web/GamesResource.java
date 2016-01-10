@@ -1,12 +1,12 @@
-package web;
+package com.bubble.web;
 
-import accounts.exceptions.OwnerAlreadyHasAccount;
-import commons.JsonHelper;
-import game.exceptions.GameUuidNotFound;
-import game.exceptions.PlayerNotFound;
-import game.exceptions.UserIsAlreadyPlayer;
-import game.exceptions.UserIsAlreadySpectator;
-import game.interactors.GameInteractor;
+import com.bubble.accounts.exceptions.OwnerAlreadyHasAccount;
+import com.bubble.commons.JsonHelper;
+import com.bubble.game.exceptions.GameUuidNotFound;
+import com.bubble.game.exceptions.PlayerNotFound;
+import com.bubble.game.exceptions.UserIsAlreadyPlayer;
+import com.bubble.game.exceptions.UserIsAlreadySpectator;
+import com.bubble.game.interactors.GameInteractor;
 
 import java.util.Map;
 import java.util.UUID;
@@ -16,6 +16,7 @@ import static spark.Spark.post;
 
 public class GamesResource {
     private static final String API_CONTEXT = "/api/games";
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(GamesResource.class);
 
     public GamesResource() {
         setupEndpoints();
@@ -68,6 +69,7 @@ public class GamesResource {
             UUID gameUuid = UUID.fromString(request.params("gameUuid"));
             try {
                 UUID userUuid = UUID.fromString(postParams.get("userUuid"));
+                LOG.debug(String.format("join-as-spectator: gameUuid: %s  userUuid: %s", gameUuid.toString(), userUuid.toString()));
                 GameInteractor.joinGameAsSpectator(gameUuid, userUuid);
             } catch (UserIsAlreadySpectator userIsAlreadySpectator) {
                 userIsAlreadySpectator.printStackTrace();
@@ -91,6 +93,6 @@ public class GamesResource {
                 playerNotFound.printStackTrace();
                 return "Player not found";
             }
-        }, new JsonTransformer());
+        });
     }
 }

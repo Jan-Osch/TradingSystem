@@ -25,6 +25,8 @@ public class WarsawOrchestrator {
     private GPWStocksScraper gpwStocksScraper;
     private GPWStocksHistoricalScraper gpwStocksHistoricalScraper;
 
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(WarsawOrchestrator.class);
+
     public WarsawOrchestrator() {
         try {
             this.warsaw = MarketManager.getMarketByUuid(this.warsawUuid);
@@ -96,6 +98,7 @@ public class WarsawOrchestrator {
     }
 
     private void startWarsaw() {
+        LOG.info("Hello welt");
         Date nextTick = getNextSessionStart();
         if (shouldSessionBeOpen()) {
             System.out.println("Warsaw: Session should be open");
@@ -104,6 +107,7 @@ public class WarsawOrchestrator {
         } else {
             adjustDate(nextTick);
             System.out.println("Warsaw: Session will start at: " + nextTick.toString());
+
             System.out.println("Warsaw: populating market with current records");
             try {
                 gpwStocksScraper.scrap();

@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html ng-app="todoapp">
+<html ng-app="bubbleApp">
 <head>
     <title>Bubble App</title>
     <link rel="stylesheet" href="/css/bootstrap.css">
     <link rel="stylesheet" href="/css/main.css">
+    <script src="/js/underscore.js"></script>
+
 </head>
 <body>
 <div class="navbar navbar-inverse">
@@ -22,15 +24,17 @@
             <li><a href="#/markets">Markets</a></li>
             <li><a href="#/games">Games</a></li>
             <li><a href="#">About</a></li>
-
+            <li ng-show="GamePlayService.isPlaying()"><a href="#"><b>Playing: {{GamePlayService.currentGame}}</b></a>
+            <li ng-show="GamePlayService.player"><a href="#/portfolio">Portfolio</a></li>
+            <li ng-show="!GamePlayService.player && GamePlayService.isPlaying()"><a href="#/players">Players</a></li>
+            <li ng-show="GamePlayService.isPlaying()"><a href="#/ranking">Ranking</a></li>
         </ul>
-        <div>
-        </div>
+
         <ul class="nav navbar-nav navbar-right">
-            <li ng-show="userService.isLogged()"><a href="#"><b>{{userService.user}}</b></a></li>
-            <li ng-show="!userService.isLogged()"><a href="#/login">login</a></li>
-            <li ng-show="userService.isLogged()"><a href="" ng-click="userService.logout()">logout</a></li>
-            <li ng-show="!userService.isLogged()"><a href="#/register">register</a></li>
+            <li ng-show="UserService.isLogged()"><a href="#"><b>{{UserService.user}}</b></a></li>
+            <li ng-show="!UserService.isLogged()"><a href="#/login">login</a></li>
+            <li ng-show="UserService.isLogged()"><a href="" ng-click="UserService.logout()">logout</a></li>
+            <li ng-show="!UserService.isLogged()"><a href="#/register">register</a></li>
         </ul>
     </div>
 </div>
@@ -47,5 +51,7 @@
 <script src="/js/angular-resource.js"></script>
 
 <script src="/scripts/app.js"></script>
+<script src="/scripts/apiServices.js"></script>
+<script src="/scripts/applicationServices.js"></script>
 </body>
 </html>

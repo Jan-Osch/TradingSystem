@@ -1,12 +1,10 @@
-package web;
+package com.bubble.web;
 
-import accounts.exceptions.AccountUuidNotFound;
-import accounts.interactors.AccountsInteractor;
-import application.exceptions.InvalidPassword;
-import application.exceptions.LoginAlreadyExists;
-import application.exceptions.UserDoesNotExist;
-import application.interactors.ApplicationInteractor;
-import commons.JsonHelper;
+import com.bubble.application.exceptions.InvalidPassword;
+import com.bubble.application.exceptions.LoginAlreadyExists;
+import com.bubble.application.exceptions.UserDoesNotExist;
+import com.bubble.application.interactors.ApplicationInteractor;
+import com.bubble.commons.JsonHelper;
 
 import java.util.Map;
 import java.util.UUID;
@@ -15,6 +13,7 @@ import static spark.Spark.post;
 
 public class ApplicationResource {
     private static final String API_CONTEXT = "api";
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(ApplicationResource.class);
 
     public ApplicationResource() {
         setupEndpoints();
@@ -30,7 +29,7 @@ public class ApplicationResource {
                 UUID uuid = ApplicationInteractor.loginUser(login, password);
                 request.session().attribute("user_uuid", uuid.toString());
                 response.cookie("user_uuid", uuid.toString());
-                return "OK";
+                return uuid;
             } catch (NullPointerException e) {
                 return "Invalid params";
             } catch (UserDoesNotExist userDoesNotExist) {
@@ -40,7 +39,7 @@ public class ApplicationResource {
                 invalidPassword.printStackTrace();
                 return "Invalid password";
             }
-        }, new JsonTransformer());
+        });
 
         post(API_CONTEXT + "/register", "application/json", (request, response) -> {
             Map<String, String> postParams = JsonHelper.jsonToMapStringString(request.body());

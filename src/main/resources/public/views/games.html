@@ -1,6 +1,4 @@
 <h2>Games</h2>
-jkashdkjashd
-ADSJHJKDAHDAS
 <table class="table table-hover">
     <tr>
         <th>
@@ -13,10 +11,19 @@ ADSJHJKDAHDAS
             # of spectators:
         </th>
         <th>
+            # of players:
+        </th>
+        <th>
             is active:
         </th>
         <th>
+            market:
+        </th>
+        <th>
             initial value:
+        </th>
+        <th>
+            actions
         </th>
 
     </tr>
@@ -26,13 +33,35 @@ ADSJHJKDAHDAS
             {{game.name}}
         </td>
         <td>
-            {{size(game.spectators)}}
+            {{game.spectators.length}}
+        </td>
+        <td>
+            {{game.numberOfPlayers}}
         </td>
         <td>
             {{game.active}}
         </td>
         <td>
-            {{game.initalValue / 100 | currency : "PLN" : 2}}
+            {{game.marketName}}
         </td>
+        <td>
+            {{game.initialValue / 100 | currency : "PLN" : 2}}
+        </td>
+        <td>
+            <div ng-if="game.isPlayer">
+                <button ng-click="playAsPlayer(game)">Play as player</button>
+            </div>
+            <div ng-if="game.isSpectator">
+                <button ng-click="playAsSpectator(game)">Play as spectator</button>
+
+            </div>
+            <div ng-if="game.canJoin">
+                <button ng-click="joinAsSpectator(game)">Join as spectator</button>
+            </div>
+            <div ng-if="game.canJoin">
+                <button ng-click="joinAsPlayer(game)">Join as player</button>
+            </div>
+        </td>
+
     </tr>
 </table>

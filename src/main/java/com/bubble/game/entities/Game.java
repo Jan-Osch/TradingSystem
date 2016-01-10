@@ -32,7 +32,9 @@ public class Game {
 
     public UUID joinGameAsPlayer(UUID userUuid) throws UserIsAlreadyPlayer, UserIsAlreadySpectator {
         validateUserCanJoinGame(userUuid);
-        return this.players.put(userUuid, UUID.randomUUID());
+        UUID playerUuid = UUID.randomUUID();
+        this.players.put(userUuid, playerUuid);
+        return playerUuid;
     }
 
     public void startGame() {

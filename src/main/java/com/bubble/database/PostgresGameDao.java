@@ -37,6 +37,12 @@ public class PostgresGameDao implements GameGateWay {
     }
 
     @Override
+    public void update(Game game) {
+        deleteGame(game.gameUuid);
+        save(game);
+    }
+
+    @Override
     public Iterable<Game> geAllGames() {
         ArrayList<Game> result = new ArrayList<>();
         String sql = "SELECT * FROM \":tableName\"";
@@ -78,5 +84,16 @@ public class PostgresGameDao implements GameGateWay {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private void deleteGame(UUID gameUuid) {
+        String sql = "DELETE FROM \":tableName\" WHERE uuid = ':uuid'";
+        sql = SqlUtils.addParameterToSqlStatement(sql, "tableName", tableName);
+        sql = SqlUtils.addParameterToSqlStatement(sql, "uuid", gameUuid.toString());
+        try {
+            PostgreSQLJDBC.executeSql(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

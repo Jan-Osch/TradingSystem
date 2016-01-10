@@ -1,0 +1,11 @@
+<h2>Your Portfolio</h2>
+<div>Current balance: <b>{{portfolio.currentBalance / 100 | currency : "PLN" : 2}}</b></div>
+
+<div>Current assets:</div>
+<table class="table table-hover">
+    <tr ng-repeat="asset in portfolio.assets">
+        <td>
+            {{asset}}
+        </td>
+    </tr>
+</table>

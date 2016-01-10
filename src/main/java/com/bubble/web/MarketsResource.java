@@ -1,17 +1,14 @@
-package web;
+package com.bubble.web;
 
-import database.SqlUtils;
-
-import markets.exceptions.InstrumentUuidNotFoundException;
-import markets.exceptions.MarketNotFoundException;
-import markets.interactors.*;
+import com.bubble.database.SqlUtils;
+import com.bubble.markets.exceptions.InstrumentUuidNotFoundException;
+import com.bubble.markets.exceptions.MarketNotFoundException;
+import com.bubble.markets.interactors.MarketsInteractor;
 
 import java.util.Date;
 import java.util.UUID;
 
 import static spark.Spark.get;
-import static spark.Spark.post;
-import static spark.Spark.put;
 
 public class MarketsResource {
 
@@ -26,9 +23,8 @@ public class MarketsResource {
 
             UUID marketUuid = UUID.fromString(request.params(":marketUuid"));
             UUID instrumentUuid = UUID.fromString(request.params(":instrumentUuid"));
-            GetInstrumentTransaction getInstrumentTransaction = new GetInstrumentTransaction(instrumentUuid, marketUuid);
             try {
-                return getInstrumentTransaction.execute();
+                MarketsInteractor.getInstrument(marketUuid, instrumentUuid);
             } catch (MarketNotFoundException | InstrumentUuidNotFoundException e) {
                 e.printStackTrace();
             }
@@ -36,20 +32,13 @@ public class MarketsResource {
         }, new JsonTransformer());
 
         get(API_CONTEXT, "application/json", (request, response) -> {
-            GetAllMarketsTransaction getAllMarketsTransaction = new GetAllMarketsTransaction();
-            try {
-                return getAllMarketsTransaction.execute();
-            } catch (MarketNotFoundException e) {
-                e.printStackTrace();
-            }
-            return "501";
+            return MarketsInteractor.getAllMarkets();
         }, new JsonTransformer());
 
         get(API_CONTEXT + "/:marketUuid/instrument", "application/json", (request, response) -> {
             UUID marketUuid = UUID.fromString(request.params(":marketUuid"));
-            GetAllInstrumentsForMarket getAllInstrumentsForMarket = new GetAllInstrumentsForMarket(marketUuid);
             try {
-                return getAllInstrumentsForMarket.execute();
+                return MarketsInteractor.getAllInstrumentsForMarket(marketUuid);
             } catch (MarketNotFoundException e) {
                 e.printStackTrace();
             }
@@ -77,9 +66,8 @@ public class MarketsResource {
             UUID marketUuid = UUID.fromString(request.params(":marketUuid"));
             UUID instrumentUuid = UUID.fromString(request.params(":instrumentUuid"));
 
-            GetCurrentRecordForInstrumentTransaction getCurrentRecordForInstrumentTransaction = new GetCurrentRecordForInstrumentTransaction(instrumentUuid, marketUuid);
             try {
-                return getCurrentRecordForInstrumentTransaction.execute();
+                return MarketsInteractor.getCurrentRecordForInstrument(instrumentUuid, marketUuid);
             } catch (MarketNotFoundException | InstrumentUuidNotFoundException e) {
                 e.printStackTrace();
             }
@@ -92,9 +80,7 @@ public class MarketsResource {
             UUID instrumentUuid = UUID.fromString(request.params(":instrumentUuid"));
             Date start = SqlUtils.dateTimeFromString(request.queryParams("start"));
             Date end = SqlUtils.dateTimeFromString(request.queryParams("end"));
-            GetCurrentRecordsForPeriodTransaction getCurrentRecordsForPeriodTransaction
-                    = new GetCurrentRecordsForPeriodTransaction(instrumentUuid, marketUuid, start, end);
-            return getCurrentRecordsForPeriodTransaction.execute();
+            return MarketsInteractor.getCurrentRecordsForPeriod(instrumentUuid, marketUuid, start, end);
         }, new JsonTransformer());
 
         get(API_CONTEXT + "/:marketUuid/instrument/:instrumentUuid/record/historical", "application/json", (request, response) -> {
@@ -104,14 +90,12 @@ public class MarketsResource {
             Date start = SqlUtils.dateTimeFromString(request.queryParams("start"));
             Date end = SqlUtils.dateTimeFromString(request.queryParams("end"));
 
-            GetHistoricalRecordsForInstrument getHistoricalRecordsForInstrument = new GetHistoricalRecordsForInstrument(instrumentUuid, marketUuid, start, end);
             try {
-                return getHistoricalRecordsForInstrument.execute();
+                return MarketsInteractor.getHistoricalRecordsForInstrument(instrumentUuid, marketUuid, start, end);
             } catch (MarketNotFoundException | InstrumentUuidNotFoundException e) {
                 e.printStackTrace();
             }
             return "501";
         }, new JsonTransformer());
-
     }
 }

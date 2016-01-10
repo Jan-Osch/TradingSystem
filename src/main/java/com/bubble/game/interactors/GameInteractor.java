@@ -40,7 +40,7 @@ public class GameInteractor {
             throw new GameUuidNotFound();
         }
         game.joinGameAsSpectator(userUuid);
-        gameGateWay.save(game);
+        gameGateWay.update(game);
     }
 
     public static void joinGameAsPlayer(UUID gameUuid, UUID userUuid) throws GameUuidNotFound, UserIsAlreadySpectator, UserIsAlreadyPlayer, OwnerAlreadyHasAccount {
@@ -49,7 +49,7 @@ public class GameInteractor {
             throw new GameUuidNotFound();
         }
         UUID playerUuid = game.joinGameAsPlayer(userUuid);
-        gameGateWay.save(game);
+        gameGateWay.update(game);
         AccountsInteractor.createAccount(playerUuid, game.getInitialValue());
     }
 

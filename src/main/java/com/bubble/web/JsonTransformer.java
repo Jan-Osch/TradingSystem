@@ -1,4 +1,4 @@
-package web;
+package com.bubble.web;
 
 import com.google.gson.Gson;
 import spark.ResponseTransformer;

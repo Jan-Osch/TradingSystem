@@ -163,9 +163,10 @@ public class MarketsInteractor {
                 marketUuid,
                 dateStart,
                 dateEnd);
+        //TODO throw some exceptions where records not found
     }
 
-    public static Record ItegetCurrentRecordForInstrument(UUID instrumentUUID, UUID marketUUID) throws MarketNotFoundException, InstrumentUuidNotFoundException {
+    public static Record getCurrentRecordForInstrument(UUID instrumentUUID, UUID marketUUID) throws MarketNotFoundException, InstrumentUuidNotFoundException {
         Market market = MarketManager.getMarketByUuid(marketUUID);
         return market.getCurrentRecord(instrumentUUID);
     }

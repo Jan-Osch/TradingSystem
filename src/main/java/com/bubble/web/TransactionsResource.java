@@ -1,12 +1,13 @@
-package web;
+package com.bubble.web;
 
-import accounts.exceptions.AccountUuidNotFound;
-import accounts.exceptions.AssetNotSufficient;
-import accounts.exceptions.ResourcesNotSufficient;
-import commons.JsonHelper;
-import markets.exceptions.InstrumentUuidNotFoundException;
-import markets.exceptions.MarketNotFoundException;
-import transactions.interactors.TransactionsInteractor;
+
+import com.bubble.accounts.exceptions.AccountUuidNotFound;
+import com.bubble.accounts.exceptions.AssetNotSufficient;
+import com.bubble.accounts.exceptions.ResourcesNotSufficient;
+import com.bubble.commons.JsonHelper;
+import com.bubble.markets.exceptions.InstrumentUuidNotFoundException;
+import com.bubble.markets.exceptions.MarketNotFoundException;
+import com.bubble.transactions.interactors.TransactionsInteractor;
 
 import java.math.BigDecimal;
 import java.util.Map;
