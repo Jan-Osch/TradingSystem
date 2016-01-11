@@ -56,8 +56,10 @@ angular.module('apiServices', [])
                 });
             },
             getPlayerUuid: function (gameUuid, userUuid, callback) {
+
                 $http.get('/api/games/' + gameUuid + '/player/' + userUuid)
                     .success(function (data) {
+                        console.warn(data);
                         callback(data);
                     })
                     .error(function (data, status) {

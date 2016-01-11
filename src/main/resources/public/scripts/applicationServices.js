@@ -47,64 +47,78 @@ angular.module('applicationServices', [])
                 this.currentGame = $cookieStore.get('game_name');
                 this.currentUuid = $cookieStore.get('game_uuid');
                 this.player = $cookieStore.get('game_player');
+                this.playerUuid = $cookieStore.get('player_uuid');
             },
 
-            loadPlayerUuid: function () {
+            loadPlayerUuid: function (callback) {
                 var that = this;
-                GamesService.getPlayerUuid(this.currentUuid, UserService.getUserUuid(), function (data) {
-                    that.playerUuid = data;
-                });
+                GamesService.getPlayerUuid(that.currentUuid, UserService.getUserUuid(), callback);
             },
 
             isPlaying: function () {
-                return this.currentGame;
+                return (this.currentGame !== undefined &&
+                this.currentUuid !== undefined &&
+                this.player !== undefined &&
+                this.playerUuid !== undefined);
             },
 
-            setCookies: function (gameName, gameUuid, player) {
+            setCookies: function (gameName, gameUuid, player, playerUuid) {
                 $cookieStore.put('game_name', gameName);
                 $cookieStore.put('game_uuid', gameUuid);
                 $cookieStore.put('game_player', player);
+                $cookieStore.put('player_uuid', playerUuid);
             },
 
             startPlaying: function (gameUuid, gameName, player) {
-                this.currentGame = gameName;
-                this.currentUuid = gameUuid;
-                this.player = player;
-                this.setCookies(gameName, gameUuid, player);
-                this.loadPlayerUuid();
+                var that = this;
+                that.currentGame = gameName;
+                that.currentUuid = gameUuid;
+                that.player = player;
+                that.loadPlayerUuid(function (playerUuid) {
+                    that.playerUuid = playerUuid;
+                    console.warn(that.playerUuid);
+                    that.setCookies(gameName, gameUuid, player, playerUuid);
+                });
             },
 
             startService: function () {
                 this.loadCookies();
-                this.loadPlayerUuid();
             }
 
         };
     }).service('StocksService', function ($cookieStore, MarketService) {
     return {
-        instruments: [],
+        instruments: {},
+        markets: [],
         getInstrument: function (instrumentUuid) {
-            return _.find(this.instruments, function (element) {
-                return element.uuid === instrumentUuid;
-            });
+            var that = this;
+            return that.instruments[instrumentUuid];
         },
         getCode: function (instrumentUuid) {
-            return this.getInstrument(instrumentUuid).codeName;
-
+            var that = this;
+            return that.getInstrument(instrumentUuid).codeName;
         },
         getName: function (instrumentUuid) {
-            return this.getInstrument(instrumentUuid).fullName;
+            var that = this;
+            return that.getInstrument(instrumentUuid).fullName;
         },
-        loadAll: function () {
-            console.info('loadAll called');
+        addInstrument: function (instrument) {
+            var that = this;
+            that.instruments[instrument.uuid] = _.pick(instrument, 'codeName', 'fullName', 'marketUuid');
+        },
+        loadAllInstruments: function () {
             var that = this;
             MarketService.getAllMarkets(function (allMarkets) {
+                that.markets = allMarkets;
                 _.forEach(allMarkets, function (market) {
                     MarketService.getAllInstrumentsForMarket(market.uuid, function (instruments) {
-                        that.instruments.concat(instruments)
+                        _.forEach(instruments, that.addInstrument, that);
                     })
                 })
             })
+        },
+        startService: function () {
+            this.loadAllInstruments();
         }
     };
 });

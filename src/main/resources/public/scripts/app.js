@@ -41,7 +41,7 @@ app.run(function ($rootScope, UserService, GamePlayService, StocksService) {
     $rootScope.UserService = UserService;
     $rootScope.GamePlayService = GamePlayService;
     $rootScope.StocksService = StocksService;
-    StocksService.loadAll();
+    StocksService.startService();
     GamePlayService.startService();
 });
 
@@ -88,12 +88,13 @@ app.controller('LoginCtrl', function ($scope, $http, $location, $rootScope) {
 });
 
 app.controller('StockQuotesCtrl', function ($scope, $routeParams, StocksService, MarketService) {
-    $scope.stock = StocksService.getInstrument($routeParams.stockUuid);
+
 
     MarketService.getCurrentRecord($routeParams.markedUuid, $routeParams.stockUuid, function (data) {
         $scope.stocRecord = data;
+        console.warn(data);
+        $scope.stock = StocksService.getInstrument($routeParams.stockUuid);
     });
-
     $scope.buy = function (stock) {
     }
 });
@@ -106,7 +107,6 @@ app.controller('MarketsCtrl', function ($scope, MarketService) {
 });
 
 app.controller('PortfolioCtrl', function ($scope, AccountsService, GamePlayService, GamesService, UserService, StocksService) {
-    console.warn(GamePlayService.playerUuid);
     AccountsService.getPortfolioForOwner(GamePlayService.playerUuid, function (portfolio) {
         _.forEach(portfolio.assets, function (asset) {
             asset.name = StocksService.getName(asset.uuid);
