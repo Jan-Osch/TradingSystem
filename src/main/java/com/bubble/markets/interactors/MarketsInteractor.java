@@ -47,7 +47,7 @@ public class MarketsInteractor {
         return MarketManager.getMarketByUuid(getMarketUuidForInstrument(instrumentUUID));
     }
 
-    private static UUID getMarketUuidForInstrument(UUID instrumentUUID) throws InstrumentUuidNotFoundException {
+    public static UUID getMarketUuidForInstrument(UUID instrumentUUID) throws InstrumentUuidNotFoundException {
         for (Market market : getAllMarkets()) {
             if (market.isInstrumentUuidOnTheMarket(instrumentUUID)) {
                 return market.getUuid();

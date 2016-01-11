@@ -37,37 +37,30 @@ app.config(function ($routeProvider) {
     })
 });
 
-app.run(function ($rootScope, UserService, GamePlayService, StocksService) {
+app.run(function ($rootScope, UserService, GamePlayService) {
     $rootScope.UserService = UserService;
     $rootScope.GamePlayService = GamePlayService;
-    $rootScope.StocksService = StocksService;
-    StocksService.startService();
     GamePlayService.startService();
+    UserService.startService();
 });
 
 
-app.controller('StocksCtrl', function ($scope, $http, $routeParams) {
-    $http.get('/api/markets/' + $routeParams.marketId + '/instrument').success(function (data) {
+app.controller('StocksCtrl', function ($scope, $http, $routeParams, MarketService) {
+    MarketService.getAllInstrumentsForMarket($routeParams.marketId, function (data) {
         $scope.instruments = data;
-    }).error(function (data, status) {
-        console.log('Error ' + data)
     });
 });
 
-app.controller('RegisterCtrl', function ($scope, $http, $location, $rootScpoe) {
+app.controller('RegisterCtrl', function ($scope, $http, $location, $rootScpoe, ApplicationService) {
     $scope.attemptRegister = function () {
         $scope.dataLoading = true;
-        $http.post('/api/register', {login: $scope.login, password: $scope.password}).success(function (data) {
-            if (data == '\"OK\"') {
-                $rootScope.UserService.rememberUser($scope.login);
-                $location.path('/');
-            } else {
-                $scope.result = data;
-            }
-        }).error(function (data, status) {
-            console.log('Error ' + data)
+        ApplicationService.register($scope.userName, $scope.password, function (uuid) {
+            UserService.rememberUser($scope.userName, uuid);
+            UserService.redirectToLanding();
+            $scope.dataLoading = false;
+        }, function (data) {
+            $scope.result = data;
         });
-        $scope.dataLoading = false;
     };
 
     $scope.confirmDoesNotMatch = function () {
@@ -75,27 +68,38 @@ app.controller('RegisterCtrl', function ($scope, $http, $location, $rootScpoe) {
     }
 });
 
-app.controller('LoginCtrl', function ($scope, $http, $location, $rootScope) {
+app.controller('LoginCtrl', function ($scope, $http, $location, $rootScope, ApplicationService, UserService) {
     $scope.attemptLogin = function () {
+        ApplicationService.login($scope.login, $scope.password, function (data) {
+            UserService.rememberUser($scope.login, data);
+            UserService.redirectToLanding()
+        }, function (data) {
+            $scope.result = data;
+        })
 
-        $http.post('/api/login', {login: $scope.login, password: $scope.password}).success(function (data) {
-            $rootScope.UserService.rememberUser($scope.login, data);
-            $location.path('/');
-        }).error(function (data, status) {
-            console.log('Error ' + data)
-        });
     };
 });
 
-app.controller('StockQuotesCtrl', function ($scope, $routeParams, StocksService, MarketService) {
-
-
-    MarketService.getCurrentRecord($routeParams.markedUuid, $routeParams.stockUuid, function (data) {
-        $scope.stocRecord = data;
-        console.warn(data);
-        $scope.stock = StocksService.getInstrument($routeParams.stockUuid);
+app.controller('StockQuotesCtrl', function ($scope, $routeParams, MarketService, TransactionService, GamePlayService) {
+    MarketService.getCurrentRecord($routeParams.stockUuid, function (data) {
+        $scope.stockRecord = data;
     });
+
+    MarketService.getInstrument($routeParams.stockUuid, function (data) {
+        $scope.stock = data;
+    });
+
     $scope.buy = function (stock) {
+        if ($scope.amount) {
+            TransactionService.buy(GamePlayService.playerUuid, stock.uuid, $scope.amount,
+                function (data) {
+                    $scope.transactionStatus = 'OK'
+                },
+                function (data) {
+                    $scope.transactionStatus = data;
+                }
+            )
+        }
     }
 });
 
@@ -106,13 +110,56 @@ app.controller('MarketsCtrl', function ($scope, MarketService) {
     })
 });
 
-app.controller('PortfolioCtrl', function ($scope, AccountsService, GamePlayService, GamesService, UserService, StocksService) {
-    AccountsService.getPortfolioForOwner(GamePlayService.playerUuid, function (portfolio) {
-        _.forEach(portfolio.assets, function (asset) {
-            asset.name = StocksService.getName(asset.uuid);
+app.controller('PortfolioCtrl', function ($scope, AccountsService, GamePlayService, MarketService, TransactionService) {
+    var reloadData = function () {
+        AccountsService.getPortfolioForOwner(GamePlayService.playerUuid, function (portfolio) {
+            $scope.portfolio = portfolio;
+            $scope.portfolio.assets = _.map($scope.portfolio.assets, function (value, key) {
+                return {
+                    amount: value,
+                    uuid: key
+                }
+            });
+            _.forEach($scope.portfolio.assets, function (element, index) {
+                MarketService.getInstrument(element.uuid, function (data) {
+                    _.extend($scope.portfolio.assets[index], data);
+                });
+                MarketService.getCurrentRecord(element.uuid, function (data) {
+                    _.extend($scope.portfolio.assets[index], data);
+                })
+            });
         });
-        $scope.portfolio = portfolio;
-    });
+    };
+
+    reloadData();
+
+    $scope.sell = function (asset) {
+        if (asset.amount >= asset.transactionAmount) {
+            TransactionService.sell(GamePlayService.playerUuid, asset.uuid, asset.transactionAmount,
+                function (data) {
+                    $scope.transactionStatus = 'Successfully selled ' + asset.transactionAmount + ' of ' + asset.fullName;
+                    reloadData();
+                },
+                function (data) {
+                    $scope.transactionStatus = data;
+                }
+            )
+        }
+    };
+
+    $scope.buy = function (asset) {
+        if (asset.transactionAmount) {
+            TransactionService.buy(GamePlayService.playerUuid, asset.uuid, asset.transactionAmount,
+                function (data) {
+                    $scope.transactionStatus = 'Successfully buyed ' + asset.transactionAmount + ' of ' + asset.fullName;
+                    reloadData();
+                },
+                function (data) {
+                    $scope.transactionStatus = data;
+                }
+            )
+        }
+    };
 });
 
 app.controller('GamesCtrl', function ($scope, $http, MarketService, GamesService, UserService, GamePlayService) {
@@ -125,10 +172,10 @@ app.controller('GamesCtrl', function ($scope, $http, MarketService, GamesService
 
     function checkIfUserCanJoin(game) {
         if (UserService.isLogged()) {
-            if (_.indexOf(game.spectators, UserService.getUserUuid()) !== -1) {
+            if (_.indexOf(game.spectators, UserService.userUuid) !== -1) {
                 game.isSpectator = true;
             }
-            if (game.players.hasOwnProperty(UserService.getUserUuid())) {
+            if (game.players.hasOwnProperty(UserService.userUuid)) {
                 game.isPlayer = true;
             }
             game.canJoin = !(game.isPlayer || game.isSpectator);
@@ -161,14 +208,14 @@ app.controller('GamesCtrl', function ($scope, $http, MarketService, GamesService
 
 
     $scope.joinAsSpectator = function (game) {
-        GamesService.joinAsSpectator(game.gameUuid, UserService.getUserUuid(), function (data) {
+        GamesService.joinAsSpectator(game.gameUuid, UserService.userUuid, function (data) {
             game.canJoin = false;
             game.isSpectator = true;
         });
     };
 
     $scope.joinAsPlayer = function (game) {
-        GamesService.joinAsPlayer(game.gameUuid, UserService.getUserUuid(), function (data) {
+        GamesService.joinAsPlayer(game.gameUuid, UserService.userUuid, function (data) {
             loadAllGames();
         });
     };

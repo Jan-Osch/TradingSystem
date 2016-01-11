@@ -24,11 +24,25 @@ public class MarketsResource {
             UUID marketUuid = UUID.fromString(request.params(":marketUuid"));
             UUID instrumentUuid = UUID.fromString(request.params(":instrumentUuid"));
             try {
-                MarketsInteractor.getInstrument(marketUuid, instrumentUuid);
+                return MarketsInteractor.getInstrument(marketUuid, instrumentUuid);
             } catch (MarketNotFoundException | InstrumentUuidNotFoundException e) {
                 e.printStackTrace();
+                response.status(404);
             }
-            return "501";
+            return "";
+        }, new JsonTransformer());
+
+        get(API_CONTEXT + "/instrument/:instrumentUuid", "application/json", (request, response) -> {
+
+            UUID instrumentUuid = UUID.fromString(request.params(":instrumentUuid"));
+            try {
+                UUID marketUuid = MarketsInteractor.getMarketUuidForInstrument(instrumentUuid);
+                return MarketsInteractor.getInstrument(marketUuid, instrumentUuid);
+            } catch (MarketNotFoundException | InstrumentUuidNotFoundException e) {
+                e.printStackTrace();
+                response.status(404);
+            }
+            return "";
         }, new JsonTransformer());
 
         get(API_CONTEXT, "application/json", (request, response) -> {
@@ -41,61 +55,55 @@ public class MarketsResource {
                 return MarketsInteractor.getAllInstrumentsForMarket(marketUuid);
             } catch (MarketNotFoundException e) {
                 e.printStackTrace();
-            }
-            return "501";
-        }, new JsonTransformer());
-
-        get(API_CONTEXT + "/:marketUuid/instrument/:instrumentUuid", "application/json", (request, response) -> {
-
-            UUID marketUuid = UUID.fromString(request.params(":marketUuid"));
-            UUID instrumentUuid = UUID.fromString(request.params(":instrumentUuid"));
-
-            try {
-                return MarketsInteractor.getInstrument(marketUuid, instrumentUuid);
-            } catch (MarketNotFoundException e) {
-                e.printStackTrace();
-                return "Market not Found";
-            } catch (InstrumentUuidNotFoundException e) {
-                e.printStackTrace();
-                return "Instrument not found!";
+                response.status(404);
+                return e;
             }
         }, new JsonTransformer());
 
-        get(API_CONTEXT + "/:marketUuid/instrument/:instrumentUuid/record/current", "application/json", (request, response) -> {
 
-            UUID marketUuid = UUID.fromString(request.params(":marketUuid"));
+        get(API_CONTEXT + "/instrument/:instrumentUuid/record/current", "application/json", (request, response) -> {
+
             UUID instrumentUuid = UUID.fromString(request.params(":instrumentUuid"));
 
             try {
+                UUID marketUuid = MarketsInteractor.getMarketUuidForInstrument(instrumentUuid);
                 return MarketsInteractor.getCurrentRecordForInstrument(instrumentUuid, marketUuid);
             } catch (MarketNotFoundException | InstrumentUuidNotFoundException e) {
                 e.printStackTrace();
+                response.status(404);
+                return e;
             }
-            return "501";
         }, new JsonTransformer());
 
-        get(API_CONTEXT + "/:marketUuid/instrument/:instrumentUuid/record/period", "application/json", (request, response) -> {
+        get(API_CONTEXT + "/instrument/:instrumentUuid/record/period", "application/json", (request, response) -> {
 
-            UUID marketUuid = UUID.fromString(request.params(":marketUuid"));
             UUID instrumentUuid = UUID.fromString(request.params(":instrumentUuid"));
             Date start = SqlUtils.dateTimeFromString(request.queryParams("start"));
             Date end = SqlUtils.dateTimeFromString(request.queryParams("end"));
-            return MarketsInteractor.getCurrentRecordsForPeriod(instrumentUuid, marketUuid, start, end);
+            try {
+                UUID marketUuid = MarketsInteractor.getMarketUuidForInstrument(instrumentUuid);
+                return MarketsInteractor.getCurrentRecordsForPeriod(instrumentUuid, marketUuid, start, end);
+            } catch (InstrumentUuidNotFoundException e) {
+                e.printStackTrace();
+                response.status(404);
+                return e;
+            }
         }, new JsonTransformer());
 
-        get(API_CONTEXT + "/:marketUuid/instrument/:instrumentUuid/record/historical", "application/json", (request, response) -> {
+        get(API_CONTEXT + "/instrument/:instrumentUuid/record/historical", "application/json", (request, response) -> {
 
-            UUID marketUuid = UUID.fromString(request.params(":marketUuid"));
             UUID instrumentUuid = UUID.fromString(request.params(":instrumentUuid"));
             Date start = SqlUtils.dateTimeFromString(request.queryParams("start"));
             Date end = SqlUtils.dateTimeFromString(request.queryParams("end"));
 
             try {
+                UUID marketUuid = MarketsInteractor.getMarketUuidForInstrument(instrumentUuid);
                 return MarketsInteractor.getHistoricalRecordsForInstrument(instrumentUuid, marketUuid, start, end);
             } catch (MarketNotFoundException | InstrumentUuidNotFoundException e) {
                 e.printStackTrace();
+                response.status(404);
+                return e;
             }
-            return "501";
         }, new JsonTransformer());
     }
 }

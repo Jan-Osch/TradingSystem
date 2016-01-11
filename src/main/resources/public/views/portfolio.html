@@ -2,10 +2,56 @@
 <div>Current balance: <b>{{portfolio.currentBalance / 100 | currency : "PLN" : 2}}</b></div>
 
 <div>Current assets:</div>
+
+<p>{{transactionStatus}}</p>
+
 <table class="table table-hover">
+    <tr>
+        <th>
+            Asset name
+        </th>
+        <th>
+            Asset code
+        </th>
+        <th>
+            type
+        </th>
+        <th>
+            Amount
+        </th>
+        <th>
+            Current value
+        </th>
+        <th>
+            Total value
+        </th>
+        <th>
+            Actions
+        </th>
+    </tr>
     <tr ng-repeat="asset in portfolio.assets">
         <td>
-            {{asset}}
+            {{asset.fullName}}
+        </td>
+        <td>
+            {{asset.codeName}}
+        </td>
+        <td>
+            {{asset.instrumentType}}
+        </td>
+        <td>
+            {{asset.amount}}
+        </td>
+        <td>
+            {{asset.value / 100 | currency : "PLN" : 2}}
+        </td>
+        <td>
+            {{asset.value * asset.amount/ 100 | currency : "PLN" : 2}}
+        </td>
+        <td>
+            <input type="number" ng-model="asset.transactionAmount">
+            <button ng-show="GamePlayService.player" ng-click="sell(asset)">Sell</button>
+            <button ng-show="GamePlayService.player" ng-click="buy(asset)">Buy</button>
         </td>
     </tr>
 </table>

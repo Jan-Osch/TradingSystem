@@ -34,11 +34,13 @@ public class TransactionsResource {
                 TransactionsInteractor.createStockBuyOrderByMarketPrice(instrumentUuid, accountUuid, amount);
             } catch (NullPointerException e) {
                 e.printStackTrace();
+                response.status(400);
                 return "Invalid Params";
             } catch (AccountUuidNotFound | ResourcesNotSufficient | MarketNotFoundException | InstrumentUuidNotFoundException e) {
+                response.status(400);
                 e.printStackTrace();
             }
-            return "501";
+            return "";
 
         }, new JsonTransformer());
         post(API_CONTEXT + "/sellByMarketPrice", "application/json", (request, response) -> {

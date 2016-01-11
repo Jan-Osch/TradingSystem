@@ -51,4 +51,21 @@ public class PostgresAccountDao implements AccountGateWay {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void update(Account account) {
+        delete(account);
+        save(account);
+    }
+
+    public void delete(Account account) {
+        String sql = "DELETE FROM \":tableName\" WHERE uuid = ':uuid'";
+        sql = SqlUtils.addParameterToSqlStatement(sql, "tableName", tableName);
+        sql = SqlUtils.addParameterToSqlStatement(sql, "uuid", account.getOwnerUUID().toString());
+        try {
+            PostgreSQLJDBC.executeSql(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

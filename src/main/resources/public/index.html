@@ -33,7 +33,9 @@
         <ul class="nav navbar-nav navbar-right">
             <li ng-show="UserService.isLogged()"><a href="#"><b>{{UserService.user}}</b></a></li>
             <li ng-show="!UserService.isLogged()"><a href="#/login">login</a></li>
-            <li ng-show="UserService.isLogged()"><a href="" ng-click="UserService.logout()">logout</a></li>
+            <li ng-show="UserService.isLogged()"><a href=""
+                                                    ng-click="UserService.logout();GamePlayService.clearCookies()">logout</a>
+            </li>
             <li ng-show="!UserService.isLogged()"><a href="#/register">register</a></li>
         </ul>
     </div>

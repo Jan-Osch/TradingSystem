@@ -33,25 +33,25 @@ public class AccountsInteractor {
     protected static void addResourcesToAccount(UUID ownerUUID, BigDecimal amount) throws AccountUuidNotFound {
         Account account = getAccount(ownerUUID);
         account.addResources(amount);
-        accountGateWay.save(account);
+        accountGateWay.update(account);
     }
 
     protected static void subtractResources(UUID ownerUUID, BigDecimal amount) throws AccountUuidNotFound, ResourcesNotSufficient {
         Account account = getAccount(ownerUUID);
         account.subtractResources(amount);
-        accountGateWay.save(account);
+        accountGateWay.update(account);
     }
 
     protected static void addAsset(UUID ownerUUID, UUID instrumentUUID, BigDecimal amount) throws AccountUuidNotFound {
         Account account = getAccount(ownerUUID);
         account.addAsset(instrumentUUID, amount);
-        accountGateWay.save(account);
+        accountGateWay.update(account);
     }
 
     protected static void subtractAsset(UUID ownerUUID, UUID instrumentUUID, BigDecimal amount) throws AccountUuidNotFound, AssetNotSufficient {
         Account account = getAccount(ownerUUID);
         account.subtractAsset(instrumentUUID, amount);
-        accountGateWay.save(account);
+        accountGateWay.update(account);
     }
 
     public static void createAccount(UUID ownerUUID, BigDecimal initalBalance) throws OwnerAlreadyHasAccount {

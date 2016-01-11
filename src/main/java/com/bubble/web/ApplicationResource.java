@@ -31,12 +31,15 @@ public class ApplicationResource {
                 response.cookie("user_uuid", uuid.toString());
                 return uuid;
             } catch (NullPointerException e) {
+                response.status(400);
                 return "Invalid params";
             } catch (UserDoesNotExist userDoesNotExist) {
                 userDoesNotExist.printStackTrace();
+                response.status(404);
                 return "User does not exist";
             } catch (InvalidPassword invalidPassword) {
                 invalidPassword.printStackTrace();
+                response.status(400);
                 return "Invalid password";
             }
         });
@@ -51,9 +54,11 @@ public class ApplicationResource {
                 response.cookie("user_uuid", uuid.toString());
                 return "OK";
             } catch (NullPointerException e) {
+                response.status(400);
                 return "Invalid params";
             } catch (LoginAlreadyExists loginAlreadyExists) {
                 loginAlreadyExists.printStackTrace();
+                response.status(409);
                 return "Login already exists";
             }
         }, new JsonTransformer());

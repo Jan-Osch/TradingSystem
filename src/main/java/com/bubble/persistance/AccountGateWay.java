@@ -9,5 +9,7 @@ public interface AccountGateWay {
     Account getAccountByUuid(UUID accountUuid);
 
     void save(Account account);
+
+    void update(Account account);
 }
 

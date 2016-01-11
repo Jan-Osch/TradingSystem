@@ -2,6 +2,8 @@
 <h3>Code : {{stock.codeName}}</h3>
 <h3>Current value : <b>{{stockRecord.value / 100 | currency : "PLN" : 2}} </b></h3>
 
-<input type="number" ng-model="amount">
-<button ng-show="GamePlayService.player" ng-click="buy(stock)">Buy</button>
-
+<div ng-show="GamePlayService.player">
+    <input type="number" ng-model="amount">
+    <button ng-click="buy(stock)">Buy</button>
+    <b>{{transactionStatus}}</b>
+</div>
