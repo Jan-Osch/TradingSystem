@@ -7,3 +7,55 @@
     <button ng-click="buy(stock)">Buy</button>
     <b>{{transactionStatus}}</b>
 </div>
+
+<div class="row">
+    <div class="col-lg-6 col-sm-12 ng-scope">
+        <div class="panel panel-default">
+            <div class="panel-heading">Values chart</div>
+            <div class="panel-body">
+                <canvas id="line"
+                        class="chart chart-line"
+                        chart-data="valueData"
+                        chart-labels="labels"
+                        chart-legend="true"
+                        chart-series="valueSeries"
+                        chart-click="onClick"
+                        chart-colours="valueColors">
+                </canvas>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-sm-12 ng-scope">
+        <div class="panel panel-default">
+            <div class="panel-heading">Volume chart</div>
+            <div class="panel-body">
+                <canvas id="volume-chart"
+                        class="chart chart-line"
+                        chart-data="volumeData"
+                        chart-legend="true"
+                        chart-labels="labels"
+                        chart-series="volumeSeries"
+                        chart-click="onClick"
+                        chart-colours="volumeColors">
+                </canvas>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6 col-sm-12 ng-scope">
+        <div class="panel panel-default">
+            <div class="panel-heading">Change chart</div>
+            <div class="panel-body">
+                <canvas id="chane-chart"
+                        class="chart chart-line"
+                        chart-data="changeData"
+                        chart-labels="labels"
+                        chart-series="changeSeries"
+                        chart-click="onClick">
+                </canvas>
+            </div>
+        </div>
+    </div>
+</div>

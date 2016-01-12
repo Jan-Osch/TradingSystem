@@ -49,7 +49,8 @@ public class PostgresHistoricalStockRecordDao implements HistoricalStockRecordGa
     @Override
     public Iterable<HistoricalStockRecord> getHistoricalStockRecordForPeriod(UUID instrumentUuid, UUID marketUuid, Date startDate, Date endDate) {
         String sql = "SELECT * FROM \":tableName\" WHERE "
-                + "uuid = ':uuid' AND date >= ':startDate' AND date <= ':endDate'";
+                + "uuid = ':uuid' AND date >= ':startDate' AND date <= ':endDate'" +
+                "ORDER BY date ASC";
 
         sql = SqlUtils.addParameterToSqlStatement(sql, "tableName", tableName);
         sql = SqlUtils.addParameterToSqlStatement(sql, "uuid", instrumentUuid.toString());

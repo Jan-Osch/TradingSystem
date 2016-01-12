@@ -150,7 +150,7 @@ public class MarketsInteractor {
             throw new InstrumentUuidNotFoundException();
         }
 
-        HistoricalStockRecordGateWay historicalStockRecordGateWay = EntityGateWayManager.getHistoricalStockRecordGateWay();
+
         return historicalStockRecordGateWay.getHistoricalStockRecordForPeriod(instrumentUuid,
                 marketUuid,
                 startDate,

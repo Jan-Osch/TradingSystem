@@ -36,6 +36,20 @@ angular.module('apiServices', [])
                     .error(function (data, status) {
                         console.error('status: %s Error: %s' % (status, data));
                     });
+            },
+            getRecordsForPeriod: function (instrumentUuid, startDate, endDate, callback) {
+                $http.get('/api/markets/instrument/' + instrumentUuid + '/record/historical', {
+                        params: {
+                            start: startDate,
+                            end: endDate
+                        }
+                    })
+                    .success(function (data) {
+                        callback(data);
+                    })
+                    .error(function (data, status) {
+                        console.error('status: %s Error: %s' % (status, data));
+                    });
             }
         }
     }])

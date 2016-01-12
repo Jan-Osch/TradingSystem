@@ -4,8 +4,12 @@ var app = angular.module('bubbleApp', [
     'ngSanitize',
     'ngRoute',
     'apiServices',
-    'applicationServices'
+    'applicationServices',
+    'chart.js'
 ]);
+
+app.constant("moment", moment);
+app.constant("myDateTimeFormat", 'YYYY/MM/DD-HH:mm:ss');
 
 app.config(function ($routeProvider) {
     $routeProvider.when('/', {
@@ -80,14 +84,21 @@ app.controller('LoginCtrl', function ($scope, $http, $location, $rootScope, Appl
     };
 });
 
-app.controller('StockQuotesCtrl', function ($scope, $routeParams, MarketService, TransactionService, GamePlayService) {
-    MarketService.getCurrentRecord($routeParams.stockUuid, function (data) {
-        $scope.stockRecord = data;
-    });
+app.controller('StockQuotesCtrl', function ($scope,
+                                            $routeParams,
+                                            MarketService,
+                                            TransactionService,
+                                            GamePlayService,
+                                            myDateTimeFormat) {
+    MarketService.getCurrentRecord($routeParams.stockUuid,
+        function (data) {
+            $scope.stockRecord = data;
+        });
 
-    MarketService.getInstrument($routeParams.stockUuid, function (data) {
-        $scope.stock = data;
-    });
+    MarketService.getInstrument($routeParams.stockUuid,
+        function (data) {
+            $scope.stock = data;
+        });
 
     $scope.buy = function (stock) {
         if ($scope.amount) {
@@ -100,7 +111,47 @@ app.controller('StockQuotesCtrl', function ($scope, $routeParams, MarketService,
                 }
             )
         }
+    };
+    var start = moment().subtract(30, 'days').format(myDateTimeFormat);
+    var end = moment().format(myDateTimeFormat);
+
+    function prepareHistoricalChart(data) {
+        $scope.labels = [];
+
+        $scope.valueData = [[], []];
+        $scope.valueSeries = ['closingValue', 'minimum value'];
+        $scope.valueColors= ['Yellow', 'Red'];
+
+        $scope.changeData = [[]];
+        $scope.changeSeries = ['change'];
+
+        $scope.volumeData = [[], []];
+        $scope.volumeSeries = ['volume', 'transactions'];
+        $scope.volumeColors = ['Yellow', 'Green'];
+
+
+        _.forEach(data, function (element) {
+            $scope.labels.push(moment(element.date).format('YYYY/MM/DD'));
+
+            $scope.volumeData[0].push(element.volumeInShares);
+            $scope.volumeData[1].push(element.numberOfTransactions);
+
+            $scope.valueData[0].push(element.closingValue);
+            $scope.valueData[1].push(element.minimumValue);
+
+            $scope.changeData[0].push(element.valueChangePercentage);
+        });
     }
+
+    MarketService.getRecordsForPeriod($routeParams.stockUuid, start, end,
+        function (data) {
+            $scope.recordsData = data;
+            prepareHistoricalChart(data);
+        });
+
+    $scope.onClick = function (points, evt) {
+        console.log(points, evt);
+    };
 });
 
 
