@@ -28,7 +28,7 @@ public class ApplicationResource {
                 String password = postParams.get("password");
                 UUID uuid = ApplicationInteractor.loginUser(login, password);
                 request.session().attribute("user_uuid", uuid.toString());
-                response.cookie("user_uuid", uuid.toString());
+                response.cookie("server_user_uuid", uuid.toString());
                 return uuid;
             } catch (NullPointerException e) {
                 response.status(400);
@@ -51,8 +51,8 @@ public class ApplicationResource {
                 String password = postParams.get("password");
                 UUID uuid = ApplicationInteractor.registerUser(login, password);
                 request.session().attribute("user_uuid", uuid.toString());
-                response.cookie("user_uuid", uuid.toString());
-                return "OK";
+                response.cookie("server_user_uuid", uuid.toString());
+                return uuid;
             } catch (NullPointerException e) {
                 response.status(400);
                 return "Invalid params";
@@ -61,12 +61,12 @@ public class ApplicationResource {
                 response.status(409);
                 return "Login already exists";
             }
-        }, new JsonTransformer());
+        });
 
         post(API_CONTEXT + "/logout", "application/json", (request, response) -> {
             request.session().removeAttribute("user_uuid");
             response.removeCookie("user_uuid");
             return "OK";
-        }, new JsonTransformer());
+        });
     }
 }

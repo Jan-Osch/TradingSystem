@@ -7,7 +7,7 @@ angular.module('apiServices', [])
                         callback(data);
                     })
                     .error(function (data, status) {
-                        console.error('status: %s Error: %s' % (status, data));
+                        console.error('status: %s Error: %s', status, data);
                     });
             },
             getAllInstrumentsForMarket: function (marketUuid, callback) {
@@ -16,7 +16,7 @@ angular.module('apiServices', [])
                         callback(data);
                     })
                     .error(function (data, status) {
-                        console.error('status: %s Error: %s' % (status, data));
+                        console.error('status: %s Error: %s', status, data);
                     });
             },
             getInstrument: function (instrumentUuid, callback) {
@@ -25,7 +25,7 @@ angular.module('apiServices', [])
                         callback(data);
                     })
                     .error(function (data, status) {
-                        console.error('status: %s Error: %s' % (status, data));
+                        console.error('status: %s Error: %s', status, data);
                     });
             },
             getCurrentRecord: function (instrumentUuid, callback) {
@@ -34,7 +34,7 @@ angular.module('apiServices', [])
                         callback(data);
                     })
                     .error(function (data, status) {
-                        console.error('status: %s Error: %s' % (status, data));
+                        console.error('status: %s Error: %s', status, data);
                     });
             },
             getRecordsForPeriod: function (instrumentUuid, startDate, endDate, callback) {
@@ -48,7 +48,21 @@ angular.module('apiServices', [])
                         callback(data);
                     })
                     .error(function (data, status) {
-                        console.error('status: %s Error: %s' % (status, data));
+                        console.error('status: %s Error: %s', status, data);
+                    })
+            },
+            getRecordsFromLastSession: function (instrumentUuid, startDate, endDate, callback) {
+                $http.get('/api/markets/instrument/' + instrumentUuid + '/record/period', {
+                        params: {
+                            start: startDate,
+                            end: endDate
+                        }
+                    })
+                    .success(function (data) {
+                        callback(data);
+                    })
+                    .error(function (data, status) {
+                        console.error('status: %s Error: %s', status, data);
                     });
             }
         }
@@ -61,7 +75,7 @@ angular.module('apiServices', [])
                         callback(data);
                     })
                     .error(function (data, status) {
-                        console.error(data);
+                        console.error('status: %s Error: %s', status, data);
                     });
             },
             joinAsSpectator: function (gameUuid, userUuid, callback) {
@@ -71,7 +85,7 @@ angular.module('apiServices', [])
                         callback(data);
                     })
                     .error(function (data, status) {
-                        console.error(data);
+                        console.error('status: %s Error: %s', status, data);
                     });
             },
             joinAsPlayer: function (gameUuid, userUuid, callback) {
@@ -79,7 +93,7 @@ angular.module('apiServices', [])
                     .success(function (data) {
                         callback(data);
                     }).error(function (data, status) {
-                    console.error(data);
+                    console.error('status: %s Error: %s', status, data);
                 });
             },
             getPlayerUuid: function (gameUuid, userUuid, callback) {
@@ -88,7 +102,7 @@ angular.module('apiServices', [])
                         callback(data);
                     })
                     .error(function (data, status) {
-                        console.error(data);
+                        console.error('status: %s Error: %s', status, data);
                     });
             }
         }
@@ -101,7 +115,7 @@ angular.module('apiServices', [])
                         callback(data);
                     })
                     .error(function (data, status) {
-                        console.error(data);
+                        console.error('status: %s Error: %s', status, data);
                     });
             }
         }
@@ -119,7 +133,7 @@ angular.module('apiServices', [])
                         callback(data);
                     })
                     .error(function (data, status) {
-                        console.error('status: %s Error: %s' % (status, data));
+                        console.error('status: %s Error: %s', status, data);
                         if (errback) {
                             errback(data);
                         }
@@ -136,7 +150,7 @@ angular.module('apiServices', [])
                         callback(data);
                     })
                     .error(function (data, status) {
-                        console.error('status: %s Error: %s' % (status, data));
+                        console.error('status: %s Error: %s', status, data);
                         if (errback) {
                             errback(data);
                         }
@@ -152,7 +166,7 @@ angular.module('apiServices', [])
                         callback(data);
                     })
                     .error(function (data, status) {
-                        console.error('status: %s Error: %s' % (status, data));
+                        console.error('status: %s Error: %s', status, data);
                         if (errback) {
                             errback(data);
                         }
@@ -164,7 +178,7 @@ angular.module('apiServices', [])
                         callback(data);
                     })
                     .error(function (data, status) {
-                        console.error('status: %s Error: %s' % (status, data));
+                        console.error('status: %s Error: %s', status, data);
                         if (errback) {
                             errback(data);
                         }

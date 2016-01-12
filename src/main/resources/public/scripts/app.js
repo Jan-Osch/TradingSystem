@@ -55,15 +55,16 @@ app.controller('StocksCtrl', function ($scope, $http, $routeParams, MarketServic
     });
 });
 
-app.controller('RegisterCtrl', function ($scope, $http, $location, $rootScpoe, ApplicationService) {
+app.controller('RegisterCtrl', function ($scope, $http, $location, ApplicationService, UserService) {
     $scope.attemptRegister = function () {
         $scope.dataLoading = true;
-        ApplicationService.register($scope.userName, $scope.password, function (uuid) {
-            UserService.rememberUser($scope.userName, uuid);
+        ApplicationService.register($scope.login, $scope.password, function (uuid) {
+            UserService.rememberUser($scope.login, uuid);
             UserService.redirectToLanding();
             $scope.dataLoading = false;
         }, function (data) {
             $scope.result = data;
+            $scope.dataLoading = false;
         });
     };
 
@@ -120,7 +121,7 @@ app.controller('StockQuotesCtrl', function ($scope,
 
         $scope.valueData = [[], []];
         $scope.valueSeries = ['closingValue', 'minimum value'];
-        $scope.valueColors= ['Yellow', 'Red'];
+        $scope.valueColors = ['Yellow', 'Red'];
 
         $scope.changeData = [[]];
         $scope.changeSeries = ['change'];
@@ -131,13 +132,13 @@ app.controller('StockQuotesCtrl', function ($scope,
 
 
         _.forEach(data, function (element) {
-            $scope.labels.push(moment(element.date).format('YYYY/MM/DD'));
+            $scope.labels.push(element.date.substring(0, 12));
 
-            $scope.volumeData[0].push(element.volumeInShares);
+            $scope.volumeData[0].push(element.volumeInShares/100);
             $scope.volumeData[1].push(element.numberOfTransactions);
 
-            $scope.valueData[0].push(element.closingValue);
-            $scope.valueData[1].push(element.minimumValue);
+            $scope.valueData[0].push(element.closingValue/100);
+            $scope.valueData[1].push(element.minimumValue/100);
 
             $scope.changeData[0].push(element.valueChangePercentage);
         });
@@ -145,8 +146,42 @@ app.controller('StockQuotesCtrl', function ($scope,
 
     MarketService.getRecordsForPeriod($routeParams.stockUuid, start, end,
         function (data) {
-            $scope.recordsData = data;
             prepareHistoricalChart(data);
+        });
+
+    var today = moment().subtract(1, 'days').format(myDateTimeFormat);
+
+    function limitLabels(labels, number) {
+        var interval = Math.floor(labels.length / number);
+        for (var i = 0; i < labels.length; i++) {
+            if (i % interval !== 0) {
+                labels[i] = '';
+            }
+        }
+    }
+
+    function prepareCurrentSessionChart(data) {
+        $scope.currentLabels = [];
+        $scope.currentData = [[]];
+        $scope.currentSeries = ['current value'];
+        $scope.currentOptions = {
+            scaleShowHorizontalLines: true,
+            scaleShowVerticalLines: false,
+            bezierCurve: false,
+            pointDot: false
+        };
+
+        _.forEach(data, function (element, index) {
+            $scope.currentData[0].push(element.value/100);
+            $scope.currentLabels.push(element.date.substring(13, 24));
+        });
+
+        limitLabels($scope.currentLabels, 10);
+    }
+
+    MarketService.getRecordsFromLastSession($routeParams.stockUuid, today, moment().format(myDateTimeFormat),
+        function (data) {
+            prepareCurrentSessionChart(data);
         });
 
     $scope.onClick = function (points, evt) {
