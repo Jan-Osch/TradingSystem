@@ -1,0 +1,34 @@
+<h2>Ranking</h2>
+
+<table class="table table-hover">
+    <tr>
+        <th>
+            Position
+        </th>
+        <th>
+            User name
+        </th>
+        <th>
+            Total portfolio valuation
+        </th>
+        <th>
+            Actions
+        </th>
+    </tr>
+    <tr ng-repeat="position in ranking">
+        <td>
+            {{$index+1}}
+        </td>
+        <td>
+            {{position.name}}
+        </td>
+        <td>
+            {{position.val / 100 | currency : "PLN" : 2}}
+        </td>
+        <td>
+            <a class="btn btn-primary pull-right" ng-href="#"><i
+                    class="icon-plus-sign icon-white"></i>
+                View portfolio</a>
+        </td>
+    </tr>
+</table>

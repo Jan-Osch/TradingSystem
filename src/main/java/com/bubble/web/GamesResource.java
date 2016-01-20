@@ -1,13 +1,20 @@
 package com.bubble.web;
 
+import com.bubble.accounts.exceptions.AccountUuidNotFound;
 import com.bubble.accounts.exceptions.OwnerAlreadyHasAccount;
+import com.bubble.application.exceptions.UserDoesNotExist;
+import com.bubble.application.interactors.ApplicationInteractor;
 import com.bubble.commons.JsonHelper;
 import com.bubble.game.exceptions.GameUuidNotFound;
 import com.bubble.game.exceptions.PlayerNotFound;
 import com.bubble.game.exceptions.UserIsAlreadyPlayer;
 import com.bubble.game.exceptions.UserIsAlreadySpectator;
 import com.bubble.game.interactors.GameInteractor;
+import com.bubble.markets.exceptions.InstrumentUuidNotFoundException;
+import com.bubble.markets.exceptions.MarketNotFoundException;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -94,5 +101,29 @@ public class GamesResource {
                 return "Player not found";
             }
         });
+
+        get(API_CONTEXT + "/:gameUuid/ranking", (request, response) -> {
+            UUID gameUuid = UUID.fromString(request.params("gameUuid"));
+            try {
+                Map<UUID, BigDecimal> ranking = GameInteractor.getRanking(gameUuid);
+                Map<UUID, UUID> playerOwnerUuids = GameInteractor.getPlayerOwnerUuids(gameUuid);
+                Map<UUID, String> playerToUserNameMap = new HashMap<>();
+                for (UUID uuid : ranking.keySet()) {
+                    playerToUserNameMap.put(uuid, ApplicationInteractor.getUserName(playerOwnerUuids.get(uuid)));
+                }
+                Map<String, Object> result = new HashMap<>();
+                result.put("Ranking", ranking);
+                result.put("UserNames", playerToUserNameMap);
+                return result;
+            } catch (GameUuidNotFound | InstrumentUuidNotFoundException | MarketNotFoundException | AccountUuidNotFound gameUuidNotFound) {
+                gameUuidNotFound.printStackTrace();
+                response.status(404);
+                return "";
+            } catch (UserDoesNotExist userDoesNotExist) {
+                userDoesNotExist.printStackTrace();
+                response.status(404);
+                return "";
+            }
+        }, new JsonTransformer());
     }
 }

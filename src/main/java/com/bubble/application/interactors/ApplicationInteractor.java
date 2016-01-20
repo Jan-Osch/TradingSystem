@@ -32,21 +32,29 @@ public class ApplicationInteractor {
     }
 
     public static void changePassword(UUID uuid, String password) throws UserDoesNotExist {
-        User user = userGateWay.getUserByUuid(uuid);
-        validateUserExists(user);
+        User user = getUserByUuid(uuid);
         user.setPassword(password);
         userGateWay.updateUser(user);
     }
 
     public static void unregisterUser(UUID uuid) throws UserDoesNotExist {
+        User user = getUserByUuid(uuid);
+        userGateWay.deleteUser(user);
+    }
+
+    public static User getUserByUuid(UUID uuid) throws UserDoesNotExist {
         User user = userGateWay.getUserByUuid(uuid);
         validateUserExists(user);
-        userGateWay.deleteUser(user);
+        return user;
     }
 
     private static void validateUserExists(User user) throws UserDoesNotExist {
         if (user == null) {
             throw new UserDoesNotExist();
         }
+    }
+
+    public static String getUserName(UUID userUuid) throws UserDoesNotExist {
+        return getUserByUuid(userUuid).getLogin();
     }
 }

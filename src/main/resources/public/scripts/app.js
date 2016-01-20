@@ -36,6 +36,9 @@ app.config(function ($routeProvider) {
     }).when('/portfolio', {
         templateUrl: 'views/portfolio.html',
         controller: 'PortfolioCtrl'
+    }).when('/ranking', {
+        templateUrl: 'views/ranking.html',
+        controller: 'RankingCtrl'
     }).otherwise({
         redirectTo: '/'
     })
@@ -52,6 +55,26 @@ app.run(function ($rootScope, UserService, GamePlayService) {
 app.controller('StocksCtrl', function ($scope, $http, $routeParams, MarketService) {
     MarketService.getAllInstrumentsForMarket($routeParams.marketId, function (data) {
         $scope.instruments = data;
+    });
+});
+
+app.controller('RankingCtrl', function ($scope, $http, GamePlayService, GamesService) {
+    function prepareData(data) {
+        var result = [];
+        _.forEach(data['Ranking'], function (value, key) {
+            result.push({
+                val: value,
+                name: data['UserNames'][key],
+                uuid: key
+            });
+        });
+        return _.sortBy(result, function (element) {
+            return -element.value;
+        })
+    }
+
+    GamesService.getRankingForGame(GamePlayService.currentUuid, function (data) {
+        $scope.ranking = prepareData(data);
     });
 });
 
@@ -134,11 +157,11 @@ app.controller('StockQuotesCtrl', function ($scope,
         _.forEach(data, function (element) {
             $scope.labels.push(element.date.substring(0, 12));
 
-            $scope.volumeData[0].push(element.volumeInShares/100);
+            $scope.volumeData[0].push(element.volumeInShares / 100);
             $scope.volumeData[1].push(element.numberOfTransactions);
 
-            $scope.valueData[0].push(element.closingValue/100);
-            $scope.valueData[1].push(element.minimumValue/100);
+            $scope.valueData[0].push(element.closingValue / 100);
+            $scope.valueData[1].push(element.minimumValue / 100);
 
             $scope.changeData[0].push(element.valueChangePercentage);
         });
@@ -172,7 +195,7 @@ app.controller('StockQuotesCtrl', function ($scope,
         };
 
         _.forEach(data, function (element, index) {
-            $scope.currentData[0].push(element.value/100);
+            $scope.currentData[0].push(element.value / 100);
             $scope.currentLabels.push(element.date.substring(13, 24));
         });
 

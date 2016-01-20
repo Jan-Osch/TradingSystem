@@ -54,11 +54,11 @@ public class AccountsInteractor {
         accountGateWay.update(account);
     }
 
-    public static void createAccount(UUID ownerUUID, BigDecimal initalBalance) throws OwnerAlreadyHasAccount {
+    public static void createAccount(UUID ownerUUID, BigDecimal initialBalance) throws OwnerAlreadyHasAccount {
         try {
             getAccount(ownerUUID);
         } catch (AccountUuidNotFound accountUuidNotFound) {
-            accountGateWay.save(new Account(ownerUUID, new HashMap<UUID, BigDecimal>(), initalBalance));
+            accountGateWay.save(new Account(ownerUUID, new HashMap<UUID, BigDecimal>(), initialBalance));
             return;
         }
         throw new OwnerAlreadyHasAccount();

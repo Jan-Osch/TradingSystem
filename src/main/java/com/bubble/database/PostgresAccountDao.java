@@ -47,8 +47,7 @@ public class PostgresAccountDao implements AccountGateWay {
         System.out.println(sql);
         try {
             PostgreSQLJDBC.executeSql(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException ignored) {
         }
     }
 

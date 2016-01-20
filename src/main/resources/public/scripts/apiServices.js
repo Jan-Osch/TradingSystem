@@ -104,7 +104,17 @@ angular.module('apiServices', [])
                     .error(function (data, status) {
                         console.error('status: %s Error: %s', status, data);
                     });
-            }
+            },
+            getRankingForGame: function (gameUuid, callback) {
+                $http.get('/api/games/' + gameUuid + '/ranking')
+                    .success(function (data) {
+                        callback(data);
+                    })
+                    .error(function (data, status) {
+                        console.error('status: %s Error: %s', status, data);
+                    });
+            },
+
         }
     }])
     .service('AccountsService', ['$http', function ($http) {

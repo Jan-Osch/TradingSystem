@@ -20,9 +20,9 @@ public class PostgresUserDao implements UserGateWay {
         sql = SqlUtils.addParameterToSqlStatement(sql, "password", user.getPassword());
         System.out.println(sql);
         try {
-            postgreSQLJDBC.executeSql(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
+            PostgreSQLJDBC.executeSql(sql);
+        } catch (SQLException ignored) {
+
         }
     }
 
@@ -31,15 +31,14 @@ public class PostgresUserDao implements UserGateWay {
         String sql = "SELECT * FROM \":tableName\" WHERE uuid = ':uuid'";
         sql = SqlUtils.addParameterToSqlStatement(sql, "tableName", tableName);
         sql = SqlUtils.addParameterToSqlStatement(sql, "uuid", uuid.toString());
-        ResultSet resultSet = postgreSQLJDBC.executeSqlWithReturn(sql);
+        ResultSet resultSet = PostgreSQLJDBC.executeSqlWithReturn(sql);
         try {
             resultSet.next();
             String login = resultSet.getString("login");
             String password = resultSet.getString("password");
-            postgreSQLJDBC.closeStatementAfterResult(resultSet);
+            PostgreSQLJDBC.closeStatementAfterResult(resultSet);
             return new User(login, password, uuid);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException ignored) {
         }
         return null;
     }
@@ -56,9 +55,8 @@ public class PostgresUserDao implements UserGateWay {
         sql = SqlUtils.addParameterToSqlStatement(sql, "tableName", tableName);
         sql = SqlUtils.addParameterToSqlStatement(sql, "uuid", user.getUuid().toString());
         try {
-            postgreSQLJDBC.executeSql(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
+            PostgreSQLJDBC.executeSql(sql);
+        } catch (SQLException ignored) {
         }
     }
 
@@ -67,15 +65,14 @@ public class PostgresUserDao implements UserGateWay {
         String sql = "SELECT * FROM \":tableName\" WHERE login = ':login'";
         sql = SqlUtils.addParameterToSqlStatement(sql, "tableName", tableName);
         sql = SqlUtils.addParameterToSqlStatement(sql, "login", login);
-        ResultSet resultSet = postgreSQLJDBC.executeSqlWithReturn(sql);
+        ResultSet resultSet = PostgreSQLJDBC.executeSqlWithReturn(sql);
         try {
             resultSet.next();
             String uuid = resultSet.getString("uuid");
             String password = resultSet.getString("password");
-            postgreSQLJDBC.closeStatementAfterResult(resultSet);
+            PostgreSQLJDBC.closeStatementAfterResult(resultSet);
             return new User(login, password, UUID.fromString(uuid));
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException ignored) {
         }
         return null;
     }
