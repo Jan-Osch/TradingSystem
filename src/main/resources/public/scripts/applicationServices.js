@@ -43,6 +43,21 @@ angular.module('applicationServices', [])
             }
         };
     })
+    .service('NavigationService', function () {
+        return {
+            current: undefined,
+
+            makeCurrent: function (tab) {
+                console.log(tab);
+                this.current = tab;
+            },
+
+            isCurrent: function (tab) {
+                console.log('is current called');
+                return this.current === tab;
+            }
+        };
+    })
     .service('GamePlayService', function ($cookieStore, GamesService, UserService) {
         return {
             currentGame: undefined,

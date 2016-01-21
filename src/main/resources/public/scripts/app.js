@@ -13,8 +13,8 @@ app.constant("myDateTimeFormat", 'YYYY/MM/DD-HH:mm:ss');
 
 app.config(function ($routeProvider) {
     $routeProvider.when('/', {
-        templateUrl: 'views/markets.html',
-        controller: 'MarketsCtrl'
+        templateUrl: 'views/stocks.html',
+        controller: 'StocksCtrl'
     }).when('/games', {
         templateUrl: 'views/games.html',
         controller: 'GamesCtrl'
@@ -52,13 +52,15 @@ app.run(function ($rootScope, UserService, GamePlayService) {
 });
 
 
-app.controller('StocksCtrl', function ($scope, $http, $routeParams, MarketService) {
-    MarketService.getAllInstrumentsForMarket($routeParams.marketId, function (data) {
+app.controller('StocksCtrl', function ($scope, $routeParams, MarketService, NavigationService) {
+    NavigationService.makeCurrent('Stocks');
+    MarketService.getAllInstrumentsForMarket('d93e338a-6d0c-4ae7-a730-f84a22eac0cc', function (data) { // TODO
         $scope.instruments = data;
     });
 });
 
-app.controller('RankingCtrl', function ($scope, $http, GamePlayService, GamesService) {
+app.controller('RankingCtrl', function ($scope, GamePlayService, GamesService, NavigationService) {
+    NavigationService.makeCurrent('Ranking');
     function prepareData(data) {
         var result = [];
         _.forEach(data['Ranking'], function (value, key) {
@@ -78,7 +80,8 @@ app.controller('RankingCtrl', function ($scope, $http, GamePlayService, GamesSer
     });
 });
 
-app.controller('RegisterCtrl', function ($scope, $http, $location, ApplicationService, UserService) {
+app.controller('RegisterCtrl', function ($scope, ApplicationService, UserService, NavigationService) {
+    NavigationService.makeCurrent('Register');
     $scope.attemptRegister = function () {
         $scope.dataLoading = true;
         ApplicationService.register($scope.login, $scope.password, function (uuid) {
@@ -96,7 +99,8 @@ app.controller('RegisterCtrl', function ($scope, $http, $location, ApplicationSe
     }
 });
 
-app.controller('LoginCtrl', function ($scope, $http, $location, $rootScope, ApplicationService, UserService) {
+app.controller('LoginCtrl', function ($scope, ApplicationService, UserService, NavigationService) {
+    NavigationService.makeCurrent('Login');
     $scope.attemptLogin = function () {
         ApplicationService.login($scope.login, $scope.password, function (data) {
             UserService.rememberUser($scope.login, data);
@@ -113,7 +117,9 @@ app.controller('StockQuotesCtrl', function ($scope,
                                             MarketService,
                                             TransactionService,
                                             GamePlayService,
-                                            myDateTimeFormat) {
+                                            myDateTimeFormat,
+                                            NavigationService) {
+    NavigationService.makeCurrent('Stocks');
     MarketService.getCurrentRecord($routeParams.stockUuid,
         function (data) {
             $scope.stockRecord = data;
@@ -213,13 +219,16 @@ app.controller('StockQuotesCtrl', function ($scope,
 });
 
 
-app.controller('MarketsCtrl', function ($scope, MarketService) {
+app.controller('MarketsCtrl', function ($scope, MarketService, NavigationService) {
+    NavigationService.makeCurrent('Stocks');
     MarketService.getAllMarkets(function (data) {
         $scope.markets = data;
     })
 });
 
-app.controller('PortfolioCtrl', function ($scope, AccountsService, GamePlayService, MarketService, TransactionService) {
+app.controller('PortfolioCtrl', function ($scope, AccountsService, GamePlayService, MarketService, TransactionService,
+                                          NavigationService) {
+    NavigationService.makeCurrent('Portfolio');
     var reloadData = function () {
         AccountsService.getPortfolioForOwner(GamePlayService.playerUuid, function (portfolio) {
             $scope.portfolio = portfolio;
@@ -271,8 +280,8 @@ app.controller('PortfolioCtrl', function ($scope, AccountsService, GamePlayServi
     };
 });
 
-app.controller('GamesCtrl', function ($scope, $http, MarketService, GamesService, UserService, GamePlayService) {
-
+app.controller('GamesCtrl', function ($scope, NavigationService, MarketService, GamesService, UserService, GamePlayService) {
+    NavigationService.makeCurrent('Games');
     var getNameByUuid = function (marketUuid) {
         return _.find($scope.markets, function (market) {
             return market.uuid === marketUuid;
