@@ -72,5 +72,10 @@ public class TransactionsResource {
             return "404";
         }, new JsonTransformer());
 
+        get(API_CONTEXT + "/history/:accountUuid", "application/json", (request, response) -> {
+            UUID accountUUid = UUID.fromString(request.params("accountUUid"));
+            return TransactionsInteractor.getTransactionsForUser(accountUUid);
+        }, new JsonTransformer());
+
     }
 }

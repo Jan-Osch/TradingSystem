@@ -19,6 +19,7 @@ public class Initializer {
         PostgresCurrentStockRecordDao postgresCurrentStockRecordDao = new PostgresCurrentStockRecordDao();
         PostgresGameDao postgresGameDao = new PostgresGameDao();
         PostgresUserDao postgresUserDao = new PostgresUserDao();
+        PostgresTransactionDao postgresTransactionDao = new PostgresTransactionDao();
 
         EntityGateWayManager.setHistoricalStockRecordGateWay(postgresHistoricalStockRecordDao);
         EntityGateWayManager.setMarketGateWay(postgresMarketDao);
@@ -28,6 +29,7 @@ public class Initializer {
         EntityGateWayManager.setAccountGateWay(postgresAccountDao);
         EntityGateWayManager.setGameGateWay(postgresGameDao);
         EntityGateWayManager.setUserGateway(postgresUserDao);
+        EntityGateWayManager.setTransactionGateWay(postgresTransactionDao);
 
         Iterable<Market> markets = MarketsInteractor.getAllMarkets();
         for (Market market : markets) {

@@ -10,6 +10,7 @@ public class EntityGateWayManager {
     private static CurrentStockRecordGateWay currentStockRecordGateWay;
     private static AccountGateWay accountGateWay;
     private static GameGateWay gameGateWay;
+    private static TransactionGateWay transactionGateWay;
 
     public static void setStockGateWay(StockGateWay stockGateWay) {
         EntityGateWayManager.stockGateWay = stockGateWay;
@@ -73,5 +74,13 @@ public class EntityGateWayManager {
 
     public static void setGameGateWay(GameGateWay gameGateWay) {
         EntityGateWayManager.gameGateWay = gameGateWay;
+    }
+
+    public static TransactionGateWay getTransactionGateWay() {
+        return transactionGateWay;
+    }
+
+    public static void setTransactionGateWay(TransactionGateWay transactionGateWay) {
+        EntityGateWayManager.transactionGateWay = transactionGateWay;
     }
 }
