@@ -1,5 +1,5 @@
 angular.module('apiServices', [])
-    .service('MarketService', ['$http', function ($http) {
+    .service('ApiService', ['$http', function ($http) {
         return {
             getAllMarkets: function (callback) {
                 $http.get('/api/markets')
@@ -64,13 +64,18 @@ angular.module('apiServices', [])
                     .error(function (data, status) {
                         console.error('status: %s Error: %s', status, data);
                     });
-            }
-        }
-    }])
-    .service('GamesService', ['$http', function ($http) {
-        return {
+            },
             getAllGames: function (callback) {
                 $http.get('/api/games')
+                    .success(function (data) {
+                        callback(data);
+                    })
+                    .error(function (data, status) {
+                        console.error('status: %s Error: %s', status, data);
+                    });
+            },
+            getAllGamesForUser: function (ownerUuid, callback) {
+                $http.get('/api/games/owner/' + ownerUuid)
                     .success(function (data) {
                         callback(data);
                     })
@@ -114,11 +119,6 @@ angular.module('apiServices', [])
                         console.error('status: %s Error: %s', status, data);
                     });
             },
-
-        }
-    }])
-    .service('AccountsService', ['$http', function ($http) {
-        return {
             getPortfolioForOwner: function (ownerUuid, callback) {
                 $http.get('/api/account/' + ownerUuid)
                     .success(function (data) {
@@ -127,11 +127,7 @@ angular.module('apiServices', [])
                     .error(function (data, status) {
                         console.error('status: %s Error: %s', status, data);
                     });
-            }
-        }
-    }])
-    .service('TransactionService', ['$http', function ($http) {
-        return {
+            },
             buy: function (ownerUuid, instrumentUuid, amount, callback, errback) {
                 $http.post('/api/transactions/buyByMarketPrice',
                     {
@@ -165,11 +161,19 @@ angular.module('apiServices', [])
                             errback(data);
                         }
                     });
-            }
-        }
-    }])
-    .service('ApplicationService', ['$http', function ($http) {
-        return {
+            },
+            getHistory: function (ownerUuid, callback, errback) {
+                $http.get('/api/transactions/history/' + ownerUuid)
+                    .success(function (data) {
+                        callback(data);
+                    })
+                    .error(function (data, status) {
+                        console.error('status: %s Error: %s', status, data);
+                        if (errback) {
+                            errback(data);
+                        }
+                    });
+            },
             register: function (userLogin, userPassword, callback, errback) {
                 $http.post('/api/register', {login: userLogin, password: userPassword})
                     .success(function (data) {

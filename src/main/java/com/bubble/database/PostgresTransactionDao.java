@@ -17,7 +17,7 @@ public class PostgresTransactionDao implements TransactionGateWay {
 
     @Override
     public void saveTransaction(Transaction transaction) {
-        String sql = "INSERT INTO \":tableName\" VALUES (':uuid', ':owner', ':value', ':instrument', ':type', ':date')";
+        String sql = "INSERT INTO \":tableName\" VALUES (':owner', ':uuid', ':value', ':instrument', ':type', ':date')";
         sql = SqlUtils.addParameterToSqlStatement(sql, "tableName", tableName);
         sql = SqlUtils.addParameterToSqlStatement(sql, "uuid", transaction.getUuid().toString());
         sql = SqlUtils.addParameterToSqlStatement(sql, "owner", transaction.getOwnerUuid().toString());

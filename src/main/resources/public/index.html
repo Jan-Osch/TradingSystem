@@ -47,28 +47,12 @@
                 <a ng-href="" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cube"></i>
                     {{GamePlayService.currentGame}} <b
                             class="caret"></b></a>
-                <ul class="dropdown-menu alert-dropdown">
-                    <li>
-                        <a href="#">Alert Name <span class="label label-default">Alert Badge</span></a>
-                    </li>
-                    <li>
-                        <a href="#">Alert Name <span class="label label-primary">Alert Badge</span></a>
-                    </li>
-                    <li>
-                        <a href="#">Alert Name <span class="label label-success">Alert Badge</span></a>
-                    </li>
-                    <li>
-                        <a href="#">Alert Name <span class="label label-info">Alert Badge</span></a>
-                    </li>
-                    <li>
-                        <a href="#">Alert Name <span class="label label-warning">Alert Badge</span></a>
-                    </li>
-                    <li>
-                        <a href="#">Alert Name <span class="label label-danger">Alert Badge</span></a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <a href="#">View All</a>
+                <ul class="dropdown-menu alert-dropdown" ng-controller="GamesWidgetCtrl">
+                    <li ng-repeat="game in gamesInWidget">
+                        <a href="#">{{game.name}}
+                            <span class="label label-default" ng-if="game.isPlayer" ng-click="playAsPlayer(game)">Play!</span>
+                            <span class="label label-default" ng-if="game.isSpectator" ng-click="joinAsSpectator(game)">Spectate!</span>
+                        </a>
                     </li>
                 </ul>
             </li>
@@ -81,14 +65,6 @@
                         class="fa fa-user-plus"></i> Register </a>
             </li>
             <li class="dropdown">
-                <!--<ul class="nav navbar-nav navbar-right">-->
-                <!--<li ng-show="UserService.isLogged()"><a href="#"><b>{{UserService.user}}</b></a></li>-->
-                <!--<li ng-show="!UserService.isLogged()"><a href="#/login">login</a></li>-->
-                <!--<li ng-show="UserService.isLogged()"><a href=""-->
-                <!--ng-click="UserService.logout();GamePlayService.clearCookies()">logout</a>-->
-                <!--</li>-->
-                <!--<li ng-show="!UserService.isLogged()"><a href="#/register">register</a></li>-->
-                <!--</ul>-->
 
                 <a ng-href="" class="dropdown-toggle" ng-show="UserService.isLogged()" data-toggle="dropdown"><i
                         class="fa fa-user"></i> {{UserService.user}} <b class="caret"></b></a>
@@ -111,30 +87,29 @@
                 </ul>
             </li>
         </ul>
-        <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav side-nav">
-                <li ng-class="{ active: NavigationService.isCurrent('Stocks') }" class="navtile">
+                <li ng-class="{active :navigationService.isCurrent('Stocks')} " class="navtile">
                     <a href="index.html"><i class="fa fa-line-chart fa-3x"></i> <big> Stocks</big></a>
                 </li>
-                <li ng-class="{ active: NavigationService.isCurrent('Portfolio') }" class="navtile">
+                <li ng-class="{active :navigationService.isCurrent('Potfolio')} " class="navtile">
                     <a href="#/portfolio"><i class="fa fa-shopping-cart fa-3x"></i><big> Portfolio</big></a>
                 </li>
-                <li ng-class="{ active: NavigationService.isCurrent('History') }" class="navtile">
-                    <a href="#"><i class="fa fa-history fa-3x"></i><big> History</big></a>
+                <li ng-class="{active :navigationService.isCurrent('History')}  " class="navtile">
+                    <a href="#/history"><i class="fa fa-history fa-3x"></i><big> History</big></a>
                 </li>
-                <li ng-class="{ active: NavigationService.isCurrent('Games') }" class="navtile">
+                <li ng-class="{active :navigationService.isCurrent('Games')} " class="navtile">
                     <a href="#/games"><i class="fa fa-cubes fa-3x"></i><big> Games</big></a>
                 </li>
-                <li ng-class="{ active: NavigationService.isCurrent('Ranking') }" class="navtile">
+                <li ng-class="{active :navigationService.isCurrent('Ranking')} " class="navtile">
                     <a href="#/ranking"><i class="fa fa-trophy fa-3x"></i><big> Ranking</big></a>
                 </li>
-                <li ng-class="{ active: NavigationService.isCurrent('About') }" class="navtile">
+                <li ng-class="{active :navigationService.isCurrent('About')}" class="navtile">
                     <a href="#"><i class="fa fa-info-circle fa-3x"></i><big> About</big></a>
                 </li>
             </ul>
         </div>
-        <!-- /.navbar-collapse -->
     </nav>
 
     <div id="page-wrapper" style="min-height: 700px">

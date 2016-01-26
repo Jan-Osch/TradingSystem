@@ -48,17 +48,15 @@ angular.module('applicationServices', [])
             current: undefined,
 
             makeCurrent: function (tab) {
-                console.log(tab);
                 this.current = tab;
             },
 
             isCurrent: function (tab) {
-                console.log('is current called');
-                return this.current === tab;
+                return this.current == tab;
             }
         };
     })
-    .service('GamePlayService', function ($cookieStore, GamesService, UserService) {
+    .service('GamePlayService', function ($cookieStore, ApiService, UserService, $location) {
         return {
             currentGame: undefined,
             currentUuid: undefined,
@@ -83,7 +81,7 @@ angular.module('applicationServices', [])
 
             loadPlayerUuid: function (callback) {
                 var that = this;
-                GamesService.getPlayerUuid(that.currentUuid, UserService.userUuid, callback);
+                ApiService.getPlayerUuid(that.currentUuid, UserService.userUuid, callback);
             },
 
             isPlaying: function () {
@@ -109,6 +107,10 @@ angular.module('applicationServices', [])
                     that.playerUuid = playerUuid;
                     that.setCookies(gameName, gameUuid, player, playerUuid);
                 });
+            },
+
+            redirectToGames: function () {
+                $location.path('/games');
             },
 
             startService: function () {

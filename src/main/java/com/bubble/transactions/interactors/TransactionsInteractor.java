@@ -36,8 +36,9 @@ public class TransactionsInteractor {
         BigDecimal currentCount = AccountsInteractor.getAssetCountForAccount(accountUUID, instrumentUUID);
         BigDecimal actualCount = currentCount.min(amount);
         BigDecimal value = MarketsInteractor.getCurrentStockValue(instrumentUUID);
-        createAndSaveTransaction(value, accountUUID, instrumentUUID, TransactionType.SELL);
-        AccountsInteractor.performSellTransactionForAccount(accountUUID, instrumentUUID, actualCount, value);
+        BigDecimal finalValue = actualCount.multiply(value);
+        createAndSaveTransaction(finalValue, accountUUID, instrumentUUID, TransactionType.SELL);
+        AccountsInteractor.performSellTransactionForAccount(accountUUID, instrumentUUID, actualCount, finalValue);
     }
 
     private static void createAndSaveTransaction(BigDecimal value, UUID accountUUID, UUID instrumentUUID, TransactionType type) {

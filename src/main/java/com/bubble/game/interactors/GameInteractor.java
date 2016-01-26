@@ -13,10 +13,10 @@ import com.bubble.markets.exceptions.MarketNotFoundException;
 import com.bubble.persistance.EntityGateWayManager;
 import com.bubble.persistance.GameGateWay;
 import com.bubble.transactions.interactors.TransactionsInteractor;
-import com.google.common.collect.Iterables;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -61,8 +61,10 @@ public class GameInteractor {
     }
 
     public static Iterable<Game> getAllGamesForUser(UUID userUuid) {
-        Iterable<Game> allGames = getAllGames();
-        return Iterables.filter(allGames, game -> game.isUserInGame(userUuid));
+        List<Game> games = (List<Game>) getAllGames();
+        return games.stream()
+                .filter(game -> game.isUserInGame(userUuid))
+                .collect(Collectors.toList());
     }
 
     public static UUID getPlayerUuid(UUID gameUuid, UUID userUuid) throws PlayerNotFound {
