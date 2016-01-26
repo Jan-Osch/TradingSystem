@@ -1,72 +1,87 @@
-<h1>Moderator</h1>
-<h2>Currently available games</h2>
-<table class="table table-hover">
-    <tr>
-        <th>
-            #
-        </th>
-        <th>
-            Game name
-        </th>
-        <th>
-            # of spectators:
-        </th>
-        <th>
-            # of players:
-        </th>
-        <th>
-            is active:
-        </th>
-        <th>
-            market:
-        </th>
-        <th>
-            initial value:
-        </th>
-        <th>
-            actions
-        </th>
+<h1 class="page-header">
+    Moderate
+    <small>/Moderator panel</small>
+</h1>
+<div class="col-lg-12">
+    <h3>Currently available games</h3>
+    <table class="table table-hover">
+        <tr>
+            <th>
+                #
+            </th>
+            <th>
+                Game name
+            </th>
+            <th>
+                # of spectators:
+            </th>
+            <th>
+                # of players:
+            </th>
+            <th>
+                is active:
+            </th>
+            <th>
+                market:
+            </th>
+            <th>
+                initial value:
+            </th>
+            <th>
+                actions
+            </th>
 
-    </tr>
-    <tr ng-repeat="game in games">
-        <td>{{$index+1}}</td>
-        <td>
-            {{game.name}}
-        </td>
-        <td>
-            {{game.spectators.length}}
-        </td>
-        <td>
-            {{game.numberOfPlayers}}
-        </td>
-        <td>
-            {{game.active}}
-        </td>
-        <td>
-            {{game.marketName}}
-        </td>
-        <td>
-            {{game.initialValue / 100 | currency : "PLN" : 2}}
-        </td>
-        <td>
-            <div>
-                <button ng-click="deleteGame">Finish game!</button>
-            </div>
-        </td>
-    </tr>
-</table>
+        </tr>
+        <tr ng-repeat="game in games">
+            <td>{{$index+1}}</td>
+            <td>
+                {{game.name}}
+            </td>
+            <td>
+                {{game.spectators.length}}
+            </td>
+            <td>
+                {{game.numberOfPlayers}}
+            </td>
+            <td>
+                {{game.active}}
+            </td>
+            <td>
+                {{game.marketName}}
+            </td>
+            <td>
+                {{game.initialValue / 100 | currency : "PLN" : 2}}
+            </td>
+            <td>
+                <div>
+                    <button ng-click="deleteGame">Finish game!</button>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="col-lg-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="centered">Create new game!</div></div>
+        <div class="panel-body">
+            <form class="centered">
+                <div class="form-group">
+                    <input class="form-control" type="text" ng-model="gameName" placeholder="Choose game name">
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="number" ng-model="initialAmount" placeholder="Initial amount of cash">
+                </div>
+                <div class="form-group">
+                    <label> Choose market</label><br>
+                    <select name="singleSelect" ng-model="marketUuid">
+                        <option ng-repeat="market in markets" value="{{market.uuid}}">{{market.name}}</option>
+                    </select>
+                </div>
+                <b>{{transactionStatus}}</b>
 
-<div>
-    <form>
-        <input type="text" ng-model="gameName">
-        <input type="number" ng-model="initialAmount">
-        <label for="singleSelect"> Single select: </label><br>
-        <div>
-            <select name="singleSelect" ng-model="marketUuid">
-                <option ng-repeat="market in markets" value="{{market.uuid}}">{{market.name}}</option>
-            </select>
+                <button class="btn btn-default" ng-click="createGame()">Create game</button>
+            </form>
         </div>
-        <b>{{transactionStatus}}</b>
-    </form>
-    <button ng-click="createGame()">Create game</button>
+    </div>
 </div>

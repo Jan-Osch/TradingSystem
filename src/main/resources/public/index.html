@@ -52,9 +52,9 @@
                     <li ng-repeat="game in gamesInWidget">
                         <a ng-href="">{{game.name}}
                             <span class="label label-success pull-right" ng-if="game.isPlayer"
-                               ng-click="playAsPlayer(game)">Play!</span>
+                                  ng-click="playAsPlayer(game)">Play!</span>
                             <span class="label label-danger pull-right" ng-if="game.isSpectator"
-                               ng-click="playAsSpectator(game)">Spectate!</span>
+                                  ng-click="playAsSpectator(game)">Spectate!</span>
                         </a>
                     </li>
                     <li class="divider"></li>
@@ -113,19 +113,22 @@
                     <a href="#/ranking"><i class="fa fa-trophy fa-3x"></i><big> Ranking</big></a>
                 </li>
                 <li ng-class="{active :navigationService.isCurrent('About')}" class="navtile">
-                    <a href="#"><i class="fa fa-info-circle fa-3x"></i><big> About</big></a>
+                    <a href="#/about"><i class="fa fa-info-circle fa-3x"></i><big> About</big></a>
                 </li>
-                <li ng-show="UserService.isModerator()" ng-class="{active :navigationService.isCurrent('Moderator')}" class="navtile">
+                <li ng-show="UserService.isModerator()" ng-class="{active :navigationService.isCurrent('Moderator')}"
+                    class="navtile">
                     <a href="#/moderator"><i class="fa fa-tachometer fa-3x"></i><big> Moderate</big></a>
                 </li>
             </ul>
         </div>
     </nav>
 
-    <div id="page-wrapper" style="min-height: 700px">
+    <div id="page-wrapper" style="min-height: 800px">
 
         <div class="container-fluid">
-            <div class="row" ng-view="">
+            <div class="row">
+                <div class="col-lg-12" ng-view="">
+                </div>
             </div>
 
 

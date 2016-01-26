@@ -48,6 +48,9 @@ app.config(function ($routeProvider) {
     }).when('/ranking', {
         templateUrl: 'views/ranking.html',
         controller: 'RankingCtrl'
+    }).when('/about', {
+        templateUrl: 'views/about.html',
+        controller: 'AboutCtrl'
     }).otherwise({
         redirectTo: '/'
     })
@@ -67,6 +70,10 @@ app.controller('StocksCtrl', function ($scope, $routeParams, ApiService, Navigat
     ApiService.getAllInstrumentsForMarket('d93e338a-6d0c-4ae7-a730-f84a22eac0cc', function (data) { // TODO remove default
         $scope.instruments = data;
     });
+});
+
+app.controller('AboutCtrl', function ($scope, NavigationService) {
+    NavigationService.makeCurrent('About');
 });
 
 app.controller('RankingCtrl', function ($scope, GamePlayService, ApiService, NavigationService) {
@@ -133,7 +140,7 @@ app.controller('LoginCtrl', function ($scope, ApiService, UserService, Navigatio
     NavigationService.makeCurrent('Login');
     $scope.attemptLogin = function () {
         ApiService.login($scope.login, $scope.password, function (data) {
-            if(data == 'moderator'){
+            if (data == 'moderator') {
                 UserService.moderator = true;
             }
             UserService.rememberUser($scope.login, data, UserService.moderator);
@@ -152,7 +159,7 @@ app.controller('GamesWidgetCtrl', function ($scope, ApiService, UserService, Gam
                 _.forEach(data, checkIfUserCanJoin);
                 $scope.gamesInWidget = data;
             });
-        }else{
+        } else {
             $scope.gamesInWidget = []
         }
     };
@@ -295,8 +302,8 @@ app.controller('MarketsCtrl', function ($scope,
 });
 
 app.controller('ModeratorCtrl', function ($scope,
-                                        ApiService,
-                                        NavigationService) {
+                                          ApiService,
+                                          NavigationService) {
     NavigationService.makeCurrent('Moderator');
 
     var getNameByUuid = function (marketUuid) {
@@ -329,10 +336,10 @@ app.controller('ModeratorCtrl', function ($scope,
         onComplete();
     });
 
-    $scope.createGame = function(){
-        ApiService.createGame($scope.gameName, $scope.marketUuid, $scope.initialAmount*100, function(data){
+    $scope.createGame = function () {
+        ApiService.createGame($scope.gameName, $scope.marketUuid, $scope.initialAmount * 100, function (data) {
             loadAllGames();
-        }, function(data){
+        }, function (data) {
             $scope.transactionStatus = data;
         });
     }

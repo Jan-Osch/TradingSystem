@@ -99,6 +99,11 @@ public class WarsawOrchestrator {
 
     private void startWarsaw() {
         LOG.info("Hello welt");
+        try {
+            gpwStocksScraper.scrap();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Date nextTick = getNextSessionStart();
         if (shouldSessionBeOpen()) {
             System.out.println("Warsaw: Session should be open");

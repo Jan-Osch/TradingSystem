@@ -1,17 +1,51 @@
-<h2>Name : {{stock.fullName}}</h2>
-<h3>Code : {{stock.codeName}}</h3>
-<h3>Current value : <b>{{stockRecord.value / 100 | currency : "PLN" : 2}} </b></h3>
+<h1 class="page-header">
+    {{stock.fullName}}
+    <small>{{stock.codeName}}</small>
+</h1>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">Description</div>
+            <div class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem distinctio fuga
+                obcaecati reprehenderit saepe! Accusantium alias distinctio doloribus eligendi, error est, fuga impedit,
+                inventore itaque officiis quidem quisquam suscipit veritatis!
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">Current value</div>
+            <div class="panel-body">
+                <div class="huge">{{stockRecord.value / 100 | currency : "PLN" : 2}}</div>
+            </div>
+        </div>
+    </div>
+</div>
 
-<div ng-show="GamePlayService.player">
-    <input type="number" ng-model="amount">
-    <button ng-click="buy(stock)">Buy</button>
-    <b>{{transactionStatus}}</b>
+<div class="row" ng-show="GamePlayService.player">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Buy {{stock.fullName}} shares:
+            </div>
+            <div class="panel-body">
+
+                <div class="col-lg-6"><input class="form-control" type="number" ng-model="amount"></div>
+                <div-col-lg-6>
+                    <div class="centered">
+                        <button class="btn btn-primary btn-info" ng-click="buy(stock)">Buy</button>
+                        <b>{{transactionStatus}}</b>
+                    </div>
+                </div-col-lg-6>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="row">
     <div class="col-lg-6 col-sm-12 ng-scope">
         <div class="panel panel-default">
-            <div class="panel-heading">Values chart</div>
+            <div class="panel-heading">Current session</div>
             <div class="panel-body">
                 <canvas id="current-session"
                         class="chart chart-line"
@@ -26,7 +60,7 @@
     </div>
     <div class="col-lg-6 col-sm-12 ng-scope">
         <div class="panel panel-default">
-            <div class="panel-heading">Values chart</div>
+            <div class="panel-heading">Value</div>
             <div class="panel-body">
                 <canvas id="line"
                         class="chart chart-line"
@@ -45,7 +79,7 @@
 <div class="row">
     <div class="col-lg-6 col-sm-12 ng-scope">
         <div class="panel panel-default">
-            <div class="panel-heading">Volume chart</div>
+            <div class="panel-heading">Volume</div>
             <div class="panel-body">
                 <canvas id="volume-chart"
                         class="chart chart-line"
@@ -61,7 +95,7 @@
     </div>
     <div class="col-lg-6 col-sm-12 ng-scope">
         <div class="panel panel-default">
-            <div class="panel-heading">Change chart</div>
+            <div class="panel-heading">Change</div>
             <div class="panel-body">
                 <canvas id="chane-chart"
                         class="chart chart-line"

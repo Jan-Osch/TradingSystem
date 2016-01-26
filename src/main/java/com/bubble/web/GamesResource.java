@@ -63,7 +63,7 @@ public class GamesResource {
             }
         });
 
-        post(API_CONTEXT + "", (request, response) -> {
+        post(API_CONTEXT + "/:gameUuid/join-as-player", (request, response) -> {
             Map<String, String> postParams = JsonHelper.jsonToMapStringString(request.body());
             UUID gameUuid = UUID.fromString(request.params("gameUuid"));
             try {

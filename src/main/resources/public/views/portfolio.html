@@ -1,4 +1,9 @@
-<h2>Your Portfolio</h2>
+<h1 class="page-header">
+    Your Portfolio
+    <small>/Manage your assets here</small>
+</h1>
+
+
 <div>Current balance: <b>{{portfolio.currentBalance / 100 | currency : "PLN" : 2}}</b></div>
 
 <div>Current assets:</div>
@@ -50,8 +55,8 @@
         </td>
         <td>
             <input type="number" ng-model="asset.transactionAmount">
-            <button ng-show="GamePlayService.player" ng-click="sell(asset)">Sell</button>
-            <button ng-show="GamePlayService.player" ng-click="buy(asset)">Buy</button>
+            <button class="btn btn-primary btn-warning" ng-show="GamePlayService.player" ng-click="sell(asset)">Sell</button>
+            <button class="btn btn-primary btn-info" ng-show="GamePlayService.player" ng-click="buy(asset)">Buy</button>
         </td>
     </tr>
 </table>

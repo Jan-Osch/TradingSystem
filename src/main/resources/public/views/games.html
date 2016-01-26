@@ -1,4 +1,7 @@
-<h2>Games</h2>
+<h1 class="page-header">
+    Games
+    <small>/Board of all available games</small>
+</h1>
 <table class="table table-hover">
     <tr>
         <th>
@@ -49,17 +52,17 @@
         </td>
         <td>
             <div ng-if="game.isPlayer">
-                <button ng-click="playAsPlayer(game)">Play as player</button>
+                <button class="btn btn-primary btn-danger " ng-click="playAsPlayer(game)">Play as player</button>
             </div>
             <div ng-if="game.isSpectator">
-                <button ng-click="playAsSpectator(game)">Play as spectator</button>
+                <button class="btn btn-primary btn-success" ng-click="playAsSpectator(game)">Play as spectator</button>
 
             </div>
             <div ng-if="game.canJoin">
-                <button ng-click="joinAsSpectator(game)">Join as spectator</button>
+                <button class="btn btn-primary btn-warning" ng-click="joinAsSpectator(game)">Join as spectator</button>
             </div>
             <div ng-if="game.canJoin">
-                <button ng-click="joinAsPlayer(game)">Join as player</button>
+                <button class="btn btn-primary btn-info" ng-click="joinAsPlayer(game)">Join as player</button>
             </div>
         </td>
 

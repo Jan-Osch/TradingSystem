@@ -1,5 +1,7 @@
-<h2>Ranking</h2>
-
+<h1 class="page-header">
+    Ranking
+    <small>/Based on total account valuation</small>
+</h1>
 <table class="table table-hover">
     <tr>
         <th>
@@ -26,7 +28,7 @@
             {{position.val / 100 | currency : "PLN" : 2}}
         </td>
         <td>
-            <a class="btn btn-primary pull-right" ng-href="#/portfolio/{{position.uuid}}/{{position.name}}"><i
+            <a ng-if="!GamePlayService.player" class="btn btn-primary btn-warning" ng-href="#/portfolio/{{position.uuid}}/{{position.name}}"><i
                     class="icon-plus-sign icon-white"></i>
                 View portfolio</a>
         </td>
