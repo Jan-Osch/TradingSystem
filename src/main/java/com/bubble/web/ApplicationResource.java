@@ -1,5 +1,6 @@
 package com.bubble.web;
 
+import com.bubble.application.entities.User;
 import com.bubble.application.exceptions.InvalidPassword;
 import com.bubble.application.exceptions.LoginAlreadyExists;
 import com.bubble.application.exceptions.UserDoesNotExist;
@@ -29,6 +30,10 @@ public class ApplicationResource {
                 UUID uuid = ApplicationInteractor.loginUser(login, password);
                 request.session().attribute("user_uuid", uuid.toString());
                 response.cookie("server_user_uuid", uuid.toString());
+                User user = ApplicationInteractor.getUserByUuid(uuid);
+                if (user.getModerator()) {
+                    return "moderator";
+                }
                 return uuid;
             } catch (NullPointerException e) {
                 response.status(400);

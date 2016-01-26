@@ -15,7 +15,7 @@ public class ApplicationInteractor {
     public static UUID registerUser(String login, String userPassword) throws LoginAlreadyExists {
         User previousNameHolder = userGateWay.getUserByLogin(login);
         if (previousNameHolder == null) {
-            User user = new User(login, userPassword);
+            User user = new User(login, userPassword, UUID.randomUUID(),false);
             userGateWay.saveUser(user);
             return user.getUuid();
         }

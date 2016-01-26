@@ -119,6 +119,23 @@ angular.module('apiServices', [])
                         console.error('status: %s Error: %s', status, data);
                     });
             },
+            createGame: function (gameName, marketUuid, initialAmount, callback, errback) {
+                $http.post('/api/games/create',
+                    {
+                        gameName: gameName,
+                        marketUuid: marketUuid,
+                        initialAmount: initialAmount
+                    })
+                    .success(function (data) {
+                        callback(data);
+                    })
+                    .error(function (data, status) {
+                        console.error('status: %s Error: %s', status, data);
+                        if (errback) {
+                            errback(data);
+                        }
+                    });
+            },
             getPortfolioForOwner: function (ownerUuid, callback) {
                 $http.get('/api/account/' + ownerUuid)
                     .success(function (data) {

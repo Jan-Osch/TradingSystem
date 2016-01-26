@@ -11,7 +11,6 @@ import java.util.UUID;
 
 public class PostgresStockDao implements StockGateWay {
     private String tableName = "STOCKS";
-    private PostgreSQLJDBC postgreSQLJDBC = PostgreSQLJDBC.getInstance();
 
     @Override
     public void saveStock(Stock stock) {
@@ -23,7 +22,7 @@ public class PostgresStockDao implements StockGateWay {
         sql = SqlUtils.addParameterToSqlStatement(sql, "name", stock.getFullName());
         System.out.println(sql);
         try {
-            postgreSQLJDBC.executeSql(sql);
+            PostgreSQLJDBC.executeSql(sql);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -37,6 +36,7 @@ public class PostgresStockDao implements StockGateWay {
         ResultSet resultSet = PostgreSQLJDBC.executeSqlWithReturn(sql);
         try {
             resultSet.next();
+            PostgreSQLJDBC.closeStatementAfterResult(resultSet);
             return parseStockFromResultSet(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();

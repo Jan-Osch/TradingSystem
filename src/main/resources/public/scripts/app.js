@@ -42,6 +42,9 @@ app.config(function ($routeProvider) {
     }).when('/portfolio/:ownerUuid/:name', {
         templateUrl: 'views/portfolio-spectator.html',
         controller: 'PortfolioSpectatorCtrl'
+    }).when('/moderator', {
+        templateUrl: 'views/moderator.html',
+        controller: 'ModeratorCtrl'
     }).when('/ranking', {
         templateUrl: 'views/ranking.html',
         controller: 'RankingCtrl'
@@ -130,7 +133,10 @@ app.controller('LoginCtrl', function ($scope, ApiService, UserService, Navigatio
     NavigationService.makeCurrent('Login');
     $scope.attemptLogin = function () {
         ApiService.login($scope.login, $scope.password, function (data) {
-            UserService.rememberUser($scope.login, data);
+            if(data == 'moderator'){
+                UserService.moderator = true;
+            }
+            UserService.rememberUser($scope.login, data, UserService.moderator);
             UserService.redirectToLanding()
         }, function (data) {
             $scope.result = data;
@@ -286,6 +292,50 @@ app.controller('MarketsCtrl', function ($scope,
     ApiService.getAllMarkets(function (data) {
         $scope.markets = data;
     })
+});
+
+app.controller('ModeratorCtrl', function ($scope,
+                                        ApiService,
+                                        NavigationService) {
+    NavigationService.makeCurrent('Moderator');
+
+    var getNameByUuid = function (marketUuid) {
+        return _.find($scope.markets, function (market) {
+            return market.uuid === marketUuid;
+        }).name;
+    };
+
+
+    var onComplete = function () {
+        if ($scope.markets && $scope.games) {
+            _.forEach($scope.games, function (game) {
+                game.marketName = getNameByUuid(game.marketUuid);
+                game.numberOfPlayers = _.keys(game.players).length;
+            });
+        }
+    };
+
+    var loadAllGames = function () {
+        ApiService.getAllGames(function (data) {
+            $scope.games = data;
+            onComplete();
+        });
+    };
+
+    loadAllGames();
+
+    ApiService.getAllMarkets(function (data) {
+        $scope.markets = data;
+        onComplete();
+    });
+
+    $scope.createGame = function(){
+        ApiService.createGame($scope.gameName, $scope.marketUuid, $scope.initialAmount*100, function(data){
+            loadAllGames();
+        }, function(data){
+            $scope.transactionStatus = data;
+        });
+    }
 });
 
 app.controller('PortfolioCtrl', function ($scope,

@@ -115,6 +115,9 @@
                 <li ng-class="{active :navigationService.isCurrent('About')}" class="navtile">
                     <a href="#"><i class="fa fa-info-circle fa-3x"></i><big> About</big></a>
                 </li>
+                <li ng-show="UserService.isModerator()" ng-class="{active :navigationService.isCurrent('Moderator')}" class="navtile">
+                    <a href="#/moderator"><i class="fa fa-tachometer fa-3x"></i><big> Moderate</big></a>
+                </li>
             </ul>
         </div>
     </nav>

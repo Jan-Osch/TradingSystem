@@ -49,7 +49,21 @@ public class GamesResource {
             return GameInteractor.getAllGamesForUser(uuid);
         }, new JsonTransformer());
 
-        post(API_CONTEXT + "/:gameUuid/join-as-player", (request, response) -> {
+        post(API_CONTEXT + "/create", (request, response) -> {
+            try {
+                Map<String, String> postParams = JsonHelper.jsonToMapStringString(request.body());
+                String gameName = postParams.get("gameName");
+                UUID marketUuid = UUID.fromString(postParams.get("marketUuid"));
+                BigDecimal initialAmount = new BigDecimal(postParams.get("initialAmount"));
+                GameInteractor.createGame(gameName, marketUuid, initialAmount);
+                return "OK";
+            }catch (Exception e){
+                response.status(402);
+                return e;
+            }
+        });
+
+        post(API_CONTEXT + "", (request, response) -> {
             Map<String, String> postParams = JsonHelper.jsonToMapStringString(request.body());
             UUID gameUuid = UUID.fromString(request.params("gameUuid"));
             try {

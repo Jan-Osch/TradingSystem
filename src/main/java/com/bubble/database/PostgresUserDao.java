@@ -8,21 +8,20 @@ import java.sql.SQLException;
 import java.util.UUID;
 
 public class PostgresUserDao implements UserGateWay {
-    private PostgreSQLJDBC postgreSQLJDBC = PostgreSQLJDBC.getInstance();
     static String tableName = "USERS";
 
     @Override
     public void saveUser(User user) {
-        String sql = "INSERT INTO \":tableName\" (UUID, LOGIN, PASSWORD) VALUES (':uuid', ':login', ':password')";
+        String sql = "INSERT INTO \":tableName\" (UUID, LOGIN, PASSWORD, MODERATOR) VALUES (':uuid', ':login', ':password', ':moderator')";
         sql = SqlUtils.addParameterToSqlStatement(sql, "tableName", tableName);
         sql = SqlUtils.addParameterToSqlStatement(sql, "uuid", user.getUuid().toString());
         sql = SqlUtils.addParameterToSqlStatement(sql, "login", user.getLogin());
         sql = SqlUtils.addParameterToSqlStatement(sql, "password", user.getPassword());
+        sql = SqlUtils.addParameterToSqlStatement(sql, "moderator", String.valueOf(user.getModerator()));
         System.out.println(sql);
         try {
             PostgreSQLJDBC.executeSql(sql);
         } catch (SQLException ignored) {
-
         }
     }
 
@@ -36,8 +35,9 @@ public class PostgresUserDao implements UserGateWay {
             resultSet.next();
             String login = resultSet.getString("login");
             String password = resultSet.getString("password");
+            boolean moderator = resultSet.getBoolean("moderator");
             PostgreSQLJDBC.closeStatementAfterResult(resultSet);
-            return new User(login, password, uuid);
+            return new User(login, password, uuid, moderator);
         } catch (SQLException ignored) {
         }
         return null;
@@ -70,8 +70,9 @@ public class PostgresUserDao implements UserGateWay {
             resultSet.next();
             String uuid = resultSet.getString("uuid");
             String password = resultSet.getString("password");
+            Boolean moderator = resultSet.getBoolean("moderator");
             PostgreSQLJDBC.closeStatementAfterResult(resultSet);
-            return new User(login, password, UUID.fromString(uuid));
+            return new User(login, password, UUID.fromString(uuid), moderator);
         } catch (SQLException ignored) {
         }
         return null;

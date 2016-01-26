@@ -3,13 +3,16 @@ angular.module('applicationServices', [])
         return {
             user: undefined,
             userUuid: undefined,
+            moderator: undefined,
 
             logout: function () {
                 var that = this;
                 $cookieStore.remove("user_uuid");
                 $cookieStore.remove("remembered_user");
+                $cookieStore.remove("moderator");
                 that.user = undefined;
                 that.userUuid = undefined;
+                that.moderator = undefined;
             },
 
             isLogged: function () {
@@ -17,11 +20,16 @@ angular.module('applicationServices', [])
                 this.userUuid !== undefined)
             },
 
-            rememberUser: function (userName, userUuid) {
+            rememberUser: function (userName, userUuid, moderator) {
                 $cookieStore.put("remembered_user", userName);
                 $cookieStore.put("user_uuid", userUuid);
+                $cookieStore.put("moderator", moderator);
                 this.user = userName;
                 this.userUuid = userUuid;
+            },
+
+            isModerator: function () {
+                return this.moderator;
             },
 
             redirectToLogin: function () {
@@ -36,6 +44,7 @@ angular.module('applicationServices', [])
                 var that = this;
                 that.userUuid = $cookieStore.get("user_uuid");
                 that.user = $cookieStore.get("remembered_user");
+                that.moderator = $cookieStore.get("moderator");
             },
 
             startService: function () {
@@ -55,11 +64,11 @@ angular.module('applicationServices', [])
                 return this.current == tab;
             },
 
-            redirectToRanking: function(){
+            redirectToRanking: function () {
                 $location.path('/ranking');
             },
 
-            redirectToPlayerPortfolio: function(){
+            redirectToPlayerPortfolio: function () {
                 $location.path('/portfolio');
             }
 
