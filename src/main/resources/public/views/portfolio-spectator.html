@@ -1,0 +1,48 @@
+<h2>Spectating {{name}}'s Portfolio</h2>
+<div>Current balance: <b>{{portfolio.currentBalance / 100 | currency : "PLN" : 2}}</b></div>
+
+<div>Current assets:</div>
+
+
+<table class="table table-hover">
+    <tr>
+        <th>
+            Asset name
+        </th>
+        <th>
+            Asset code
+        </th>
+        <th>
+            type
+        </th>
+        <th>
+            Amount
+        </th>
+        <th>
+            Current value
+        </th>
+        <th>
+            Total value
+        </th>
+    </tr>
+    <tr ng-repeat="asset in portfolio.assets">
+        <td>
+            {{asset.fullName}}
+        </td>
+        <td>
+            {{asset.codeName}}
+        </td>
+        <td>
+            {{asset.instrumentType}}
+        </td>
+        <td>
+            {{asset.amount}}
+        </td>
+        <td>
+            {{asset.value / 100 | currency : "PLN" : 2}}
+        </td>
+        <td>
+            {{asset.value * asset.amount/ 100 | currency : "PLN" : 2}}
+        </td>
+    </tr>
+</table>

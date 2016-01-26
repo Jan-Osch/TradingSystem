@@ -43,16 +43,23 @@
         </div>
         <!-- Top Menu Items -->
         <ul class="nav navbar-right top-nav">
-            <li class="dropdown">
-                <a ng-href="" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cube"></i>
+            <li class="dropdown" ng-controller="GamesWidgetCtrl">
+                <a ng-href="" class="dropdown-toggle" data-toggle="dropdown" ng-click="reload()"><i
+                        class="fa fa-cube"></i>
                     {{GamePlayService.currentGame}} <b
                             class="caret"></b></a>
-                <ul class="dropdown-menu alert-dropdown" ng-controller="GamesWidgetCtrl">
+                <ul class="dropdown-menu message-dropdown">
                     <li ng-repeat="game in gamesInWidget">
-                        <a href="#">{{game.name}}
-                            <span class="label label-default" ng-if="game.isPlayer" ng-click="playAsPlayer(game)">Play!</span>
-                            <span class="label label-default" ng-if="game.isSpectator" ng-click="joinAsSpectator(game)">Spectate!</span>
+                        <a ng-href="">{{game.name}}
+                            <span class="label label-success pull-right" ng-if="game.isPlayer"
+                               ng-click="playAsPlayer(game)">Play!</span>
+                            <span class="label label-danger pull-right" ng-if="game.isSpectator"
+                               ng-click="playAsSpectator(game)">Spectate!</span>
                         </a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="#/games">View All</a>
                     </li>
                 </ul>
             </li>
@@ -93,7 +100,7 @@
                 <li ng-class="{active :navigationService.isCurrent('Stocks')} " class="navtile">
                     <a href="index.html"><i class="fa fa-line-chart fa-3x"></i> <big> Stocks</big></a>
                 </li>
-                <li ng-class="{active :navigationService.isCurrent('Potfolio')} " class="navtile">
+                <li ng-class="{active :navigationService.isCurrent('Portfolio')} " class="navtile">
                     <a href="#/portfolio"><i class="fa fa-shopping-cart fa-3x"></i><big> Portfolio</big></a>
                 </li>
                 <li ng-class="{active :navigationService.isCurrent('History')}  " class="navtile">
@@ -120,10 +127,8 @@
 
 
         </div>
-        <!-- /.container-fluid -->
 
     </div>
-    <!-- /#page-wrapper -->
 
 </div>
 

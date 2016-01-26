@@ -1,8 +1,12 @@
-.success-true{
+.success-true {
     text-decoration: line-through;
 }
 
-.navtile{
+.navtile {
     margin-bottom: 10px;
     margin-top: 10px;
+}
+
+.message-dropdown {
+    width: 250px
 }

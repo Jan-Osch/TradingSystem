@@ -43,7 +43,7 @@ angular.module('applicationServices', [])
             }
         };
     })
-    .service('NavigationService', function () {
+    .service('NavigationService', function ($location) {
         return {
             current: undefined,
 
@@ -53,7 +53,16 @@ angular.module('applicationServices', [])
 
             isCurrent: function (tab) {
                 return this.current == tab;
+            },
+
+            redirectToRanking: function(){
+                $location.path('/ranking');
+            },
+
+            redirectToPlayerPortfolio: function(){
+                $location.path('/portfolio');
             }
+
         };
     })
     .service('GamePlayService', function ($cookieStore, ApiService, UserService, $location) {

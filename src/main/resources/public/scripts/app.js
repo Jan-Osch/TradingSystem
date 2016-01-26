@@ -39,6 +39,9 @@ app.config(function ($routeProvider) {
     }).when('/portfolio', {
         templateUrl: 'views/portfolio.html',
         controller: 'PortfolioCtrl'
+    }).when('/portfolio/:ownerUuid/:name', {
+        templateUrl: 'views/portfolio-spectator.html',
+        controller: 'PortfolioSpectatorCtrl'
     }).when('/ranking', {
         templateUrl: 'views/ranking.html',
         controller: 'RankingCtrl'
@@ -137,10 +140,16 @@ app.controller('LoginCtrl', function ($scope, ApiService, UserService, Navigatio
 });
 
 app.controller('GamesWidgetCtrl', function ($scope, ApiService, UserService, GamePlayService) {
-    ApiService.getAllGamesForUser(UserService.userUuid, function (data) {
-        _.forEach(data, checkIfUserCanJoin);
-        $scope.gamesInWidget = data;
-    });
+    $scope.reload = function () {
+        if (UserService.userUuid) {
+            ApiService.getAllGamesForUser(UserService.userUuid, function (data) {
+                _.forEach(data, checkIfUserCanJoin);
+                $scope.gamesInWidget = data;
+            });
+        }else{
+            $scope.gamesInWidget = []
+        }
+    };
 
     $scope.playAsPlayer = function (game) {
         GamePlayService.startPlaying(game.gameUuid, game.name, true);
@@ -148,8 +157,8 @@ app.controller('GamesWidgetCtrl', function ($scope, ApiService, UserService, Gam
 
     $scope.playAsSpectator = function (game) {
         GamePlayService.startPlaying(game.gameUuid, game.name, false);
-        console.warn(game);
     };
+
 
     function checkIfUserCanJoin(game) {
         if (UserService.isLogged()) {
@@ -288,6 +297,10 @@ app.controller('PortfolioCtrl', function ($scope,
         GamePlayService.redirectToGames();
         return;
     }
+    if (!GamePlayService.player) {
+        NavigationService.redirectToRanking();
+        return;
+    }
     var reloadData = function () {
         ApiService.getPortfolioForOwner(GamePlayService.playerUuid, function (portfolio) {
             $scope.portfolio = portfolio;
@@ -337,6 +350,44 @@ app.controller('PortfolioCtrl', function ($scope,
             )
         }
     };
+});
+
+app.controller('PortfolioSpectatorCtrl', function ($scope,
+                                                   ApiService,
+                                                   GamePlayService,
+                                                   NavigationService,
+                                                   $routeParams) {
+    NavigationService.makeCurrent('Portfolio');
+    if (!GamePlayService.isPlaying()) {
+        GamePlayService.redirectToGames();
+        return;
+    }
+    if (GamePlayService.player) {
+        NavigationService.redirectToPlayerPortfolio();
+        return;
+    }
+    var reloadData = function () {
+        ApiService.getPortfolioForOwner($routeParams.ownerUuid, function (portfolio) {
+            $scope.portfolio = portfolio;
+            $scope.name = $routeParams.name;
+            $scope.portfolio.assets = _.map($scope.portfolio.assets, function (value, key) {
+                return {
+                    amount: value,
+                    uuid: key
+                }
+            });
+            _.forEach($scope.portfolio.assets, function (element, index) {
+                ApiService.getInstrument(element.uuid, function (data) {
+                    _.extend($scope.portfolio.assets[index], data);
+                });
+                ApiService.getCurrentRecord(element.uuid, function (data) {
+                    _.extend($scope.portfolio.assets[index], data);
+                })
+            });
+        });
+    };
+
+    reloadData();
 });
 
 
@@ -409,6 +460,5 @@ app.controller('GamesCtrl', function ($scope,
 
     $scope.playAsSpectator = function (game) {
         GamePlayService.startPlaying(game.gameUuid, game.name, false);
-        console.warn(game);
     };
 });
