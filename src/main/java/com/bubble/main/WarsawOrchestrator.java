@@ -99,6 +99,7 @@ public class WarsawOrchestrator {
 
     private void startWarsaw() {
         LOG.info("Hello welt");
+
         try {
             gpwStocksScraper.scrap();
         } catch (IOException e) {

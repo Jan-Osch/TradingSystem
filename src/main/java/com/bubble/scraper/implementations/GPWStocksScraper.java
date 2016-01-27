@@ -61,6 +61,9 @@ public class GPWStocksScraper extends StockScraper {
         Elements columns = root.getElementsByTag("td");
         String valueAsString = columns.get(11).text().replaceAll("[^0-9]", "");
         if (Objects.equals(valueAsString, "")) {
+            valueAsString = columns.get(6).text().replaceAll("[^0-9]", "");
+        }
+        if (Objects.equals(valueAsString, "")) {
             valueAsString = "-1";
         }
         BigDecimal value = new BigDecimal(valueAsString);
